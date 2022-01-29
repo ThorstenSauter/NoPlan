@@ -35,10 +35,5 @@ public class Get : EndpointWithMapping<GetToDoRequest, ToDoResponse, ToDo>
     }
 
     public override ToDoResponse MapFromEntity(ToDo e) =>
-        new()
-        {
-            Id = e.Id,
-            Title = e.Title,
-            Description = e.Description
-        };
+        new() { Id = e.Id, Title = e.Title, Description = e.Description };
 }
