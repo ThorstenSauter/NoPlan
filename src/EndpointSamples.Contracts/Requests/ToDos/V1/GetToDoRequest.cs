@@ -1,4 +1,4 @@
-﻿namespace EndpointSamples.Api.Contracts.Requests.ToDos.V1;
+﻿namespace EndpointSamples.Contracts.Requests.ToDos.V1;
 
 public record GetToDoRequest
 {

@@ -1,7 +1,7 @@
-﻿using EndpointSamples.Api.Contracts.Requests.ToDos.V1;
-using EndpointSamples.Api.Contracts.Responses;
-using EndpointSamples.Api.Models;
+﻿using EndpointSamples.Api.Models;
 using EndpointSamples.Api.Services;
+using EndpointSamples.Contracts.Requests.ToDos.V1;
+using EndpointSamples.Contracts.Responses.ToDos.V1;
 
 namespace EndpointSamples.Api.Features.ToDos;
 

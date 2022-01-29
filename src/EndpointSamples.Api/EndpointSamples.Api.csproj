@@ -9,13 +9,19 @@
     <ItemGroup>
         <PackageReference Include="FastEndpoints" Version="3.1.4" />
         <PackageReference Include="FastEndpoints.Swagger" Version="3.1.4" />
-        <PackageReference Include="FastEndpoints.Validation" Version="3.1.4" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     </ItemGroup>
 
     <ItemGroup>
         <Using Include="FastEndpoints" />
         <Using Include="FastEndpoints.Validation" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="Contracts" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\EndpointSamples.Contracts\EndpointSamples.Contracts.csproj" />
     </ItemGroup>
 
 </Project>

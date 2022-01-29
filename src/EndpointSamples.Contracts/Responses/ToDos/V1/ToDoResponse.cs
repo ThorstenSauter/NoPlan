@@ -1,4 +1,4 @@
-﻿namespace EndpointSamples.Api.Contracts.Responses;
+﻿namespace EndpointSamples.Contracts.Responses.ToDos.V1;
 
 public record ToDoResponse
 {
