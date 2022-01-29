@@ -1,14 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>f0f988d0-f85a-41f4-b49a-e8381d732de2</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="FastEndpoints" Version="3.1.4" />
         <PackageReference Include="FastEndpoints.Swagger" Version="3.1.4" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
@@ -21,7 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\EndpointSamples.Contracts\EndpointSamples.Contracts.csproj" />
+        <ProjectReference Include="..\EndpointSamples.Contracts\EndpointSamples.Contracts.csproj" />
+        <ProjectReference Include="..\EndpointsSamples.Infrastructure\EndpointsSamples.Infrastructure.csproj" />
     </ItemGroup>
-
 </Project>

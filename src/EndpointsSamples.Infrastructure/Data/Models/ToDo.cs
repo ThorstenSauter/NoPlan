@@ -1,4 +1,4 @@
-﻿namespace EndpointSamples.Api.Models;
+﻿namespace EndpointsSamples.Infrastructure.Data.Models;
 
 public class ToDo
 {

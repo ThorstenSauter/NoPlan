@@ -1,4 +1,4 @@
-﻿using EndpointSamples.Api.Models;
+﻿using EndpointsSamples.Infrastructure.Data.Models;
 
 namespace EndpointSamples.Api.Services;
 
