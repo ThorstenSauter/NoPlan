@@ -11,9 +11,15 @@ public class Get : EndpointWithMapping<GetToDoRequest, ToDoResponse, ToDo>
 
     public override void Configure()
     {
-        Get("/todos/{id}");
+        Get("/todos/{Id}");
         Version(1);
         AllowAnonymous();
+        Describe(b => b
+            .Accepts<GetToDoRequest>("application/json")
+            .Produces<ToDoResponse>(200, "application/json")
+            .Produces(404)
+            .WithName("ToDos.Get")
+        );
     }
 
     public override async Task HandleAsync(GetToDoRequest req, CancellationToken ct)

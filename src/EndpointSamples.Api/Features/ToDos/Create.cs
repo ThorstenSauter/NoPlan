@@ -14,6 +14,11 @@ public class Create : EndpointWithMapping<CreateToDoRequest, ToDoResponse, ToDo>
         Post("/todos");
         Version(1);
         AllowAnonymous();
+        Describe(b => b
+            .Accepts<CreateToDoRequest>("application/json")
+            .Produces<ToDoResponse>(200, "application/json")
+            .WithName("ToDos.Create")
+        );
     }
 
     public override async Task HandleAsync(CreateToDoRequest req, CancellationToken ct)

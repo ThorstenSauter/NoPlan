@@ -14,6 +14,12 @@ public class Delete : EndpointWithMapping<DeleteToDoRequest, ToDoResponse, ToDo>
         Delete("/todos/{Id}");
         Version(1);
         AllowAnonymous();
+        Describe(b => b
+            .Accepts<DeleteToDoRequest>("application/json")
+            .Produces<ToDoResponse>(200, "application/json")
+            .Produces(404)
+            .WithName("ToDos.Delete")
+        );
     }
 
     public override async Task HandleAsync(DeleteToDoRequest req, CancellationToken ct)

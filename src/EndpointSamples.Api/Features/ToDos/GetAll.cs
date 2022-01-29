@@ -13,6 +13,11 @@ public class GetAll : EndpointWithMapping<EmptyRequest, ToDosResponse, IEnumerab
         Get("/todos");
         Version(1);
         AllowAnonymous();
+        Describe(b => b
+            .Accepts<EmptyRequest>("application/json")
+            .Produces<ToDosResponse>(200, "application/json")
+            .WithName("ToDos.GetAll")
+        );
     }
 
     public override async Task HandleAsync(EmptyRequest req, CancellationToken ct) =>
