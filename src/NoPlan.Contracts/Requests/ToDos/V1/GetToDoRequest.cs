@@ -3,4 +3,4 @@
 public record GetToDoRequest
 {
     public Guid Id { get; init; }
-};
+}

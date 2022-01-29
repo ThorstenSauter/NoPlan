@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\EndpointSamples.Contracts\EndpointSamples.Contracts.csproj" />
-        <ProjectReference Include="..\EndpointsSamples.Infrastructure\EndpointsSamples.Infrastructure.csproj" />
+        <ProjectReference Include="..\NoPlan.Contracts\NoPlan.Contracts.csproj" />
+        <ProjectReference Include="..\NoPlan.Infrastructure\NoPlan.Infrastructure.csproj" />
     </ItemGroup>
 </Project>
