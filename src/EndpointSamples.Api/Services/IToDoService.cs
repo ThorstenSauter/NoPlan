@@ -1,9 +1,12 @@
-﻿using EndpointSamples.Api.Contracts.Responses;
+﻿using EndpointSamples.Api.Models;
 
 namespace EndpointSamples.Api.Services;
 
 public interface IToDoService
 {
-    IEnumerable<ToDoResponse?> GetAll();
-    ToDoResponse? Get(Guid id);
+    IEnumerable<ToDo> GetAll();
+    ToDo? Get(Guid id);
+    ToDo Create(ToDo newToDo);
+    ToDo? Update(ToDo updatedToDo);
+    ToDo? Delete(Guid id);
 }

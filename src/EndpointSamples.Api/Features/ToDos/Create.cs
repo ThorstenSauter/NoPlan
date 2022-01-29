@@ -5,27 +5,21 @@ using EndpointSamples.Api.Services;
 
 namespace EndpointSamples.Api.Features.ToDos;
 
-public class Get : EndpointWithMapping<GetToDoRequest, ToDoResponse, ToDo>
+public class Create : EndpointWithMapping<CreateToDoRequest, ToDoResponse, ToDo>
 {
     public IToDoService ToDoService { get; set; } = null!;
 
     public override void Configure()
     {
-        Get("/todos/{id}");
+        Post("/todos");
         Version(1);
         AllowAnonymous();
     }
 
-    public override async Task HandleAsync(GetToDoRequest req, CancellationToken ct)
+    public override async Task HandleAsync(CreateToDoRequest req, CancellationToken ct)
     {
-        var todo = ToDoService.Get(req.Id);
-        if (todo is null)
-        {
-            await SendNotFoundAsync(ct);
-            return;
-        }
-
-        await SendAsync(MapFromEntity(todo), cancellation: ct);
+        var toDo = ToDoService.Create(MapToEntity(req));
+        await SendCreatedAtAsync<Get>(new { toDo.Id }, MapFromEntity(toDo), ct);
     }
 
     public override ToDoResponse MapFromEntity(ToDo e) =>
@@ -34,5 +28,12 @@ public class Get : EndpointWithMapping<GetToDoRequest, ToDoResponse, ToDo>
             Id = e.Id,
             Title = e.Title,
             Description = e.Description
+        };
+
+    public override ToDo MapToEntity(CreateToDoRequest r) =>
+        new()
+        {
+            Title = r.Title,
+            Description = r.Description
         };
 }

@@ -5,27 +5,27 @@ using EndpointSamples.Api.Services;
 
 namespace EndpointSamples.Api.Features.ToDos;
 
-public class Get : EndpointWithMapping<GetToDoRequest, ToDoResponse, ToDo>
+public class Delete : EndpointWithMapping<DeleteToDoRequest, ToDoResponse, ToDo>
 {
     public IToDoService ToDoService { get; set; } = null!;
 
     public override void Configure()
     {
-        Get("/todos/{id}");
+        Delete("/todos/{Id}");
         Version(1);
         AllowAnonymous();
     }
 
-    public override async Task HandleAsync(GetToDoRequest req, CancellationToken ct)
+    public override async Task HandleAsync(DeleteToDoRequest req, CancellationToken ct)
     {
-        var todo = ToDoService.Get(req.Id);
-        if (todo is null)
+        var deletedToDo = ToDoService.Delete(req.Id);
+        if (deletedToDo is null)
         {
             await SendNotFoundAsync(ct);
             return;
         }
 
-        await SendAsync(MapFromEntity(todo), cancellation: ct);
+        await SendAsync(MapFromEntity(deletedToDo), cancellation: ct);
     }
 
     public override ToDoResponse MapFromEntity(ToDo e) =>
