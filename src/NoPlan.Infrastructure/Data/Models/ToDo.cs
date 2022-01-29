@@ -1,4 +1,4 @@
-﻿namespace EndpointsSamples.Infrastructure.Data.Models;
+﻿namespace NoPlan.Infrastructure.Data.Models;
 
 public class ToDo
 {

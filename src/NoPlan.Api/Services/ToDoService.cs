@@ -1,8 +1,8 @@
-﻿using EndpointsSamples.Infrastructure.Data;
-using EndpointsSamples.Infrastructure.Data.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using NoPlan.Infrastructure.Data;
+using NoPlan.Infrastructure.Data.Models;
 
-namespace EndpointSamples.Api.Services;
+namespace NoPlan.Api.Services;
 
 public class ToDoService : IToDoService
 {
