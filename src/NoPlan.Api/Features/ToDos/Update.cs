@@ -35,18 +35,8 @@ public class Update : EndpointWithMapping<UpdateToDoRequest, ToDoResponse, ToDo>
     }
 
     public override ToDoResponse MapFromEntity(ToDo e) =>
-        new()
-        {
-            Id = e.Id,
-            Title = e.Title,
-            Description = e.Description
-        };
+        new() { Id = e.Id, Title = e.Title, Description = e.Description };
 
     public override ToDo MapToEntity(UpdateToDoRequest r) =>
-        new()
-        {
-            Id = r.Id,
-            Title = r.Title,
-            Description = r.Description
-        };
+        new() { Id = r.Id, Title = r.Title, Description = r.Description };
 }

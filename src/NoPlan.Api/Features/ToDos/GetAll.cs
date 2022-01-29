@@ -25,11 +25,6 @@ public class GetAll : EndpointWithMapping<EmptyRequest, ToDosResponse, IEnumerab
 
     public override ToDosResponse MapFromEntity(IEnumerable<ToDo> e) => new()
     {
-        ToDos = e.Select(t => new ToDoResponse
-        {
-            Id = t.Id,
-            Title = t.Title,
-            Description = t.Description
-        })
+        ToDos = e.Select(t => new ToDoResponse { Id = t.Id, Title = t.Title, Description = t.Description })
     };
 }

@@ -5,9 +5,9 @@ namespace EndpointsSamples.Infrastructure.Data;
 
 public class PlannerContext : DbContext
 {
-    public DbSet<ToDo> ToDos { get; set; } = null!;
-
     public PlannerContext(DbContextOptions<PlannerContext> options) : base(options)
     {
     }
+
+    public DbSet<ToDo> ToDos { get; set; } = null!;
 }
