@@ -22,3 +22,10 @@ public class UpdateToDoRequestValidator : Validator<UpdateToDoRequest>
             .NotEmpty().WithMessage("A description for the ToDo to update is required");
     }
 }
+
+public class GetToDoRequestValidator : Validator<DeleteToDoRequest>
+{
+    public GetToDoRequestValidator() =>
+        RuleFor(x => x.Id)
+            .NotEmpty().WithMessage("The ToDo identifier is required");
+}
