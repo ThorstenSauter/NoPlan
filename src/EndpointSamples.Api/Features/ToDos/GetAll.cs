@@ -12,7 +12,7 @@ public class GetAll : EndpointWithMapping<EmptyRequest, ToDosResponse, IEnumerab
     {
         Get("/todos");
         Version(1);
-        AllowAnonymous();
+        Policies("User");
         Describe(b => b
             .Accepts<EmptyRequest>("application/json")
             .Produces<ToDosResponse>(200, "application/json")

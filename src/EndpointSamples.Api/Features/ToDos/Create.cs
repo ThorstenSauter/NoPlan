@@ -13,7 +13,7 @@ public class Create : EndpointWithMapping<CreateToDoRequest, ToDoResponse, ToDo>
     {
         Post("/todos");
         Version(1);
-        AllowAnonymous();
+        Policies("User");
         Describe(b => b
             .Accepts<CreateToDoRequest>("application/json")
             .Produces<ToDoResponse>(200, "application/json")

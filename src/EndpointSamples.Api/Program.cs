@@ -2,6 +2,7 @@ using EndpointSamples.Api.Services;
 using EndpointsSamples.Infrastructure.Data;
 using FastEndpoints.Swagger;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Web;
 
 var builder = WebApplication.CreateBuilder();
 var services = builder.Services;
@@ -14,7 +15,9 @@ services
         s.Version = "v1.0";
     })
     .AddInfrastructure(builder.Configuration)
-    .AddScoped<IToDoService, ToDoService>();
+    .AddScoped<IToDoService, ToDoService>()
+    .AddAuthorization(options => options.AddPolicy("User", b => b.RequireScope("User")))
+    .AddMicrosoftIdentityWebApiAuthentication(builder.Configuration);
 
 var app = builder.Build();
 
@@ -24,6 +27,7 @@ using (var scope = app.Services.CreateScope())
     plannerContext.Database.Migrate();
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseFastEndpoints(c =>
 {
@@ -36,6 +40,10 @@ app.UseFastEndpoints(c =>
     };
 });
 
-app.UseOpenApi(); //add this
-app.UseSwaggerUi3(s => s.ConfigureDefaults()); //add this
+if (app.Environment.IsDevelopment())
+{
+    app.UseOpenApi();
+    app.UseSwaggerUi3(s => s.ConfigureDefaults());
+}
+
 app.Run();

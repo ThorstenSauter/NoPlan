@@ -13,7 +13,7 @@ public class Get : EndpointWithMapping<GetToDoRequest, ToDoResponse, ToDo>
     {
         Get("/todos/{Id}");
         Version(1);
-        AllowAnonymous();
+        Policies("User");
         Describe(b => b
             .Accepts<GetToDoRequest>("application/json")
             .Produces<ToDoResponse>(200, "application/json")

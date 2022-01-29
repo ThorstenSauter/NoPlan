@@ -13,7 +13,7 @@ public class Delete : EndpointWithMapping<DeleteToDoRequest, ToDoResponse, ToDo>
     {
         Delete("/todos/{Id}");
         Version(1);
-        AllowAnonymous();
+        Policies("User");
         Describe(b => b
             .Accepts<DeleteToDoRequest>("application/json")
             .Produces<ToDoResponse>(200, "application/json")
