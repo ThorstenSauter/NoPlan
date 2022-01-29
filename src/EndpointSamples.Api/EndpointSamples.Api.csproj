@@ -21,10 +21,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Contracts" />
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\EndpointSamples.Contracts\EndpointSamples.Contracts.csproj" />
         <ProjectReference Include="..\EndpointsSamples.Infrastructure\EndpointsSamples.Infrastructure.csproj" />
     </ItemGroup>
