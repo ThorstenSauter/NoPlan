@@ -14,7 +14,7 @@ services
         s.Version = "v1.0";
     })
     .AddInfrastructure(builder.Configuration)
-    .AddSingleton<IToDoService, ToDoService>();
+    .AddScoped<IToDoService, ToDoService>();
 
 var app = builder.Build();
 

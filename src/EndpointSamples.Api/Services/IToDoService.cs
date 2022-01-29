@@ -4,9 +4,9 @@ namespace EndpointSamples.Api.Services;
 
 public interface IToDoService
 {
-    IEnumerable<ToDo> GetAll();
-    ToDo? Get(Guid id);
-    ToDo Create(ToDo newToDo);
-    ToDo? Update(ToDo updatedToDo);
-    ToDo? Delete(Guid id);
+    Task<IEnumerable<ToDo>> GetAllAsync();
+    Task<ToDo?> GetAsync(Guid id);
+    Task<ToDo> CreateAsync(ToDo newToDo);
+    Task<ToDo?> UpdateAsync(ToDo updatedToDo);
+    Task<ToDo?> DeleteAsync(Guid id);
 }

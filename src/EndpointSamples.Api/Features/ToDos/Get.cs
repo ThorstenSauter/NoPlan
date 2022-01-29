@@ -18,7 +18,7 @@ public class Get : EndpointWithMapping<GetToDoRequest, ToDoResponse, ToDo>
 
     public override async Task HandleAsync(GetToDoRequest req, CancellationToken ct)
     {
-        var todo = ToDoService.Get(req.Id);
+        var todo = await ToDoService.GetAsync(req.Id);
         if (todo is null)
         {
             await SendNotFoundAsync(ct);

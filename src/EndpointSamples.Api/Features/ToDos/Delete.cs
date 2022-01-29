@@ -18,7 +18,7 @@ public class Delete : EndpointWithMapping<DeleteToDoRequest, ToDoResponse, ToDo>
 
     public override async Task HandleAsync(DeleteToDoRequest req, CancellationToken ct)
     {
-        var deletedToDo = ToDoService.Delete(req.Id);
+        var deletedToDo = await ToDoService.DeleteAsync(req.Id);
         if (deletedToDo is null)
         {
             await SendNotFoundAsync(ct);

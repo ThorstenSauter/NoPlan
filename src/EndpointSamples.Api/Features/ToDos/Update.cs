@@ -18,7 +18,7 @@ public class Update : EndpointWithMapping<UpdateToDoRequest, ToDoResponse, ToDo>
 
     public override async Task HandleAsync(UpdateToDoRequest req, CancellationToken ct)
     {
-        var updatedToDo = ToDoService.Update(MapToEntity(req));
+        var updatedToDo = await ToDoService.UpdateAsync(MapToEntity(req));
         if (updatedToDo is null)
         {
             await SendNotFoundAsync(ct);

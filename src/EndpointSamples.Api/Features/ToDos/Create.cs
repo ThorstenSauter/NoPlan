@@ -18,7 +18,7 @@ public class Create : EndpointWithMapping<CreateToDoRequest, ToDoResponse, ToDo>
 
     public override async Task HandleAsync(CreateToDoRequest req, CancellationToken ct)
     {
-        var toDo = ToDoService.Create(MapToEntity(req));
+        var toDo = await ToDoService.CreateAsync(MapToEntity(req));
         await SendCreatedAtAsync<Get>(new { toDo.Id }, MapFromEntity(toDo), ct);
     }
 
