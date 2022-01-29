@@ -1,8 +1,8 @@
-using EndpointSamples.Api.Services;
-using EndpointsSamples.Infrastructure.Data;
 using FastEndpoints.Swagger;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
+using NoPlan.Api.Services;
+using NoPlan.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder();
 var services = builder.Services;

@@ -1,7 +1,7 @@
-﻿using EndpointsSamples.Infrastructure.Data.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using NoPlan.Infrastructure.Data.Models;
 
-namespace EndpointsSamples.Infrastructure.Data;
+namespace NoPlan.Infrastructure.Data;
 
 public class PlannerContext : DbContext
 {

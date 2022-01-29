@@ -1,8 +1,8 @@
-﻿using EndpointSamples.Api.Services;
-using EndpointSamples.Contracts.Responses.ToDos.V1;
-using EndpointsSamples.Infrastructure.Data.Models;
+﻿using NoPlan.Api.Services;
+using NoPlan.Contracts.Responses.ToDos.V1;
+using NoPlan.Infrastructure.Data.Models;
 
-namespace EndpointSamples.Api.Features.ToDos;
+namespace NoPlan.Api.Features.ToDos;
 
 public class GetAll : EndpointWithMapping<EmptyRequest, ToDosResponse, IEnumerable<ToDo>>
 {

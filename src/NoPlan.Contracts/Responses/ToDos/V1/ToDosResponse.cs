@@ -1,4 +1,4 @@
-﻿namespace EndpointSamples.Contracts.Responses.ToDos.V1;
+﻿namespace NoPlan.Contracts.Responses.ToDos.V1;
 
 public class ToDosResponse
 {

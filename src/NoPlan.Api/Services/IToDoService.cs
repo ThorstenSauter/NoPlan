@@ -1,6 +1,6 @@
-﻿using EndpointsSamples.Infrastructure.Data.Models;
+﻿using NoPlan.Infrastructure.Data.Models;
 
-namespace EndpointSamples.Api.Services;
+namespace NoPlan.Api.Services;
 
 public interface IToDoService
 {
