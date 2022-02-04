@@ -49,4 +49,4 @@ stages:
                     azureSubscription: '$(armServiceConnection)'
                     appName: '$(appServiceName)'
                     containers: '$(containerRegistry)/$(imageRepository):$(tag)'
-                    appSettings: '-AppConfiguration:Endpoint $(appConfigurationEndpoint)'
+                    appSettings: '-AppConfiguration__Endpoint $(appConfigurationEndpoint)'
