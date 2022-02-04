@@ -1,0 +1,55 @@
+trigger:
+  - main
+
+pr: none
+
+variables:
+  image: 'ubuntu-latest'
+  dockerRegistryServiceConnection: 'noplan-registry'
+  armServiceConnection: 'NoPlan-Prod'
+  appServiceName: 'no-plan'
+  containerRegistry: 'noplan.azurecr.io'
+  imageRepository: 'noplan-api'
+  dockerfilePath: 'src/NoPlan.Api/Dockerfile'
+  tag: '$(Build.BuildId)'
+
+pool:
+  vmImage: $(image)
+
+stages:
+  - stage: Build
+    displayName: 'Build and push stage'
+    jobs:
+      - job: Build
+        displayName: 'Build job'
+        pool:
+          vmImage: '$(image)'
+        steps:
+          - task: Docker@2
+            displayName: 'Build and push the app image to container registry'
+            inputs:
+              command: 'buildAndPush'
+              repository: '$(imageRepository)'
+              dockerfile: '$(dockerfilePath)'
+              containerRegistry: '$(dockerRegistryServiceConnection)'
+              tags: |
+                $(tag)
+  - stage: Production
+    dependsOn: Build
+    displayName: 'Deploy to production environment'
+    jobs:
+      - deployment: Deploy
+        displayName: 'Deploy to Azure App Service'
+        environment: 'Production'
+        pool:
+          vmImage: '$(image)'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureWebAppContainer@1
+                  displayName: 'Deploy to Azure App Service production slot'
+                  inputs:
+                    azureSubscription: '$(armServiceConnection)'
+                    appName: '$(appServiceName)'
+                    containers: '$(containerRegistry)/$(imageRepository):$(tag)'
