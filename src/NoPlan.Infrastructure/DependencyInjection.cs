@@ -9,7 +9,8 @@ public static class DependencyInjection
     {
         var cosmosConnectionString = configuration.GetConnectionString("Default");
         var databaseName = configuration.GetValue<string>("DatabaseName");
-        services.AddHealthChecks()
+        services
+            .AddHealthChecks()
             .AddCosmosDb(
                 cosmosConnectionString,
                 databaseName,
@@ -17,6 +18,8 @@ public static class DependencyInjection
                 timeout: TimeSpan.FromSeconds(15),
                 tags: new[] { "db" });
 
-        return services.AddDbContext<PlannerContext>(options => options.UseCosmos(cosmosConnectionString, databaseName));
+        return services
+            .AddDbContext<PlannerContext>(options => options.UseCosmos(cosmosConnectionString, databaseName))
+            .AddApplicationInsightsTelemetry();
     }
 }
