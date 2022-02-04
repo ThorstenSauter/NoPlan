@@ -1,10 +1,21 @@
+using Azure.Identity;
 using FastEndpoints.Swagger;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Identity.Web;
 using NoPlan.Api.Services;
 using NoPlan.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder();
+builder.Host.ConfigureAppConfiguration(config =>
+    config.AddAzureAppConfiguration(options =>
+    {
+        var credential = new DefaultAzureCredential();
+        options.Connect(builder.Configuration.GetValue<Uri>("AppConfiguration:Endpoint"), credential);
+        options.ConfigureKeyVault(c => c.SetCredential(credential));
+        var prefix = builder.Environment.IsDevelopment() ? "dev" : "prod";
+        options.Select(KeyFilter.Any, prefix);
+    }));
+
 var services = builder.Services;
 services
     .AddFastEndpoints()
@@ -24,7 +35,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var plannerContext = scope.ServiceProvider.GetRequiredService<PlannerContext>();
-    plannerContext.Database.Migrate();
+    plannerContext.Database.EnsureCreated();
 }
 
 app.UseAuthentication();
