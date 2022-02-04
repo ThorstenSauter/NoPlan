@@ -1,4 +1,5 @@
-﻿using NoPlan.Api.Services;
+﻿using Microsoft.Identity.Web;
+using NoPlan.Api.Services;
 using NoPlan.Contracts.Requests.ToDos.V1;
 using NoPlan.Contracts.Responses.ToDos.V1;
 using NoPlan.Infrastructure.Data.Models;
@@ -8,6 +9,7 @@ namespace NoPlan.Api.Features.ToDos;
 public class Create : EndpointWithMapping<CreateToDoRequest, ToDoResponse, ToDo>
 {
     public IToDoService ToDoService { get; set; } = null!;
+    public IDateTimeProvider DateTimeProvider { get; set; } = null!;
 
     public override void Configure()
     {
@@ -19,6 +21,7 @@ public class Create : EndpointWithMapping<CreateToDoRequest, ToDoResponse, ToDo>
             .Produces<ToDoResponse>(200, "application/json")
             .WithName("ToDos.Create")
         );
+
     }
 
     public override async Task HandleAsync(CreateToDoRequest req, CancellationToken ct)
@@ -28,8 +31,8 @@ public class Create : EndpointWithMapping<CreateToDoRequest, ToDoResponse, ToDo>
     }
 
     public override ToDoResponse MapFromEntity(ToDo e) =>
-        new() { Id = e.Id, Title = e.Title, Description = e.Description };
+        new() { Id = e.Id, Title = e.Title, Description = e.Description, CreatedAt = e.CreatedAt };
 
     public override ToDo MapToEntity(CreateToDoRequest r) =>
-        new() { Title = r.Title, Description = r.Description };
+        new() { Title = r.Title, Description = r.Description, CreatedAt = DateTimeProvider.Now(), CreatedBy = Guid.Parse(User.GetObjectId()!) };
 }

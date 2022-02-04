@@ -17,9 +17,10 @@ public class Update : EndpointWithMapping<UpdateToDoRequest, ToDoResponse, ToDo>
         Describe(b => b
             .Accepts<UpdateToDoRequest>("application/json")
             .Produces<ToDoResponse>(200, "application/json")
-            .Produces(404)
+            .ProducesProblem(404)
             .WithName("ToDos.Update")
         );
+        Summary("Updates the specified ToDo entity.");
     }
 
     public override async Task HandleAsync(UpdateToDoRequest req, CancellationToken ct)
@@ -35,7 +36,7 @@ public class Update : EndpointWithMapping<UpdateToDoRequest, ToDoResponse, ToDo>
     }
 
     public override ToDoResponse MapFromEntity(ToDo e) =>
-        new() { Id = e.Id, Title = e.Title, Description = e.Description };
+        new() { Id = e.Id, Title = e.Title, Description = e.Description, CreatedAt = e.CreatedAt };
 
     public override ToDo MapToEntity(UpdateToDoRequest r) =>
         new() { Id = r.Id, Title = r.Title, Description = r.Description };

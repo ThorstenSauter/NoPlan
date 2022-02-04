@@ -27,6 +27,7 @@ services
     })
     .AddInfrastructure(builder.Configuration)
     .AddScoped<IToDoService, ToDoService>()
+    .AddSingleton<IDateTimeProvider, DateTimeProvider>()
     .AddAuthorization(options => options.AddPolicy("User", b => b.RequireScope("User")))
     .AddMicrosoftIdentityWebApiAuthentication(builder.Configuration);
 
