@@ -4,17 +4,10 @@ trigger:
 pr: none
 
 variables:
-  image: 'ubuntu-latest'
-  dockerRegistryServiceConnection: 'noplan-registry'
-  armServiceConnection: 'NoPlan-Prod'
-  appServiceName: 'no-plan'
-  containerRegistry: 'noplan.azurecr.io'
-  imageRepository: 'noplan-api'
-  dockerfilePath: 'src/NoPlan.Api/Dockerfile'
-  tag: '$(Build.BuildId)'
+  - group: 'NoPlan-Prod-Vars'
 
 pool:
-  vmImage: $(image)
+  vmImage: 'ubuntu-latest'
 
 stages:
   - stage: Build
@@ -54,3 +47,4 @@ stages:
                     azureSubscription: '$(armServiceConnection)'
                     appName: '$(appServiceName)'
                     containers: '$(containerRegistry)/$(imageRepository):$(tag)'
+                    appSettings: '-AppConfiguration:Endpoint $(appConfigurationEndpoint)'
