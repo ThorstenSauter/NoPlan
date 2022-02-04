@@ -6,13 +6,18 @@ using NoPlan.Api.Services;
 using NoPlan.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder();
+var configuration = builder.Configuration;
 builder.Host.ConfigureAppConfiguration(config =>
     config.AddAzureAppConfiguration(options =>
     {
-        var credential = new DefaultAzureCredential();
-        options.Connect(builder.Configuration.GetValue<Uri>("AppConfiguration:Endpoint"), credential);
+        var isDevelopment = builder.Environment.IsDevelopment();
+        var credential = isDevelopment
+            ? new DefaultAzureCredential()
+            : new(new DefaultAzureCredentialOptions { ManagedIdentityClientId = configuration.GetValue<string>("ManagedIdentityClientId") });
+
+        options.Connect(configuration.GetValue<Uri>("AppConfiguration:Endpoint"), credential);
         options.ConfigureKeyVault(c => c.SetCredential(credential));
-        var prefix = builder.Environment.IsDevelopment() ? "dev" : "prod";
+        var prefix = isDevelopment ? "dev" : "prod";
         options.Select(KeyFilter.Any, prefix);
     }));
 
@@ -25,11 +30,11 @@ services
         s.Title = "ToDos API";
         s.Version = "v1.0";
     })
-    .AddInfrastructure(builder.Configuration)
+    .AddInfrastructure(configuration)
     .AddScoped<IToDoService, ToDoService>()
     .AddSingleton<IDateTimeProvider, DateTimeProvider>()
     .AddAuthorization(options => options.AddPolicy("User", b => b.RequireScope("User")))
-    .AddMicrosoftIdentityWebApiAuthentication(builder.Configuration);
+    .AddMicrosoftIdentityWebApiAuthentication(configuration);
 
 var app = builder.Build();
 
