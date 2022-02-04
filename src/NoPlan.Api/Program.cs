@@ -1,5 +1,6 @@
 using Azure.Identity;
 using FastEndpoints.Swagger;
+using HealthChecks.UI.Client;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Identity.Web;
 using NoPlan.Api.Services;
@@ -21,8 +22,7 @@ builder.Host.ConfigureAppConfiguration(config =>
         options.Select(KeyFilter.Any, prefix);
     }));
 
-var services = builder.Services;
-services
+builder.Services
     .AddFastEndpoints()
     .AddSwaggerDoc(maxEndpointVersion: 1, settings: s =>
     {
@@ -37,13 +37,13 @@ services
     .AddMicrosoftIdentityWebApiAuthentication(configuration);
 
 var app = builder.Build();
-
 using (var scope = app.Services.CreateScope())
 {
     var plannerContext = scope.ServiceProvider.GetRequiredService<PlannerContext>();
     plannerContext.Database.EnsureCreated();
 }
 
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseFastEndpoints(c =>
@@ -62,5 +62,11 @@ if (app.Environment.IsDevelopment())
     app.UseOpenApi();
     app.UseSwaggerUi3(s => s.ConfigureDefaults());
 }
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHealthChecks("/health/ready", new() { ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse });
+    endpoints.MapHealthChecks("/health/live", new() { Predicate = _ => false, ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse });
+});
 
 app.Run();
