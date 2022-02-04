@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NoPlan.Infrastructure.Data.Models;
+﻿using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Infrastructure.Data;
 
