@@ -17,9 +17,10 @@ public class Delete : EndpointWithMapping<DeleteToDoRequest, ToDoResponse, ToDo>
         Describe(b => b
             .Accepts<DeleteToDoRequest>("application/json")
             .Produces<ToDoResponse>(200, "application/json")
-            .Produces(404)
+            .ProducesProblem(404)
             .WithName("ToDos.Delete")
         );
+        Summary("Deletes the specified ToDo entity.");
     }
 
     public override async Task HandleAsync(DeleteToDoRequest req, CancellationToken ct)

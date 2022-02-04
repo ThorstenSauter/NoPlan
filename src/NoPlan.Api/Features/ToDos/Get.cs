@@ -17,9 +17,10 @@ public class Get : EndpointWithMapping<GetToDoRequest, ToDoResponse, ToDo>
         Describe(b => b
             .Accepts<GetToDoRequest>("application/json")
             .Produces<ToDoResponse>(200, "application/json")
-            .Produces(404)
+            .ProducesProblem(404)
             .WithName("ToDos.Get")
         );
+        Summary("Retrieves the specified ToDo entity.");
     }
 
     public override async Task HandleAsync(GetToDoRequest req, CancellationToken ct)
@@ -35,5 +36,5 @@ public class Get : EndpointWithMapping<GetToDoRequest, ToDoResponse, ToDo>
     }
 
     public override ToDoResponse MapFromEntity(ToDo e) =>
-        new() { Id = e.Id, Title = e.Title, Description = e.Description };
+        new() { Id = e.Id, Title = e.Title, Description = e.Description, CreatedAt = e.CreatedAt };
 }
