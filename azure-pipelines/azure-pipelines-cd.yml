@@ -5,9 +5,11 @@ pr: none
 
 variables:
   - group: 'NoPlan-Prod-Vars'
+  - name: 'image'
+    value: 'ubuntu-latest'
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: '$(image)'
 
 stages:
   - stage: Build
