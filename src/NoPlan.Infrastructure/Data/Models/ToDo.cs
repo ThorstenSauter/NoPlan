@@ -7,4 +7,5 @@ public class ToDo
     public string Description { get; set; } = null!;
     public DateTime CreatedAt { get; set; }
     public Guid CreatedBy { get; set; }
+    public string ETag { get; set; } = null!;
 }
