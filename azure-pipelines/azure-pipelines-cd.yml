@@ -37,8 +37,7 @@ stages:
       - deployment: Deploy
         displayName: 'Deploy to Azure App Service'
         environment: 'Production'
-        pool:
-          vmImage: '$(image)'
+        pool: 'Default'
         strategy:
           runOnce:
             deploy:
