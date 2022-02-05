@@ -49,4 +49,5 @@ stages:
                     azureSubscription: '$(armServiceConnection)'
                     appName: '$(appServiceName)'
                     containers: '$(containerRegistry)/$(imageRepository):$(tag)'
+                    resourceGroupName: $(resourceGroupName)
                     appSettings: '-AppConfiguration__Endpoint $(appConfigurationEndpoint) -ManagedIdentityClientId $(managedIdentityClientId)'
