@@ -18,8 +18,13 @@ builder.Host.ConfigureAppConfiguration(config =>
 
         options.Connect(configuration.GetValue<Uri>("AppConfiguration:Endpoint"), credential);
         options.ConfigureKeyVault(c => c.SetCredential(credential));
-        var prefix = isDevelopment ? "dev" : "prod";
-        options.Select(KeyFilter.Any, prefix);
+        var label = isDevelopment ? "dev" : "prod";
+        options.Select(KeyFilter.Any, label);
+        options.ConfigureRefresh(refreshOptions =>
+        {
+            refreshOptions.SetCacheExpiration(TimeSpan.FromMinutes(5));
+            refreshOptions.Register("Sentinel", label, true);
+        });
     }));
 
 builder.Services
@@ -31,6 +36,7 @@ builder.Services
         s.Version = "v1.0";
     })
     .AddInfrastructure(configuration)
+    .AddAzureAppConfiguration()
     .AddScoped<IToDoService, ToDoService>()
     .AddSingleton<IDateTimeProvider, DateTimeProvider>()
     .AddAuthorization(options => options.AddPolicy("User", b => b.RequireScope("User")))
@@ -43,6 +49,7 @@ using (var scope = app.Services.CreateScope())
     plannerContext.Database.EnsureCreated();
 }
 
+app.UseAzureAppConfiguration();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
