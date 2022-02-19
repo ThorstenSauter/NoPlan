@@ -20,7 +20,14 @@ public class Get : EndpointWithMapping<GetToDoRequest, ToDoResponse, ToDo>
             .ProducesProblem(404)
             .WithName("ToDos.Get")
         );
-        Summary("Retrieves the specified ToDo entity.");
+
+        Summary(s =>
+        {
+            s.Summary = "Retrieves the specified ToDo entity.";
+            s.Description = "Retrieves the ToDo entity with the provided identifier and returns it.";
+            s[200] = "Returns the ToDo entity.";
+            s[404] = "Returned if the specified ToDo entity does not exist.";
+        });
     }
 
     public override async Task HandleAsync(GetToDoRequest req, CancellationToken ct)

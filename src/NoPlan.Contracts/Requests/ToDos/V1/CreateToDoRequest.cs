@@ -2,7 +2,14 @@
 
 public record CreateToDoRequest
 {
+    /// <summary>
+    ///     The ToDo title. Must be at least 3 characters long.
+    /// </summary>
     public string Title { get; init; } = null!;
+
+    /// <summary>
+    ///     The ToDo description. Cannot be null or empty.
+    /// </summary>
     public string Description { get; init; } = null!;
 }
 

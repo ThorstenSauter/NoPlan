@@ -2,8 +2,19 @@
 
 public record UpdateToDoRequest
 {
+    /// <summary>
+    ///     The identifier of the ToDo object to update.
+    /// </summary>
     public Guid Id { get; init; }
+
+    /// <summary>
+    ///     The updated ToDo title. Must be at least 3 characters long.
+    /// </summary>
     public string Title { get; init; } = null!;
+
+    /// <summary>
+    ///     The updated ToDo description. Cannot be null or empty.
+    /// </summary>
     public string Description { get; init; } = null!;
 }
 

@@ -20,7 +20,14 @@ public class Delete : EndpointWithMapping<DeleteToDoRequest, ToDoResponse, ToDo>
             .ProducesProblem(404)
             .WithName("ToDos.Delete")
         );
-        Summary("Deletes the specified ToDo entity.");
+
+        Summary(s =>
+        {
+            s.Summary = "Deletes the specified ToDo entity.";
+            s.Description = "Deletes the ToDo entity with the provided identifier and returns the deleted data.";
+            s[200] = "Returns the successfully deleted ToDo entity.";
+            s[404] = "Returned if the specified ToDo entity did not exist.";
+        });
     }
 
     public override async Task HandleAsync(DeleteToDoRequest req, CancellationToken ct)

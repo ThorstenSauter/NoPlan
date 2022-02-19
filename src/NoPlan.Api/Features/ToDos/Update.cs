@@ -20,7 +20,14 @@ public class Update : EndpointWithMapping<UpdateToDoRequest, ToDoResponse, ToDo>
             .ProducesProblem(404)
             .WithName("ToDos.Update")
         );
-        Summary("Updates the specified ToDo entity.");
+
+        Summary(s =>
+        {
+            s.Summary = "Updates the specified ToDo entity.";
+            s.Description = "Updates the ToDo entity with the provided identifier and data and returns the updated entity.";
+            s[200] = "Returns the successfully updated ToDo entity.";
+            s[404] = "Returned if the specified ToDo entity does not exist.";
+        });
     }
 
     public override async Task HandleAsync(UpdateToDoRequest req, CancellationToken ct)
