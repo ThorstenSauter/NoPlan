@@ -18,16 +18,22 @@ public class Create : EndpointWithMapping<CreateToDoRequest, ToDoResponse, ToDo>
         Policies("User");
         Describe(b => b
             .Accepts<CreateToDoRequest>("application/json")
-            .Produces<ToDoResponse>(200, "application/json")
+            .Produces<ToDoResponse>(201, "application/json")
             .WithName("ToDos.Create")
         );
 
+        Summary(s =>
+        {
+            s.Summary = "Creates a new ToDo entity.";
+            s.Description = "Creates a new ToDo entity with the provided data and returns it.";
+            s[201] = "Returns the successfully created ToDo entity.";
+        });
     }
 
     public override async Task HandleAsync(CreateToDoRequest req, CancellationToken ct)
     {
         var toDo = await ToDoService.CreateAsync(MapToEntity(req));
-        await SendCreatedAtAsync<Get>(new { toDo.Id }, MapFromEntity(toDo), ct);
+        await SendCreatedAtAsync<Get>(new { toDo.Id }, MapFromEntity(toDo), cancellation: ct);
     }
 
     public override ToDoResponse MapFromEntity(ToDo e) =>

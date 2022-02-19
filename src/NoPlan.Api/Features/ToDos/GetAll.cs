@@ -18,7 +18,13 @@ public class GetAll : EndpointWithMapping<EmptyRequest, ToDosResponse, IEnumerab
             .Produces<ToDosResponse>(200, "application/json")
             .WithName("ToDos.GetAll")
         );
-        Summary("Retrieves all ToDo entities.");
+
+        Summary(s =>
+        {
+            s.Summary = "Retrieves all ToDo entities.";
+            s.Description = "Retrieves all ToDo entities and returns them.";
+            s[200] = "Returns all ToDo entities.";
+        });
     }
 
     public override async Task HandleAsync(EmptyRequest req, CancellationToken ct) =>

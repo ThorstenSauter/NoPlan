@@ -4,6 +4,9 @@ namespace NoPlan.Contracts.Requests.ToDos.V1;
 
 public record DeleteToDoRequest
 {
+    /// <summary>
+    ///     The identifier of the ToDo object to delete.
+    /// </summary>
     [FromRoute]
     public Guid Id { get; init; }
 }

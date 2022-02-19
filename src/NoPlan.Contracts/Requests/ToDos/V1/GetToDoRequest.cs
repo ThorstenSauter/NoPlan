@@ -2,6 +2,9 @@
 
 public record GetToDoRequest
 {
+    /// <summary>
+    ///     The identifier of the ToDo object that is requested.
+    /// </summary>
     public Guid Id { get; init; }
 }
 
