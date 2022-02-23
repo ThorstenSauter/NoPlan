@@ -10,9 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.2" />
-    <PackageReference Include="FastEndpoints" Version="3.5.1" />
-    <PackageReference Include="FastEndpoints.Swagger" Version="3.5.1" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.3" />
+    <PackageReference Include="FastEndpoints" Version="3.6.0" />
+    <PackageReference Include="FastEndpoints.Swagger" Version="3.6.0" />
     <PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.2">
       <PrivateAssets>all</PrivateAssets>
