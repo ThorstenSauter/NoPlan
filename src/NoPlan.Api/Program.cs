@@ -31,9 +31,9 @@ builder.Services
     .AddFastEndpoints()
     .AddSwaggerDoc(maxEndpointVersion: 1, settings: s =>
     {
-        s.DocumentName = "Release 1.0";
-        s.Title = "ToDos API";
-        s.Version = "v1.0";
+        s.DocumentName = "Release v1";
+        s.Title = "NoPlan API";
+        s.Version = "v1";
     })
     .AddInfrastructure(configuration)
     .AddAzureAppConfiguration()
