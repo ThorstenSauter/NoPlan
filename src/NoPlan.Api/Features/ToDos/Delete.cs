@@ -7,7 +7,10 @@ namespace NoPlan.Api.Features.ToDos;
 
 public class Delete : EndpointWithMapping<DeleteToDoRequest, ToDoResponse, ToDo>
 {
-    public IToDoService ToDoService { get; set; } = null!;
+    private readonly IToDoService _toDoService;
+
+    public Delete(IToDoService toDoService) =>
+        _toDoService = toDoService;
 
     public override void Configure()
     {
@@ -32,7 +35,7 @@ public class Delete : EndpointWithMapping<DeleteToDoRequest, ToDoResponse, ToDo>
 
     public override async Task HandleAsync(DeleteToDoRequest req, CancellationToken ct)
     {
-        var deletedToDo = await ToDoService.DeleteAsync(req.Id);
+        var deletedToDo = await _toDoService.DeleteAsync(req.Id);
         if (deletedToDo is null)
         {
             await SendNotFoundAsync(ct);

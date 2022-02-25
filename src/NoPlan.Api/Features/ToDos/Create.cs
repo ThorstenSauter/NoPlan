@@ -8,8 +8,14 @@ namespace NoPlan.Api.Features.ToDos;
 
 public class Create : EndpointWithMapping<CreateToDoRequest, ToDoResponse, ToDo>
 {
-    public IToDoService ToDoService { get; set; } = null!;
-    public IDateTimeProvider DateTimeProvider { get; set; } = null!;
+    private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly IToDoService _toDoService;
+
+    public Create(IToDoService toDoService, IDateTimeProvider dateTimeProvider)
+    {
+        _toDoService = toDoService;
+        _dateTimeProvider = dateTimeProvider;
+    }
 
     public override void Configure()
     {
@@ -32,7 +38,7 @@ public class Create : EndpointWithMapping<CreateToDoRequest, ToDoResponse, ToDo>
 
     public override async Task HandleAsync(CreateToDoRequest req, CancellationToken ct)
     {
-        var toDo = await ToDoService.CreateAsync(MapToEntity(req));
+        var toDo = await _toDoService.CreateAsync(MapToEntity(req));
         await SendCreatedAtAsync<Get>(new { toDo.Id }, MapFromEntity(toDo), cancellation: ct);
     }
 
@@ -40,5 +46,5 @@ public class Create : EndpointWithMapping<CreateToDoRequest, ToDoResponse, ToDo>
         new() { Id = e.Id, Title = e.Title, Description = e.Description, CreatedAt = e.CreatedAt };
 
     public override ToDo MapToEntity(CreateToDoRequest r) =>
-        new() { Title = r.Title, Description = r.Description, CreatedAt = DateTimeProvider.Now(), CreatedBy = Guid.Parse(User.GetObjectId()!) };
+        new() { Title = r.Title, Description = r.Description, CreatedAt = _dateTimeProvider.Now(), CreatedBy = Guid.Parse(User.GetObjectId()!) };
 }

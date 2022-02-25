@@ -6,7 +6,10 @@ namespace NoPlan.Api.Features.ToDos;
 
 public class GetAll : EndpointWithMapping<EmptyRequest, ToDosResponse, IEnumerable<ToDo>>
 {
-    public IToDoService ToDoService { get; set; } = null!;
+    private readonly IToDoService _toDoService;
+
+    public GetAll(IToDoService toDoService) =>
+        _toDoService = toDoService;
 
     public override void Configure()
     {
@@ -28,7 +31,7 @@ public class GetAll : EndpointWithMapping<EmptyRequest, ToDosResponse, IEnumerab
     }
 
     public override async Task HandleAsync(EmptyRequest req, CancellationToken ct) =>
-        await SendAsync(MapFromEntity(await ToDoService.GetAllAsync()), cancellation: ct);
+        await SendAsync(MapFromEntity(await _toDoService.GetAllAsync()), cancellation: ct);
 
     public override ToDosResponse MapFromEntity(IEnumerable<ToDo> e) => new()
     {
