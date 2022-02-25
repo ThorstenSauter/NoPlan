@@ -7,7 +7,10 @@ namespace NoPlan.Api.Features.ToDos;
 
 public class Get : EndpointWithMapping<GetToDoRequest, ToDoResponse, ToDo>
 {
-    public IToDoService ToDoService { get; set; } = null!;
+    private readonly IToDoService _toDoService;
+
+    public Get(IToDoService toDoService) =>
+        _toDoService = toDoService;
 
     public override void Configure()
     {
@@ -32,7 +35,7 @@ public class Get : EndpointWithMapping<GetToDoRequest, ToDoResponse, ToDo>
 
     public override async Task HandleAsync(GetToDoRequest req, CancellationToken ct)
     {
-        var todo = await ToDoService.GetAsync(req.Id);
+        var todo = await _toDoService.GetAsync(req.Id);
         if (todo is null)
         {
             await SendNotFoundAsync(ct);
