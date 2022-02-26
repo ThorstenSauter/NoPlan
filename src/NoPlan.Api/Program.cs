@@ -3,6 +3,7 @@ using FastEndpoints.Swagger;
 using HealthChecks.UI.Client;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Identity.Web;
+using NoPlan.Api.Options;
 using NoPlan.Api.Services;
 using NoPlan.Infrastructure.Data;
 
@@ -11,18 +12,19 @@ var configuration = builder.Configuration;
 builder.Host.ConfigureAppConfiguration(config =>
     config.AddAzureAppConfiguration(options =>
     {
+        var appConfigurationOptions = configuration.GetSection(AppConfigurationOptions.SectionName).Get<AppConfigurationOptions>();
         var isDevelopment = builder.Environment.IsDevelopment();
         var credential = isDevelopment
             ? new DefaultAzureCredential()
             : new(new DefaultAzureCredentialOptions { ManagedIdentityClientId = configuration.GetValue<string>("ManagedIdentityClientId") });
 
-        options.Connect(configuration.GetValue<Uri>("AppConfiguration:Endpoint"), credential);
+        options.Connect(appConfigurationOptions.EndPoint, credential);
         options.ConfigureKeyVault(c => c.SetCredential(credential));
         var label = isDevelopment ? "dev" : "prod";
         options.Select(KeyFilter.Any, label);
         options.ConfigureRefresh(refreshOptions =>
         {
-            refreshOptions.SetCacheExpiration(TimeSpan.FromMinutes(5));
+            refreshOptions.SetCacheExpiration(TimeSpan.FromSeconds(appConfigurationOptions.RefreshInterval));
             refreshOptions.Register("Sentinel", label, true);
         });
     }));
