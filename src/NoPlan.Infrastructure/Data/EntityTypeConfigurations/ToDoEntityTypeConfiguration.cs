@@ -7,9 +7,12 @@ public class ToDoEntityTypeConfiguration : IEntityTypeConfiguration<ToDo>
 {
     public void Configure(EntityTypeBuilder<ToDo> builder)
     {
-        builder.ToContainer("todos");
-        builder.HasNoDiscriminator();
-        builder.HasPartitionKey(e => e.Id);
+        builder
+            .ToContainer("todos")
+            .HasNoDiscriminator()
+            .HasPartitionKey(e => e.CreatedBy)
+            .HasKey(e => e.Id);
+
         builder
             .Property(e => e.ETag)
             .IsETagConcurrency();
