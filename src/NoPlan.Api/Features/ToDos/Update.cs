@@ -1,4 +1,5 @@
-﻿using NoPlan.Api.Services;
+﻿using NoPlan.Api.Extensions;
+using NoPlan.Api.Services;
 using NoPlan.Contracts.Requests.ToDos.V1;
 using NoPlan.Contracts.Responses.ToDos.V1;
 using NoPlan.Infrastructure.Data.Models;
@@ -49,5 +50,5 @@ public class Update : EndpointWithMapping<UpdateToDoRequest, ToDoResponse, ToDo>
         new() { Id = e.Id, Title = e.Title, Description = e.Description, CreatedAt = e.CreatedAt };
 
     public override ToDo MapToEntity(UpdateToDoRequest r) =>
-        new() { Id = r.Id, Title = r.Title, Description = r.Description };
+        new() { Id = r.Id, Title = r.Title, Description = r.Description, CreatedBy = User.GetId() };
 }

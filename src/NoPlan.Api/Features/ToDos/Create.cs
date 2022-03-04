@@ -1,4 +1,4 @@
-﻿using Microsoft.Identity.Web;
+﻿using NoPlan.Api.Extensions;
 using NoPlan.Api.Services;
 using NoPlan.Contracts.Requests.ToDos.V1;
 using NoPlan.Contracts.Responses.ToDos.V1;
@@ -46,5 +46,5 @@ public class Create : EndpointWithMapping<CreateToDoRequest, ToDoResponse, ToDo>
         new() { Id = e.Id, Title = e.Title, Description = e.Description, CreatedAt = e.CreatedAt };
 
     public override ToDo MapToEntity(CreateToDoRequest r) =>
-        new() { Title = r.Title, Description = r.Description, CreatedAt = _dateTimeProvider.Now(), CreatedBy = Guid.Parse(User.GetObjectId()!) };
+        new() { Title = r.Title, Description = r.Description, CreatedAt = _dateTimeProvider.Now(), CreatedBy = User.GetId() };
 }

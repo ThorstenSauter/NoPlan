@@ -1,4 +1,5 @@
-﻿using NoPlan.Api.Services;
+﻿using NoPlan.Api.Extensions;
+using NoPlan.Api.Services;
 using NoPlan.Contracts.Requests.ToDos.V1;
 using NoPlan.Contracts.Responses.ToDos.V1;
 using NoPlan.Infrastructure.Data.Models;
@@ -35,7 +36,7 @@ public class Delete : EndpointWithMapping<DeleteToDoRequest, ToDoResponse, ToDo>
 
     public override async Task HandleAsync(DeleteToDoRequest req, CancellationToken ct)
     {
-        var deletedToDo = await _toDoService.DeleteAsync(req.Id);
+        var deletedToDo = await _toDoService.DeleteAsync(req.Id, User.GetId());
         if (deletedToDo is null)
         {
             await SendNotFoundAsync(ct);
