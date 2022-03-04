@@ -1,4 +1,5 @@
-﻿using NoPlan.Api.Services;
+﻿using NoPlan.Api.Extensions;
+using NoPlan.Api.Services;
 using NoPlan.Contracts.Requests.ToDos.V1;
 using NoPlan.Contracts.Responses.ToDos.V1;
 using NoPlan.Infrastructure.Data.Models;
@@ -35,7 +36,7 @@ public class Get : EndpointWithMapping<GetToDoRequest, ToDoResponse, ToDo>
 
     public override async Task HandleAsync(GetToDoRequest req, CancellationToken ct)
     {
-        var todo = await _toDoService.GetAsync(req.Id);
+        var todo = await _toDoService.GetAsync(req.Id, User.GetId());
         if (todo is null)
         {
             await SendNotFoundAsync(ct);

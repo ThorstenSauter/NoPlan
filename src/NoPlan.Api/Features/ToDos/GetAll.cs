@@ -1,4 +1,5 @@
-﻿using NoPlan.Api.Services;
+﻿using NoPlan.Api.Extensions;
+using NoPlan.Api.Services;
 using NoPlan.Contracts.Responses.ToDos.V1;
 using NoPlan.Infrastructure.Data.Models;
 
@@ -31,7 +32,7 @@ public class GetAll : EndpointWithMapping<EmptyRequest, ToDosResponse, IEnumerab
     }
 
     public override async Task HandleAsync(EmptyRequest req, CancellationToken ct) =>
-        await SendAsync(MapFromEntity(await _toDoService.GetAllAsync()), cancellation: ct);
+        await SendAsync(MapFromEntity(await _toDoService.GetAllAsync(User.GetId())), cancellation: ct);
 
     public override ToDosResponse MapFromEntity(IEnumerable<ToDo> e) => new()
     {

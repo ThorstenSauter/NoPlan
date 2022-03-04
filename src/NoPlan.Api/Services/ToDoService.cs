@@ -11,11 +11,14 @@ public class ToDoService : IToDoService
     public ToDoService(PlannerContext context) =>
         _context = context;
 
-    public async Task<IEnumerable<ToDo>> GetAllAsync() =>
-        await _context.ToDos.AsNoTracking().ToListAsync();
+    public async Task<IEnumerable<ToDo>> GetAllAsync(Guid userId) =>
+        await _context.ToDos.AsNoTracking().WithPartitionKey(userId.ToString()).ToListAsync();
 
-    public async Task<ToDo?> GetAsync(Guid id) =>
-        await _context.ToDos.WithPartitionKey(id.ToString()).AsNoTracking().FirstOrDefaultAsync();
+    public async Task<ToDo?> GetAsync(Guid id, Guid userId) =>
+        await _context.ToDos
+            .AsNoTracking()
+            .WithPartitionKey(userId.ToString())
+            .FirstOrDefaultAsync(t => t.Id == id);
 
     public async Task<ToDo> CreateAsync(ToDo newToDo)
     {
@@ -27,7 +30,7 @@ public class ToDoService : IToDoService
 
     public async Task<ToDo?> UpdateAsync(ToDo updatedToDo)
     {
-        var toDo = await _context.ToDos.WithPartitionKey(updatedToDo.Id.ToString()).FirstOrDefaultAsync();
+        var toDo = await _context.ToDos.WithPartitionKey(updatedToDo.CreatedBy.ToString()).FirstOrDefaultAsync(t => t.Id == updatedToDo.Id);
         if (toDo is null)
         {
             return null;
@@ -39,9 +42,9 @@ public class ToDoService : IToDoService
         return toDo;
     }
 
-    public async Task<ToDo?> DeleteAsync(Guid id)
+    public async Task<ToDo?> DeleteAsync(Guid id, Guid userId)
     {
-        var toDo = await _context.ToDos.WithPartitionKey(id.ToString()).FirstOrDefaultAsync();
+        var toDo = await _context.ToDos.WithPartitionKey(userId.ToString()).FirstOrDefaultAsync(t => t.Id == id);
         if (toDo is null)
         {
             return null;
