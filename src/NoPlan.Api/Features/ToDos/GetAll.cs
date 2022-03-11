@@ -1,5 +1,4 @@
-﻿using NoPlan.Api.Extensions;
-using NoPlan.Api.Services;
+﻿using NoPlan.Api.Services;
 using NoPlan.Contracts.Responses.ToDos.V1;
 using NoPlan.Infrastructure.Data.Models;
 

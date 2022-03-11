@@ -1,5 +1,4 @@
-﻿using NoPlan.Api.Extensions;
-using NoPlan.Api.Services;
+﻿using NoPlan.Api.Services;
 using NoPlan.Contracts.Requests.ToDos.V1;
 using NoPlan.Contracts.Responses.ToDos.V1;
 using NoPlan.Infrastructure.Data.Models;
@@ -39,7 +38,7 @@ public class Create : EndpointWithMapping<CreateToDoRequest, ToDoResponse, ToDo>
     public override async Task HandleAsync(CreateToDoRequest req, CancellationToken ct)
     {
         var toDo = await _toDoService.CreateAsync(MapToEntity(req));
-        await SendCreatedAtAsync<Get>(new { toDo.Id }, MapFromEntity(toDo), cancellation: ct);
+        await SendCreatedAtAsync("ToDos.Get", new { toDo.Id }, MapFromEntity(toDo), cancellation: ct);
     }
 
     public override ToDoResponse MapFromEntity(ToDo e) =>

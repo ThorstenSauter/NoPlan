@@ -45,11 +45,7 @@ builder.Services
     .AddMicrosoftIdentityWebApiAuthentication(configuration);
 
 var app = builder.Build();
-using (var scope = app.Services.CreateScope())
-{
-    var plannerContext = scope.ServiceProvider.GetRequiredService<PlannerContext>();
-    plannerContext.Database.EnsureCreated();
-}
+EnsureDatabaseCreated(app);
 
 app.UseAzureAppConfiguration();
 app.UseRouting();
@@ -79,3 +75,10 @@ app.UseEndpoints(endpoints =>
 });
 
 app.Run();
+
+void EnsureDatabaseCreated(IHost webApplication)
+{
+    using var scope = webApplication.Services.CreateScope();
+    var plannerContext = scope.ServiceProvider.GetRequiredService<PlannerContext>();
+    plannerContext.Database.EnsureCreated();
+}
