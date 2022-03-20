@@ -19,7 +19,6 @@ public static class DependencyInjection
                 tags: new[] { "db" });
 
         return services
-            .AddDbContext<PlannerContext>(options => options.UseCosmos(cosmosConnectionString, databaseName))
-            .AddApplicationInsightsTelemetry();
+            .AddDbContext<PlannerContext>(options => options.UseCosmos(cosmosConnectionString, databaseName));
     }
 }
