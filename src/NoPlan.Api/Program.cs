@@ -61,7 +61,13 @@ try
     EnsureDatabaseCreated(app);
 
     app.UseAzureAppConfiguration();
-    app.UseSerilogRequestLogging();
+    app.UseSerilogRequestLogging(options =>
+        options.EnrichDiagnosticContext = (diagnosticsContext, httpContext) =>
+        {
+            diagnosticsContext.Set("UserId", httpContext.User.GetId());
+            diagnosticsContext.Set("RequestId", httpContext.TraceIdentifier);
+        });
+
     app.UseRouting();
     app.UseAuthentication();
     app.UseAuthorization();
