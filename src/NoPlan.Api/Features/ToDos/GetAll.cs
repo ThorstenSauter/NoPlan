@@ -16,7 +16,7 @@ public class GetAll : EndpointWithMapping<EmptyRequest, ToDosResponse, IEnumerab
         Get("/todos");
         Version(1);
         Policies("User");
-        Describe(b => b
+        Description(b => b
             .Accepts<EmptyRequest>("application/json")
             .Produces<ToDosResponse>(200, "application/json")
             .WithName("ToDos.GetAll")

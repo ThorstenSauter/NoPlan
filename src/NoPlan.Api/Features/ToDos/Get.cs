@@ -17,7 +17,7 @@ public class Get : EndpointWithMapping<GetToDoRequest, ToDoResponse, ToDo>
         Get("/todos/{Id}");
         Version(1);
         Policies("User");
-        Describe(b => b
+        Description(b => b
             .Accepts<GetToDoRequest>("application/json")
             .Produces<ToDoResponse>(200, "application/json")
             .ProducesProblem(404)

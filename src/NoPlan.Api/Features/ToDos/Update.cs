@@ -17,7 +17,7 @@ public class Update : EndpointWithMapping<UpdateToDoRequest, ToDoResponse, ToDo>
         Put("/todos/{Id}");
         Version(1);
         Policies("User");
-        Describe(b => b
+        Description(b => b
             .Accepts<UpdateToDoRequest>("application/json")
             .Produces<ToDoResponse>(200, "application/json")
             .ProducesProblem(404)
