@@ -21,7 +21,7 @@ public class Create : EndpointWithMapping<CreateToDoRequest, ToDoResponse, ToDo>
         Post("/todos");
         Version(1);
         Policies("User");
-        Describe(b => b
+        Description(b => b
             .Accepts<CreateToDoRequest>("application/json")
             .Produces<ToDoResponse>(201, "application/json")
             .WithName("ToDos.Create")
