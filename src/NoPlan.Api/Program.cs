@@ -1,6 +1,7 @@
 using Azure.Identity;
 using FastEndpoints.Swagger;
 using HealthChecks.UI.Client;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Identity.Web;
 using NoPlan.Api.Options;
@@ -58,13 +59,13 @@ try
             .Enrich.WithProperty("Version", typeof(Program).Assembly.GetName().Version));
 
     var app = builder.Build();
-    EnsureDatabaseCreated(app);
+    await EnsureDatabaseCreatedAsync<PlannerContext>(app);
 
     app.UseAzureAppConfiguration();
     app.UseSerilogRequestLogging(options =>
         options.EnrichDiagnosticContext = (diagnosticsContext, httpContext) =>
         {
-            diagnosticsContext.Set("UserId", httpContext.User.GetId());
+            diagnosticsContext.Set("UserId", httpContext.User.GetId().ToString());
             diagnosticsContext.Set("RequestId", httpContext.TraceIdentifier);
         });
 
@@ -94,7 +95,7 @@ try
         endpoints.MapHealthChecks("/health/live", new() { Predicate = _ => false, ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse });
     });
 
-    app.Run();
+    await app.RunAsync();
 }
 catch (Exception ex)
 {
@@ -105,9 +106,9 @@ finally
     Log.CloseAndFlush();
 }
 
-void EnsureDatabaseCreated(IHost webApplication)
+async Task EnsureDatabaseCreatedAsync<T>(IHost webApplication) where T : DbContext
 {
     using var scope = webApplication.Services.CreateScope();
-    var plannerContext = scope.ServiceProvider.GetRequiredService<PlannerContext>();
-    plannerContext.Database.EnsureCreated();
+    var plannerContext = scope.ServiceProvider.GetRequiredService<T>();
+    await plannerContext.Database.EnsureCreatedAsync();
 }
