@@ -2,7 +2,7 @@
 
 namespace NoPlan.Contracts.Requests.V1.ToDos;
 
-public record DeleteToDoRequest
+public sealed record DeleteToDoRequest
 {
     /// <summary>
     ///     The identifier of the ToDo object to delete.
@@ -11,7 +11,7 @@ public record DeleteToDoRequest
     public Guid Id { get; init; }
 }
 
-public class DeleteToDoRequestValidator : Validator<DeleteToDoRequest>
+public sealed class DeleteToDoRequestValidator : Validator<DeleteToDoRequest>
 {
     public DeleteToDoRequestValidator() =>
         RuleFor(x => x.Id)

@@ -1,7 +1,6 @@
 ﻿namespace NoPlan.Contracts.Responses.V1.ToDos;
 
-
-public record ToDoResponse
+public sealed record ToDoResponse
 {
     /// <summary>
     ///     The unique identifier.

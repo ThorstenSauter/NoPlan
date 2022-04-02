@@ -5,7 +5,7 @@ using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Api.Features.V1.ToDos;
 
-public class Create : EndpointWithMapping<CreateToDoRequest, ToDoResponse, ToDo>
+public sealed class Create : EndpointWithMapping<CreateToDoRequest, ToDoResponse, ToDo>
 {
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IToDoService _toDoService;

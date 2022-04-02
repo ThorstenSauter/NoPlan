@@ -5,7 +5,7 @@ using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Api.Features.V1.ToDos;
 
-public class Update : EndpointWithMapping<UpdateToDoRequest, ToDoResponse, ToDo>
+public sealed class Update : EndpointWithMapping<UpdateToDoRequest, ToDoResponse, ToDo>
 {
     private readonly IToDoService _toDoService;
     private readonly IDateTimeProvider _dateTimeProvider;

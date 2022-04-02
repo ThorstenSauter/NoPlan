@@ -3,7 +3,7 @@ using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Infrastructure.Data.EntityTypeConfigurations;
 
-public class ToDoEntityTypeConfiguration : IEntityTypeConfiguration<ToDo>
+public sealed class ToDoEntityTypeConfiguration : IEntityTypeConfiguration<ToDo>
 {
     public void Configure(EntityTypeBuilder<ToDo> builder)
     {

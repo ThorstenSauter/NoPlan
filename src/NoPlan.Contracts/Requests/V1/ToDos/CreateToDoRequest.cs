@@ -1,6 +1,6 @@
 ﻿namespace NoPlan.Contracts.Requests.V1.ToDos;
 
-public record CreateToDoRequest
+public sealed record CreateToDoRequest
 {
     /// <summary>
     ///     The ToDo title. Must be at least 3 characters long.
@@ -18,7 +18,7 @@ public record CreateToDoRequest
     public HashSet<CreateTagRequest> Tags { get; init; } = new();
 }
 
-public class CreateToDoRequestValidator : Validator<CreateToDoRequest>
+public sealed class CreateToDoRequestValidator : Validator<CreateToDoRequest>
 {
     public CreateToDoRequestValidator()
     {

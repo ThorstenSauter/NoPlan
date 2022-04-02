@@ -4,7 +4,7 @@ using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Api.Features.V1.ToDos;
 
-public class GetAll : EndpointWithMapping<EmptyRequest, ToDosResponse, IEnumerable<ToDo>>
+public sealed class GetAll : EndpointWithMapping<EmptyRequest, ToDosResponse, IEnumerable<ToDo>>
 {
     private readonly IToDoService _toDoService;
 

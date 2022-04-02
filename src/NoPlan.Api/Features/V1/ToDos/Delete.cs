@@ -5,7 +5,7 @@ using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Api.Features.V1.ToDos;
 
-public class Delete : EndpointWithMapping<DeleteToDoRequest, ToDoResponse, ToDo>
+public sealed class Delete : EndpointWithMapping<DeleteToDoRequest, ToDoResponse, ToDo>
 {
     private readonly IToDoService _toDoService;
 

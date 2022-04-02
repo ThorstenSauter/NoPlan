@@ -5,7 +5,7 @@ using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Api.Features.V1.ToDos;
 
-public class Get : EndpointWithMapping<GetToDoRequest, ToDoResponse, ToDo>
+public sealed class Get : EndpointWithMapping<GetToDoRequest, ToDoResponse, ToDo>
 {
     private readonly IToDoService _toDoService;
 
