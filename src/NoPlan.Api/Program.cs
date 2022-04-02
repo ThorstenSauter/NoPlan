@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Identity.Web;
 using NoPlan.Api.Options;
 using NoPlan.Api.Services;
+using NoPlan.Api.Swagger;
 using NoPlan.Contracts;
 using NoPlan.Infrastructure.Data;
 using Serilog;
@@ -42,6 +43,7 @@ try
         .AddFastEndpoints(new[] { typeof(IContractAssemblyMarker).Assembly })
         .AddSwaggerDoc(maxEndpointVersion: 1, settings: s =>
         {
+            s.SchemaNameGenerator = new ShortVersionedSchemaNameGenerator();
             s.DocumentName = "Release v1";
             s.Title = "NoPlan API";
             s.Version = "v1";
