@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace NoPlan.Contracts.Requests.ToDos.V1;
+namespace NoPlan.Contracts.Requests.V1.ToDos;
 
 public record DeleteToDoRequest
 {

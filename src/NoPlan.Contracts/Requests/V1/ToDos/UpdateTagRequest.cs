@@ -1,4 +1,4 @@
-﻿namespace NoPlan.Contracts.Requests.ToDos.V1.Tags;
+﻿namespace NoPlan.Contracts.Requests.V1.ToDos;
 
 public record UpdateTagRequest
 {

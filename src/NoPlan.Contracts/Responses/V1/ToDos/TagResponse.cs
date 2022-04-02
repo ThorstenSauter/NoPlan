@@ -1,4 +1,4 @@
-﻿namespace NoPlan.Contracts.Responses.ToDos.V1.Tags;
+﻿namespace NoPlan.Contracts.Responses.V1.ToDos;
 
 public class TagResponse
 {
