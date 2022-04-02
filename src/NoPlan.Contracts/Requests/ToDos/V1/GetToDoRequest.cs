@@ -8,7 +8,7 @@ public record GetToDoRequest
     public Guid Id { get; init; }
 }
 
-public class GetToDoRequestValidator : Validator<DeleteToDoRequest>
+public class GetToDoRequestValidator : Validator<GetToDoRequest>
 {
     public GetToDoRequestValidator() =>
         RuleFor(x => x.Id)

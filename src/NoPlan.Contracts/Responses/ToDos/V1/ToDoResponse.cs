@@ -1,4 +1,6 @@
-﻿namespace NoPlan.Contracts.Responses.ToDos.V1;
+﻿using NoPlan.Contracts.Responses.ToDos.V1.Tags;
+
+namespace NoPlan.Contracts.Responses.ToDos.V1;
 
 public record ToDoResponse
 {
@@ -16,6 +18,11 @@ public record ToDoResponse
     ///     The description.
     /// </summary>
     public string Description { get; init; } = null!;
+
+    /// <summary>
+    ///     The list of associated tags.
+    /// </summary>
+    public IEnumerable<TagResponse> Tags { get; set; } = new List<TagResponse>();
 
     /// <summary>
     ///     The time of creation.

@@ -36,8 +36,18 @@ public class ToDoService : IToDoService
             return null;
         }
 
+        foreach (var tag in updatedToDo.Tags)
+        {
+            var existingToDo = toDo.Tags.FirstOrDefault(t => t == tag);
+            if (existingToDo is not null)
+            {
+                tag.AssignedAt = existingToDo.AssignedAt;
+            }
+        }
+
         toDo.Title = updatedToDo.Title;
         toDo.Description = updatedToDo.Description;
+        toDo.Tags = updatedToDo.Tags;
         await _context.SaveChangesAsync();
         return toDo;
     }
