@@ -1,4 +1,6 @@
-﻿namespace NoPlan.Contracts.Requests.ToDos.V1;
+﻿using NoPlan.Contracts.Requests.ToDos.V1.Tags;
+
+namespace NoPlan.Contracts.Requests.ToDos.V1;
 
 public record CreateToDoRequest
 {
@@ -11,6 +13,11 @@ public record CreateToDoRequest
     ///     The ToDo description. Cannot be null or empty.
     /// </summary>
     public string Description { get; init; } = null!;
+
+    /// <summary>
+    ///     The required list of tags that should be associated with the new ToDo.
+    /// </summary>
+    public HashSet<CreateTagRequest> Tags { get; init; } = new();
 }
 
 public class CreateToDoRequestValidator : Validator<CreateToDoRequest>
@@ -23,5 +30,11 @@ public class CreateToDoRequestValidator : Validator<CreateToDoRequest>
 
         RuleFor(x => x.Description)
             .NotEmpty().WithMessage("A description for the new ToDo is required");
+
+        RuleFor(x => x.Tags)
+            .NotNull().WithMessage("The list of associated tags is required");
+
+        RuleForEach(x => x.Tags)
+            .SetValidator(new CreateTagRequestValidator());
     }
 }

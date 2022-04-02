@@ -1,6 +1,7 @@
 ﻿using NoPlan.Api.Services;
 using NoPlan.Contracts.Requests.ToDos.V1;
 using NoPlan.Contracts.Responses.ToDos.V1;
+using NoPlan.Contracts.Responses.ToDos.V1.Tags;
 using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Api.Features.ToDos;
@@ -46,5 +47,12 @@ public class Get : EndpointWithMapping<GetToDoRequest, ToDoResponse, ToDo>
     }
 
     public override ToDoResponse MapFromEntity(ToDo e) =>
-        new() { Id = e.Id, Title = e.Title, Description = e.Description, CreatedAt = e.CreatedAt };
+        new()
+        {
+            Id = e.Id,
+            Title = e.Title,
+            Description = e.Description,
+            Tags = e.Tags.Select(ta => new TagResponse { Name = ta.Name, AssignedAt = ta.AssignedAt }),
+            CreatedAt = e.CreatedAt
+        };
 }

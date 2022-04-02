@@ -1,6 +1,8 @@
 ﻿using NoPlan.Api.Services;
 using NoPlan.Contracts.Requests.ToDos.V1;
+using NoPlan.Contracts.Requests.ToDos.V1.Tags;
 using NoPlan.Contracts.Responses.ToDos.V1;
+using NoPlan.Contracts.Responses.ToDos.V1.Tags;
 using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Api.Features.ToDos;
@@ -42,8 +44,31 @@ public class Create : EndpointWithMapping<CreateToDoRequest, ToDoResponse, ToDo>
     }
 
     public override ToDoResponse MapFromEntity(ToDo e) =>
-        new() { Id = e.Id, Title = e.Title, Description = e.Description, CreatedAt = e.CreatedAt };
+        new()
+        {
+            Id = e.Id,
+            Title = e.Title,
+            Description = e.Description,
+            Tags = e.Tags.Select(MapFromEntity),
+            CreatedAt = e.CreatedAt
+        };
 
-    public override ToDo MapToEntity(CreateToDoRequest r) =>
-        new() { Title = r.Title, Description = r.Description, CreatedAt = _dateTimeProvider.Now(), CreatedBy = User.GetId() };
+    public override ToDo MapToEntity(CreateToDoRequest r)
+    {
+        var creationTime = _dateTimeProvider.UtcNow();
+        return new()
+        {
+            Title = r.Title,
+            Description = r.Description,
+            Tags = r.Tags.Select(request => MapToEntity(request, creationTime)).ToList(),
+            CreatedAt = creationTime,
+            CreatedBy = User.GetId()
+        };
+    }
+
+    private Tag MapToEntity(CreateTagRequest r, DateTime creationTime) =>
+        new() { Name = r.Name, AssignedAt = creationTime };
+
+    private TagResponse MapFromEntity(Tag e) =>
+        new() { Name = e.Name, AssignedAt = e.AssignedAt };
 }

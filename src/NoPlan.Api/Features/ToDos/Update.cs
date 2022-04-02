@@ -1,6 +1,8 @@
 ﻿using NoPlan.Api.Services;
 using NoPlan.Contracts.Requests.ToDos.V1;
+using NoPlan.Contracts.Requests.ToDos.V1.Tags;
 using NoPlan.Contracts.Responses.ToDos.V1;
+using NoPlan.Contracts.Responses.ToDos.V1.Tags;
 using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Api.Features.ToDos;
@@ -8,9 +10,13 @@ namespace NoPlan.Api.Features.ToDos;
 public class Update : EndpointWithMapping<UpdateToDoRequest, ToDoResponse, ToDo>
 {
     private readonly IToDoService _toDoService;
+    private readonly IDateTimeProvider _dateTimeProvider;
 
-    public Update(IToDoService toDoService) =>
+    public Update(IToDoService toDoService, IDateTimeProvider dateTimeProvider)
+    {
         _toDoService = toDoService;
+        _dateTimeProvider = dateTimeProvider;
+    }
 
     public override void Configure()
     {
@@ -46,8 +52,31 @@ public class Update : EndpointWithMapping<UpdateToDoRequest, ToDoResponse, ToDo>
     }
 
     public override ToDoResponse MapFromEntity(ToDo e) =>
-        new() { Id = e.Id, Title = e.Title, Description = e.Description, CreatedAt = e.CreatedAt };
+        new()
+        {
+            Id = e.Id,
+            Title = e.Title,
+            Description = e.Description,
+            Tags = e.Tags.Select(MapFromEntity),
+            CreatedAt = e.CreatedAt
+        };
 
-    public override ToDo MapToEntity(UpdateToDoRequest r) =>
-        new() { Id = r.Id, Title = r.Title, Description = r.Description, CreatedBy = User.GetId() };
+    public override ToDo MapToEntity(UpdateToDoRequest r)
+    {
+        var updateTime = _dateTimeProvider.UtcNow();
+        return new()
+        {
+            Id = r.Id,
+            Title = r.Title,
+            Description = r.Description,
+            Tags = r.Tags.Select(request => MapToEntity(request, updateTime)).ToList(),
+            CreatedBy = User.GetId()
+        };
+    }
+
+    private Tag MapToEntity(UpdateTagRequest r, DateTime updateTime) =>
+        new() { Name = r.Name, AssignedAt = updateTime };
+
+    private TagResponse MapFromEntity(Tag e) =>
+        new() { Name = e.Name, AssignedAt = e.AssignedAt };
 }
