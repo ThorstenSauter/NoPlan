@@ -1,6 +1,6 @@
 ﻿namespace NoPlan.Infrastructure.Data.Models;
 
-public class Tag
+public sealed class Tag
 {
     public string Name { get; set; } = null!;
     public DateTime AssignedAt { get; set; }
@@ -30,6 +30,6 @@ public class Tag
         // ReSharper disable once NonReadonlyMemberInGetHashCode
         Name.GetHashCode();
 
-    protected bool Equals(Tag other) =>
+    private bool Equals(Tag other) =>
         Name == other.Name;
 }

@@ -1,6 +1,6 @@
 ﻿namespace NoPlan.Infrastructure.Data.Models;
 
-public class ToDo
+public sealed class ToDo
 {
     public Guid Id { get; set; }
     public string Title { get; set; } = null!;

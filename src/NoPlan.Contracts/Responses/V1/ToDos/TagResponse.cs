@@ -1,6 +1,6 @@
-﻿namespace NoPlan.Contracts.Responses.ToDos.V1.Tags;
+﻿namespace NoPlan.Contracts.Responses.V1.ToDos;
 
-public class TagResponse
+public sealed record TagResponse
 {
     public string Name { get; set; } = null!;
     public DateTime AssignedAt { get; set; }

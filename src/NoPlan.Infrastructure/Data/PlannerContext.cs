@@ -2,7 +2,7 @@
 
 namespace NoPlan.Infrastructure.Data;
 
-public class PlannerContext : DbContext
+public sealed class PlannerContext : DbContext
 {
     public PlannerContext(DbContextOptions<PlannerContext> options) : base(options)
     {

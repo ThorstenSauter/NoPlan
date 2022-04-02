@@ -4,7 +4,7 @@ using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Api.Services;
 
-public class ToDoService : IToDoService
+public sealed class ToDoService : IToDoService
 {
     private readonly PlannerContext _context;
 

@@ -3,7 +3,7 @@
 /// <summary>
 ///     Contains configuration values for connecting to Azure App Configuration.
 /// </summary>
-public class AppConfigurationOptions
+public sealed class AppConfigurationOptions
 {
     /// <summary>
     ///     The <see cref="IConfiguration" /> section name.

@@ -1,6 +1,6 @@
-﻿namespace NoPlan.Contracts.Responses.ToDos.V1;
+﻿namespace NoPlan.Contracts.Responses.V1.ToDos;
 
-public class ToDosResponse
+public sealed record ToDosResponse
 {
     /// <summary>
     ///     The collection of ToDo entities.

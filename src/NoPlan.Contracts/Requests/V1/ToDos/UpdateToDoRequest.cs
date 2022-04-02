@@ -1,8 +1,6 @@
-﻿using NoPlan.Contracts.Requests.ToDos.V1.Tags;
+﻿namespace NoPlan.Contracts.Requests.V1.ToDos;
 
-namespace NoPlan.Contracts.Requests.ToDos.V1;
-
-public record UpdateToDoRequest
+public sealed record UpdateToDoRequest
 {
     /// <summary>
     ///     The identifier of the ToDo object to update.
@@ -25,7 +23,7 @@ public record UpdateToDoRequest
     public HashSet<UpdateTagRequest> Tags { get; init; } = new();
 }
 
-public class UpdateToDoRequestValidator : Validator<UpdateToDoRequest>
+public sealed class UpdateToDoRequestValidator : Validator<UpdateToDoRequest>
 {
     public UpdateToDoRequestValidator()
     {

@@ -1,12 +1,11 @@
 ﻿using NoPlan.Api.Services;
-using NoPlan.Contracts.Requests.ToDos.V1;
-using NoPlan.Contracts.Responses.ToDos.V1;
-using NoPlan.Contracts.Responses.ToDos.V1.Tags;
+using NoPlan.Contracts.Requests.V1.ToDos;
+using NoPlan.Contracts.Responses.V1.ToDos;
 using NoPlan.Infrastructure.Data.Models;
 
-namespace NoPlan.Api.Features.ToDos;
+namespace NoPlan.Api.Features.V1.ToDos;
 
-public class Get : EndpointWithMapping<GetToDoRequest, ToDoResponse, ToDo>
+public sealed class Get : EndpointWithMapping<GetToDoRequest, ToDoResponse, ToDo>
 {
     private readonly IToDoService _toDoService;
 

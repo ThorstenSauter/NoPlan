@@ -1,8 +1,6 @@
-﻿using NoPlan.Contracts.Responses.ToDos.V1.Tags;
+﻿namespace NoPlan.Contracts.Responses.V1.ToDos;
 
-namespace NoPlan.Contracts.Responses.ToDos.V1;
-
-public record ToDoResponse
+public sealed record ToDoResponse
 {
     /// <summary>
     ///     The unique identifier.

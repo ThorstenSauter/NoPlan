@@ -1,8 +1,6 @@
-﻿using NoPlan.Contracts.Requests.ToDos.V1.Tags;
+﻿namespace NoPlan.Contracts.Requests.V1.ToDos;
 
-namespace NoPlan.Contracts.Requests.ToDos.V1;
-
-public record CreateToDoRequest
+public sealed record CreateToDoRequest
 {
     /// <summary>
     ///     The ToDo title. Must be at least 3 characters long.
@@ -20,7 +18,7 @@ public record CreateToDoRequest
     public HashSet<CreateTagRequest> Tags { get; init; } = new();
 }
 
-public class CreateToDoRequestValidator : Validator<CreateToDoRequest>
+public sealed class CreateToDoRequestValidator : Validator<CreateToDoRequest>
 {
     public CreateToDoRequestValidator()
     {
