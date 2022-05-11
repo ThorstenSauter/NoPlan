@@ -13,10 +13,11 @@ variables:
 
 steps:
   - task: UseDotNet@2
-    displayName: 'Acquire .NET 6 SDK'
+    displayName: 'Acquire .NET 7 SDK'
     inputs:
       packageType: 'sdk'
-      version: '6.0.x'
+      version: '7.0.x'
+      includePreviewVersions: true
   - task: DotNetCoreCLI@2
     displayName: 'Restore NuGet packages for solution'
     inputs:
