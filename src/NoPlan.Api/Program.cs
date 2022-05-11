@@ -1,3 +1,4 @@
+using System.Configuration;
 using Azure.Identity;
 using FastEndpoints.Swagger;
 using HealthChecks.UI.Client;
@@ -22,7 +23,9 @@ try
     builder.Host.ConfigureAppConfiguration(config =>
         config.AddAzureAppConfiguration(options =>
         {
-            var appConfigurationOptions = configuration.GetSection(AppConfigurationOptions.SectionName).Get<AppConfigurationOptions>();
+            var appConfigurationOptions = configuration.GetSection(AppConfigurationOptions.SectionName).Get<AppConfigurationOptions>() ??
+                                          throw new ConfigurationErrorsException("AppConfigurationOptions not found");
+
             var isDevelopment = builder.Environment.IsDevelopment();
             var credential = isDevelopment
                 ? new DefaultAzureCredential()
