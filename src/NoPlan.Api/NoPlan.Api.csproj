@@ -12,8 +12,8 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.4" />
-    <PackageReference Include="FastEndpoints" Version="4.1.0" />
-    <PackageReference Include="FastEndpoints.Swagger" Version="4.1.0" />
+    <PackageReference Include="FastEndpoints" Version="4.2.0" />
+    <PackageReference Include="FastEndpoints.Swagger" Version="4.2.0" />
     <PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0-preview.4.22229.2">
       <PrivateAssets>all</PrivateAssets>
@@ -27,7 +27,6 @@
 
   <ItemGroup>
     <Using Include="FastEndpoints" />
-    <Using Include="FastEndpoints.Validation" />
     <Using Include="NoPlan.Api.Extensions" />
   </ItemGroup>
 
