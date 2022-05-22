@@ -3,14 +3,14 @@ using NoPlan.Contracts.Requests.V1.ToDos;
 using NoPlan.Contracts.Responses.V1.ToDos;
 using NoPlan.Infrastructure.Data.Models;
 
-namespace NoPlan.Api.Features.V1.ToDos;
+namespace NoPlan.Api.Endpoints.V1.ToDos;
 
-public sealed class Update : EndpointWithMapping<UpdateToDoRequest, ToDoResponse, ToDo>
+public sealed class UpdateToDoEndpoint : EndpointWithMapping<UpdateToDoRequest, ToDoResponse, ToDo>
 {
     private readonly IToDoService _toDoService;
     private readonly IDateTimeProvider _dateTimeProvider;
 
-    public Update(IToDoService toDoService, IDateTimeProvider dateTimeProvider)
+    public UpdateToDoEndpoint(IToDoService toDoService, IDateTimeProvider dateTimeProvider)
     {
         _toDoService = toDoService;
         _dateTimeProvider = dateTimeProvider;
@@ -21,20 +21,7 @@ public sealed class Update : EndpointWithMapping<UpdateToDoRequest, ToDoResponse
         Put("/todos/{Id}");
         Version(1);
         Policies("User");
-        Description(b => b
-            .Accepts<UpdateToDoRequest>("application/json")
-            .Produces<ToDoResponse>(200, "application/json")
-            .ProducesProblem(404)
-            .WithName("ToDos.Update")
-        );
-
-        Summary(s =>
-        {
-            s.Summary = "Updates the specified ToDo entity.";
-            s.Description = "Updates the ToDo entity with the provided identifier and data and returns the updated entity.";
-            s[200] = "Returns the successfully updated ToDo entity.";
-            s[404] = "Returned if the specified ToDo entity does not exist.";
-        });
+        Description(b => b.WithName("ToDos.Update"));
     }
 
     public override async Task HandleAsync(UpdateToDoRequest req, CancellationToken ct)

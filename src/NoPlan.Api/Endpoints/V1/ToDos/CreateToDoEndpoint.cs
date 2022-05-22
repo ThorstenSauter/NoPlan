@@ -3,14 +3,14 @@ using NoPlan.Contracts.Requests.V1.ToDos;
 using NoPlan.Contracts.Responses.V1.ToDos;
 using NoPlan.Infrastructure.Data.Models;
 
-namespace NoPlan.Api.Features.V1.ToDos;
+namespace NoPlan.Api.Endpoints.V1.ToDos;
 
-public sealed class Create : EndpointWithMapping<CreateToDoRequest, ToDoResponse, ToDo>
+public sealed class CreateToDoEndpoint : EndpointWithMapping<CreateToDoRequest, ToDoResponse, ToDo>
 {
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IToDoService _toDoService;
 
-    public Create(IToDoService toDoService, IDateTimeProvider dateTimeProvider)
+    public CreateToDoEndpoint(IToDoService toDoService, IDateTimeProvider dateTimeProvider)
     {
         _toDoService = toDoService;
         _dateTimeProvider = dateTimeProvider;
@@ -21,18 +21,7 @@ public sealed class Create : EndpointWithMapping<CreateToDoRequest, ToDoResponse
         Post("/todos");
         Version(1);
         Policies("User");
-        Description(b => b
-            .Accepts<CreateToDoRequest>("application/json")
-            .Produces<ToDoResponse>(201, "application/json")
-            .WithName("ToDos.Create")
-        );
-
-        Summary(s =>
-        {
-            s.Summary = "Creates a new ToDo entity.";
-            s.Description = "Creates a new ToDo entity with the provided data and returns it.";
-            s[201] = "Returns the successfully created ToDo entity.";
-        });
+        Description(b => b.WithName("ToDos.Create"));
     }
 
     public override async Task HandleAsync(CreateToDoRequest req, CancellationToken ct)

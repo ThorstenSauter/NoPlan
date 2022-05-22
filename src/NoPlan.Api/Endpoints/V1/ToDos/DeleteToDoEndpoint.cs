@@ -3,13 +3,13 @@ using NoPlan.Contracts.Requests.V1.ToDos;
 using NoPlan.Contracts.Responses.V1.ToDos;
 using NoPlan.Infrastructure.Data.Models;
 
-namespace NoPlan.Api.Features.V1.ToDos;
+namespace NoPlan.Api.Endpoints.V1.ToDos;
 
-public sealed class Delete : EndpointWithMapping<DeleteToDoRequest, ToDoResponse, ToDo>
+public sealed class DeleteToDoEndpoint : EndpointWithMapping<DeleteToDoRequest, ToDoResponse, ToDo>
 {
     private readonly IToDoService _toDoService;
 
-    public Delete(IToDoService toDoService) =>
+    public DeleteToDoEndpoint(IToDoService toDoService) =>
         _toDoService = toDoService;
 
     public override void Configure()
@@ -17,20 +17,7 @@ public sealed class Delete : EndpointWithMapping<DeleteToDoRequest, ToDoResponse
         Delete("/todos/{Id}");
         Version(1);
         Policies("User");
-        Description(b => b
-            .Accepts<DeleteToDoRequest>("application/json")
-            .Produces<ToDoResponse>(200, "application/json")
-            .ProducesProblem(404)
-            .WithName("ToDos.Delete")
-        );
-
-        Summary(s =>
-        {
-            s.Summary = "Deletes the specified ToDo entity.";
-            s.Description = "Deletes the ToDo entity with the provided identifier and returns the deleted data.";
-            s[200] = "Returns the successfully deleted ToDo entity.";
-            s[404] = "Returned if the specified ToDo entity did not exist.";
-        });
+        Description(b => b.WithName("ToDos.Delete"));
     }
 
     public override async Task HandleAsync(DeleteToDoRequest req, CancellationToken ct)
