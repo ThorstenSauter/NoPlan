@@ -2,13 +2,13 @@
 using NoPlan.Contracts.Responses.V1.ToDos;
 using NoPlan.Infrastructure.Data.Models;
 
-namespace NoPlan.Api.Features.V1.ToDos;
+namespace NoPlan.Api.Endpoints.V1.ToDos;
 
-public sealed class GetAll : EndpointWithMapping<EmptyRequest, ToDosResponse, IEnumerable<ToDo>>
+public sealed class GetAllToDosEndpoint : EndpointWithMapping<EmptyRequest, ToDosResponse, IEnumerable<ToDo>>
 {
     private readonly IToDoService _toDoService;
 
-    public GetAll(IToDoService toDoService) =>
+    public GetAllToDosEndpoint(IToDoService toDoService) =>
         _toDoService = toDoService;
 
     public override void Configure()
@@ -16,18 +16,7 @@ public sealed class GetAll : EndpointWithMapping<EmptyRequest, ToDosResponse, IE
         Get("/todos");
         Version(1);
         Policies("User");
-        Description(b => b
-            .Accepts<EmptyRequest>("application/json")
-            .Produces<ToDosResponse>(200, "application/json")
-            .WithName("ToDos.GetAll")
-        );
-
-        Summary(s =>
-        {
-            s.Summary = "Retrieves all ToDo entities.";
-            s.Description = "Retrieves all ToDo entities and returns them.";
-            s[200] = "Returns all ToDo entities.";
-        });
+        Description(b => b.WithName("ToDos.GetAll"));
     }
 
     public override async Task HandleAsync(EmptyRequest req, CancellationToken ct) =>
