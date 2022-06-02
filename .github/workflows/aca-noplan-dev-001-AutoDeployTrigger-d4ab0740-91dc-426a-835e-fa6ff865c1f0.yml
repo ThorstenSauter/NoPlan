@@ -1,0 +1,60 @@
+name: Trigger auto deployment for aca-noplan-dev-001
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ main ]
+    paths:
+    - 'src/NoPlan.Api/**'
+    - '.github/workflows/aca-noplan-dev-001-AutoDeployTrigger-d4ab0740-91dc-426a-835e-fa6ff865c1f0.yml'
+
+  # Allow mannually trigger 
+  workflow_dispatch:      
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to container registry
+        uses: docker/login-action@v1
+        with:
+          registry: crnoplandev001.azurecr.io
+          username: ${{ secrets.ACANOPLANDEV001_REGISTRY_USERNAME }}
+          password: ${{ secrets.ACANOPLANDEV001_REGISTRY_PASSWORD }}
+
+      - name: Build and push container image to registry
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: crnoplandev001.azurecr.io/noplan-api:${{ github.sha }}
+          file: ./src/NoPlan.Api/Dockerfile
+          context: ./src/NoPlan.Api/
+
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.ACANOPLANDEV001_AZURE_CREDENTIALS }}
+
+
+      - name: Deploy to containerapp
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az config set extension.use_dynamic_install=yes_without_prompt
+            az containerapp registry set -n aca-noplan-dev-001 -g rg-noplan-dev-001 --server crnoplandev001.azurecr.io --username  ${{ secrets.ACANOPLANDEV001_REGISTRY_USERNAME }} --password ${{ secrets.ACANOPLANDEV001_REGISTRY_PASSWORD }}
+            az containerapp update -n aca-noplan-dev-001 -g rg-noplan-dev-001 --image crnoplandev001.azurecr.io/noplan-api:${{ github.sha }}
