@@ -31,6 +31,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="appsettings.Development.json" CopyToPublishDirectory="Never" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\NoPlan.Contracts\NoPlan.Contracts.csproj" />
     <ProjectReference Include="..\NoPlan.Infrastructure\NoPlan.Infrastructure.csproj" />
   </ItemGroup>
