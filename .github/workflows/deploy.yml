@@ -31,14 +31,14 @@ jobs:
       - name: Login to Azure Container Registry
         uses: azure/docker-login@v1
         with:
-          login-server: ${ env.REGISTRY_NAME }.azurecr.io
+          login-server: ${{ env.REGISTRY_NAME }}.azurecr.io
           username: ${{ secrets.AZURE_CLIENT_ID }}
           password: ${{ secrets.AZURE_CLIENT_SECRET }}
       - name: Build and push container image to registry
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${ env.REGISTRY_NAME }.azurecr.io/noplan-api:${{ github.sha }}
+          tags: ${{ env.REGISTRY_NAME }}.azurecr.io/noplan-api:${{ github.sha }}
           file: ./src/NoPlan.Api/Dockerfile
           context: .
 
@@ -58,5 +58,5 @@ jobs:
         with:
           inlineScript: |
             az config set extension.use_dynamic_install=yes_without_prompt
-            az containerapp registry set -n ${ env.APP_NAME } -g ${ env.RESOURCE_GROUP } --server ${ env.REGISTRY_NAME }.azurecr.io
-            az containerapp update -n ${ env.APP_NAME } -g ${ env.RESOURCE_GROUP } --image ${ env.REGISTRY_NAME }.azurecr.io/noplan-api:${{ github.sha }}
+            az containerapp registry set -n ${{ env.APP_NAME }} -g ${{ env.RESOURCE_GROUP }} --server ${{ env.REGISTRY_NAME }}.azurecr.io
+            az containerapp update -n ${{ env.APP_NAME }} -g ${{ env.RESOURCE_GROUP }} --image ${{ env.REGISTRY_NAME }}.azurecr.io/noplan-api:${{ github.sha }}
