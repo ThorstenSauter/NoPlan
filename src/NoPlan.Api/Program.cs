@@ -51,6 +51,7 @@ try
         })
         .AddInfrastructure(configuration)
         .AddAzureAppConfiguration()
+        .AddApplicationInsightsTelemetry()
         .AddScoped<IToDoService, ToDoService>()
         .AddSingleton<IDateTimeProvider, DateTimeProvider>()
         .AddAuthorization(options => options.AddPolicy("User", b => b.RequireScope("User")))
