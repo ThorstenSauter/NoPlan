@@ -12,18 +12,24 @@ on:
 
 jobs:
   build:
+    name: Building the Docker image
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout to the branch
+      - name: Checkout the main branch
         uses: actions/checkout@v2
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-      - name: Log in to container registry
-        uses: docker/login-action@v1
+      - name: Login to Azure
+        uses: azure/login@v1
         with:
-          registry: crnoplandev001.azurecr.io
-          username: ${{ secrets.ACANOPLANDEV001_REGISTRY_USERNAME }}
-          password: ${{ secrets.ACANOPLANDEV001_REGISTRY_PASSWORD }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Log in to container registry
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az acr login -n crnoplandev001
       - name: Build and push container image to registry
         uses: docker/build-push-action@v2
         with:
@@ -33,17 +39,20 @@ jobs:
           context: .
 
   deploy:
+    name: Deployment
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Azure Login
+      - name: Login to Azure
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.ACANOPLANDEV001_AZURE_CREDENTIALS }}
-      - name: Deploy to containerapp
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Deploy to Azure Container Apps
         uses: azure/CLI@v1
         with:
           inlineScript: |
             az config set extension.use_dynamic_install=yes_without_prompt
-            az containerapp registry set -n aca-noplan-dev-001 -g rg-noplan-dev-001 --server crnoplandev001.azurecr.io --username  ${{ secrets.ACANOPLANDEV001_REGISTRY_USERNAME }} --password ${{ secrets.ACANOPLANDEV001_REGISTRY_PASSWORD }}
+            az containerapp registry set -n aca-noplan-dev-001 -g rg-noplan-dev-001 --server crnoplandev001.azurecr.io
             az containerapp update -n aca-noplan-dev-001 -g rg-noplan-dev-001 --image crnoplandev001.azurecr.io/noplan-api:${{ github.sha }}
