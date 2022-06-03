@@ -2,7 +2,7 @@
 
 ## Deployments
 
-[![Build Status](https://dev.azure.com/thorstensauter/NoPlan/_apis/build/status/ThorstenSauter.NoPlan.CD?branchName=main)](https://dev.azure.com/thorstensauter/NoPlan/_build/latest?definitionId=16&branchName=main)
+![Deployment status](https://github.com/ThorstenSauter/NoPlan/actions/workflows/deploy.yml/badge.svg)
 
 ## Goals
 
