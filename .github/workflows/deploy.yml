@@ -59,5 +59,4 @@ jobs:
         with:
           inlineScript: |
             az config set extension.use_dynamic_install=yes_without_prompt
-            az containerapp registry set -n ${{ env.APP_NAME }} -g ${{ env.RESOURCE_GROUP }} --server ${{ env.REGISTRY_URI }}
             az containerapp update -n ${{ env.APP_NAME }} -g ${{ env.RESOURCE_GROUP }} --image ${{ env.REGISTRY_URI }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
