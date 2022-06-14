@@ -16,7 +16,7 @@ WORKDIR "/src/NoPlan.Api"
 RUN dotnet build "NoPlan.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "NoPlan.Api.csproj" -c Release -o /app/publish
+RUN dotnet publish "NoPlan.Api.csproj" -c Release -r linux-x64 --no-self-contained -o /app/publish
 
 FROM base AS final
 WORKDIR /app
