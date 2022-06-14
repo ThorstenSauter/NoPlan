@@ -19,16 +19,19 @@ try
 {
     var builder = WebApplication.CreateBuilder();
     var configuration = builder.Configuration;
-    builder.Host.ConfigureAppConfiguration(config =>
+    builder.Host.ConfigureAppConfiguration((context, config) =>
         config.AddAzureAppConfiguration(options =>
         {
-            var appConfigurationOptions = configuration.GetSection(AppConfigurationOptions.SectionName).Get<AppConfigurationOptions>() ??
+            var appConfigurationOptions = context.Configuration.GetSection(AppConfigurationOptions.SectionName).Get<AppConfigurationOptions>() ??
                                           throw new ConfigurationErrorsException("AppConfigurationOptions not found");
 
             var isDevelopment = builder.Environment.IsDevelopment();
             var credential = isDevelopment
                 ? new DefaultAzureCredential()
-                : new(new DefaultAzureCredentialOptions { ManagedIdentityClientId = configuration.GetValue<string>("ManagedIdentityClientId") });
+                : new(new DefaultAzureCredentialOptions
+                {
+                    ManagedIdentityClientId = context.Configuration.GetValue<string>("ManagedIdentityClientId")
+                });
 
             options.Connect(appConfigurationOptions.EndPoint, credential);
             options.ConfigureKeyVault(c => c.SetCredential(credential));
@@ -50,6 +53,7 @@ try
             s.Version = "v1";
         })
         .AddInfrastructure(configuration)
+        .AddSectionedOptions<AppConfigurationOptions>(configuration)
         .AddAzureAppConfiguration()
         .AddApplicationInsightsTelemetry()
         .AddScoped<IToDoService, ToDoService>()

@@ -1,16 +1,15 @@
-﻿namespace NoPlan.Api.Options;
+﻿using Microsoft.Extensions.Options;
+
+namespace NoPlan.Api.Options;
 
 /// <summary>
 ///     Contains configuration values for connecting to Azure App Configuration.
 /// </summary>
-public sealed class AppConfigurationOptions
+public sealed class AppConfigurationOptions : IOptionsSectionDefinition
 {
-    /// <summary>
-    ///     The <see cref="IConfiguration" /> section name.
-    /// </summary>
-    public const string SectionName = "AppConfiguration";
+    private const int DefaultRefreshInterval = 300;
 
-    private int _refreshInterval = 300;
+    private int _refreshInterval = DefaultRefreshInterval;
 
     /// <summary>
     ///     The <see cref="Uri" /> of the Azure App Configuration endpoint.
@@ -23,6 +22,8 @@ public sealed class AppConfigurationOptions
     public int RefreshInterval
     {
         get => _refreshInterval;
-        set => _refreshInterval = value <= 0 ? 300 : value;
+        set => _refreshInterval = value <= 0 ? DefaultRefreshInterval : value;
     }
+
+    public static string SectionName => "AppConfiguration";
 }
