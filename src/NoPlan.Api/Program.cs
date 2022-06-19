@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Identity.Web;
 using NoPlan.Api.Options;
 using NoPlan.Api.Services;
-using NoPlan.Contracts;
 using NoPlan.Infrastructure.Data;
 using Serilog;
 
@@ -45,7 +44,7 @@ try
         }));
 
     builder.Services
-        .AddFastEndpoints(new[] { typeof(IContractAssemblyMarker).Assembly })
+        .AddFastEndpoints(options => options.SourceGeneratorDiscoveredTypes = DiscoveredTypes.All)
         .AddSwaggerDoc(maxEndpointVersion: 1, shortSchemaNames: true, settings: s =>
         {
             s.DocumentName = "Release v1";
