@@ -7,7 +7,7 @@ namespace NoPlan.Api.Options;
 /// </summary>
 public sealed class AppConfigurationOptions : IOptionsSectionDefinition
 {
-    private const int DefaultRefreshInterval = 300;
+    private const int DefaultRefreshInterval = 600;
 
     private int _refreshInterval = DefaultRefreshInterval;
 
@@ -25,5 +25,6 @@ public sealed class AppConfigurationOptions : IOptionsSectionDefinition
         set => _refreshInterval = value <= 0 ? DefaultRefreshInterval : value;
     }
 
+    /// <inheritdoc />
     public static string SectionName => "AppConfiguration";
 }
