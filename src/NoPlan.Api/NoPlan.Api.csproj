@@ -13,9 +13,9 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.4" />
-    <PackageReference Include="FastEndpoints" Version="4.3.0" />
-    <PackageReference Include="FastEndpoints.Generator" Version="4.3.0" />
-    <PackageReference Include="FastEndpoints.Swagger" Version="4.3.0" />
+    <PackageReference Include="FastEndpoints" Version="4.3.1" />
+    <PackageReference Include="FastEndpoints.Generator" Version="4.3.1" />
+    <PackageReference Include="FastEndpoints.Swagger" Version="4.3.1" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.20.0" />
     <PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0-preview.6.22329.4">
