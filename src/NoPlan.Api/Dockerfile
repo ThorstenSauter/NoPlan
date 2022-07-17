@@ -16,7 +16,7 @@ COPY ["src/NoPlan.Api/", "NoPlan.Api/"]
 COPY ["src/NoPlan.Infrastructure/", "NoPlan.Infrastructure/"]
 COPY ["src/NoPlan.Contracts/", "NoPlan.Contracts/"]
 WORKDIR "/src/NoPlan.Api"
-RUN dotnet build -c Release --no-restore -o /app/build "NoPlan.Api.csproj"
+RUN dotnet build -c Release -r linux-x64 --no-self-contained "NoPlan.Api.csproj"
 
 FROM build AS publish
 RUN dotnet publish -c Release --no-build -r linux-x64 --no-self-contained -o /app/publish "NoPlan.Api.csproj"
