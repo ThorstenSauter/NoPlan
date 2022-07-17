@@ -7,6 +7,7 @@
     <UserSecretsId>f0f988d0-f85a-41f4-b49a-e8381d732de2</UserSecretsId>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PublishReadyToRun>true</PublishReadyToRun>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>

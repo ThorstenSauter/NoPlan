@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "dependencies": {
+    "net7.0": {
+      "FastEndpoints": {
+        "type": "Direct",
+        "requested": "[4.3.0, )",
+        "resolved": "4.3.0",
+        "contentHash": "kTyKhTH/hjkAexsLqaDIRvtcXbeVjG0HogKhsq5SGLp4zN+QU5A9vOwTviWqw4kFn7QTODpa1fV/YhbL9eX7KQ==",
+        "dependencies": {
+          "FluentValidation": "11.0.3"
+        }
+      },
+      "FluentValidation": {
+        "type": "Transitive",
+        "resolved": "11.0.3",
+        "contentHash": "UZSn74ufuSpHBSRivPVe1IGhOYnbyzr1jpoWqK3CTcnpDxkADcwoUbrbKhEio3MZLxTv9yVlFT7uDkb/XotOiQ=="
+      }
+    }
+  }
+}
