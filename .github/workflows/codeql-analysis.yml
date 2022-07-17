@@ -3,8 +3,14 @@ name: Perform code analysis using CodeQL
 on:
   push:
     branches: [main]
+    paths:
+      - 'src/**'
+      - 'load-testing/**'
   pull_request:
     branches: [main]
+    paths:
+      - 'src/**'
+      - 'load-testing/**'
 
   workflow_dispatch:
 
