@@ -4,17 +4,17 @@
     "net7.0": {
       "FastEndpoints": {
         "type": "Direct",
-        "requested": "[4.3.0, )",
-        "resolved": "4.3.0",
-        "contentHash": "kTyKhTH/hjkAexsLqaDIRvtcXbeVjG0HogKhsq5SGLp4zN+QU5A9vOwTviWqw4kFn7QTODpa1fV/YhbL9eX7KQ==",
+        "requested": "[4.3.1, )",
+        "resolved": "4.3.1",
+        "contentHash": "nHRNCvqUF5byCEvWaGq8aduf9SgammYoQI6MKjKQqT4n+t50RjwcjhPrgFxeXiXVMh5SVLG+Yp+9hgdDDyALsQ==",
         "dependencies": {
-          "FluentValidation": "11.0.3"
+          "FluentValidation": "11.1.0"
         }
       },
       "FluentValidation": {
         "type": "Transitive",
-        "resolved": "11.0.3",
-        "contentHash": "UZSn74ufuSpHBSRivPVe1IGhOYnbyzr1jpoWqK3CTcnpDxkADcwoUbrbKhEio3MZLxTv9yVlFT7uDkb/XotOiQ=="
+        "resolved": "11.1.0",
+        "contentHash": "Ld7w+2jOmnhQqFkngEGuEWTRa5j6u4Xzli7jKxRtbA5PtuHHcpin01qxvxYL0LomeJuzRMGAOURu2rKONdjKQA=="
       }
     }
   }
