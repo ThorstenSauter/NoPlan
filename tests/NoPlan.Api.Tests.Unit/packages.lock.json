@@ -386,10 +386,10 @@
       },
       "Microsoft.Azure.AppConfiguration.AspNetCore": {
         "type": "Transitive",
-        "resolved": "5.0.0",
-        "contentHash": "SwgyHXZZkEENEEbPlPC2VGbh5B8XT9MFHD1fkF1Z9dlAJTxIMbKZcC4e1RWC5L9ticnkeEMhtv3HCh1WQPi0Ew==",
+        "resolved": "5.1.0",
+        "contentHash": "J5lkB2oYqBsumjLmU+iAaVnqG63r1oQbeBaxvvROVjRskQuAIGFv6+Cmo4rD1+ooqmJaItwMSCRyxbTxaEMUtw==",
         "dependencies": {
-          "Microsoft.Extensions.Configuration.AzureAppConfiguration": "5.0.0"
+          "Microsoft.Extensions.Configuration.AzureAppConfiguration": "5.1.0"
         }
       },
       "Microsoft.Azure.Cosmos": {
@@ -505,8 +505,8 @@
       },
       "Microsoft.Extensions.Configuration.AzureAppConfiguration": {
         "type": "Transitive",
-        "resolved": "5.0.0",
-        "contentHash": "1yDu6r/mPowAxZ9ntEZqCpoNiVwKFIiZxkBsDDq3ahpb18xt6BgDnmmPKCzw/jKGw8aJzQ5g8Kl5+0uUN7hGrg==",
+        "resolved": "5.1.0",
+        "contentHash": "FoAfgvT/rjL/+c7BP7q0LrJIdc4Hu6SH56BTIUbwCwVjHoUw4dpgGtLQULi5GmMjdbdAxyLQSnbwpOEWuBy+RA==",
         "dependencies": {
           "Azure.Data.AppConfiguration": "1.2.0",
           "Azure.Messaging.EventGrid": "4.7.0",
@@ -1140,13 +1140,13 @@
       },
       "Serilog.AspNetCore": {
         "type": "Transitive",
-        "resolved": "6.0.0",
-        "contentHash": "k631Oy0B2Kx2WhVec9LCC49bM8x/QUI+JMwOVVzR6YrMO8xSBtrMwEqAUoooM9hfSn7XQscL2v1Ds7K0uS6IGA==",
+        "resolved": "6.0.1",
+        "contentHash": "5XW90k62V7G9I0D/j9Iz+NyRBB6/SnoFpHUPeLnV40gONV2vs2A/ewWi91QVjQmyHBfzFeqIrkvE/DJMZ0alTg==",
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection": "5.0.0",
           "Microsoft.Extensions.Logging": "5.0.0",
           "Serilog": "2.10.0",
-          "Serilog.Extensions.Hosting": "5.0.0",
+          "Serilog.Extensions.Hosting": "5.0.1",
           "Serilog.Formatting.Compact": "1.1.0",
           "Serilog.Settings.Configuration": "3.3.0",
           "Serilog.Sinks.Console": "4.0.1",
@@ -1164,8 +1164,8 @@
       },
       "Serilog.Extensions.Hosting": {
         "type": "Transitive",
-        "resolved": "5.0.0",
-        "contentHash": "Dea1bCvizIhPWwv/a9JdQRSrOyqE0L8XCtvq7BkBeM/cqlvZRqPKPyo7XqvrC80LG6Owb8fw1UiGeifOqM0cIw==",
+        "resolved": "5.0.1",
+        "contentHash": "o0VUyt3npAqOJaZ6CiWLFeLYs3CYJwfcAqaUqprzsmj7qYIvorcn8cZLVR8AQX6vzX7gee2bD0sQeA17iO2/Aw==",
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.8",
           "Microsoft.Extensions.Hosting.Abstractions": "3.1.8",
@@ -2146,11 +2146,11 @@
           "FastEndpoints.Generator": "[4.3.1, )",
           "FastEndpoints.Swagger": "[4.3.1, )",
           "Microsoft.ApplicationInsights.AspNetCore": "[2.20.0, )",
-          "Microsoft.Azure.AppConfiguration.AspNetCore": "[5.0.0, )",
+          "Microsoft.Azure.AppConfiguration.AspNetCore": "[5.1.0, )",
           "Microsoft.Identity.Web": "[1.25.1, )",
           "NoPlan.Contracts": "[1.0.0, )",
           "NoPlan.Infrastructure": "[1.0.0, )",
-          "Serilog.AspNetCore": "[6.0.0, )",
+          "Serilog.AspNetCore": "[6.0.1, )",
           "Serilog.Enrichers.Environment": "[2.2.0, )"
         }
       },
