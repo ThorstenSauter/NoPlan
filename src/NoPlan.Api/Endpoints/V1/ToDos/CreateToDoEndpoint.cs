@@ -21,7 +21,6 @@ public sealed class CreateToDoEndpoint : EndpointWithMapping<CreateToDoRequest, 
         Post("/todos");
         Version(1);
         Policies("User");
-        Description(b => b.WithName("ToDos.Create"));
     }
 
     public override async Task HandleAsync(CreateToDoRequest req, CancellationToken ct)
@@ -57,5 +56,5 @@ public sealed class CreateToDoEndpoint : EndpointWithMapping<CreateToDoRequest, 
         new() { Name = r.Name, AssignedAt = creationTime };
 
     private TagResponse MapFromEntity(Tag e) =>
-        new() { Name = e.Name, AssignedAt = e.AssignedAt };
+        new() { Id = e.Id, Name = e.Name, AssignedAt = e.AssignedAt };
 }

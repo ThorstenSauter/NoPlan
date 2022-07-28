@@ -21,7 +21,6 @@ public sealed class UpdateToDoEndpoint : EndpointWithMapping<UpdateToDoRequest, 
         Put("/todos/{Id}");
         Version(1);
         Policies("User");
-        Description(b => b.WithName("ToDos.Update"));
     }
 
     public override async Task HandleAsync(UpdateToDoRequest req, CancellationToken ct)
@@ -60,8 +59,8 @@ public sealed class UpdateToDoEndpoint : EndpointWithMapping<UpdateToDoRequest, 
     }
 
     private Tag MapToEntity(UpdateTagRequest r, DateTime updateTime) =>
-        new() { Name = r.Name, AssignedAt = updateTime };
+        new() { Id = r.Id, Name = r.Name, AssignedAt = updateTime };
 
     private TagResponse MapFromEntity(Tag e) =>
-        new() { Name = e.Name, AssignedAt = e.AssignedAt };
+        new() { Id = e.Id, Name = e.Name, AssignedAt = e.AssignedAt };
 }
