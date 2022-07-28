@@ -18,30 +18,33 @@ try
 {
     var builder = WebApplication.CreateBuilder();
     var configuration = builder.Configuration;
-    builder.Host.ConfigureAppConfiguration((context, config) =>
-        config.AddAzureAppConfiguration(options =>
-        {
-            var appConfigurationOptions = context.Configuration.GetSection(AppConfigurationOptions.SectionName).Get<AppConfigurationOptions>() ??
-                                          throw new ConfigurationErrorsException("AppConfigurationOptions not found");
-
-            var isDevelopment = builder.Environment.IsDevelopment();
-            var credential = isDevelopment
-                ? new DefaultAzureCredential()
-                : new(new DefaultAzureCredentialOptions
-                {
-                    ManagedIdentityClientId = context.Configuration.GetValue<string>("ManagedIdentityClientId")
-                });
-
-            options.Connect(appConfigurationOptions.EndPoint, credential);
-            options.ConfigureKeyVault(c => c.SetCredential(credential));
-            var label = isDevelopment ? "dev" : "prod";
-            options.Select(KeyFilter.Any, label);
-            options.ConfigureRefresh(refreshOptions =>
+    if (!builder.Environment.IsTesting())
+    {
+        builder.Host.ConfigureAppConfiguration((context, config) =>
+            config.AddAzureAppConfiguration(options =>
             {
-                refreshOptions.SetCacheExpiration(TimeSpan.FromSeconds(appConfigurationOptions.RefreshInterval));
-                refreshOptions.Register("Sentinel", label, true);
-            });
-        }));
+                var appConfigurationOptions = context.Configuration.GetSection(AppConfigurationOptions.SectionName).Get<AppConfigurationOptions>() ??
+                                              throw new ConfigurationErrorsException("AppConfigurationOptions not found");
+
+                var isDevelopment = builder.Environment.IsDevelopment();
+                var credential = isDevelopment
+                    ? new DefaultAzureCredential()
+                    : new(new DefaultAzureCredentialOptions
+                    {
+                        ManagedIdentityClientId = context.Configuration.GetValue<string>("ManagedIdentityClientId")
+                    });
+
+                options.Connect(appConfigurationOptions.EndPoint, credential);
+                options.ConfigureKeyVault(c => c.SetCredential(credential));
+                var label = isDevelopment ? "dev" : "prod";
+                options.Select(KeyFilter.Any, label);
+                options.ConfigureRefresh(refreshOptions =>
+                {
+                    refreshOptions.SetCacheExpiration(TimeSpan.FromSeconds(appConfigurationOptions.RefreshInterval));
+                    refreshOptions.Register("Sentinel", label, true);
+                });
+            }));
+    }
 
     builder.Services
         .AddFastEndpoints(options => options.SourceGeneratorDiscoveredTypes = DiscoveredTypes.All)
