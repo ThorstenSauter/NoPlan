@@ -70,7 +70,7 @@ try
             .Enrich.WithProperty("Version", typeof(Program).Assembly.GetName().Version));
 
     var app = builder.Build();
-    await EnsureDatabaseCreatedAsync<PlannerContext>(app);
+    await ApplyMigrationsAsync<PlannerContext>(app);
 
     app.UseAzureAppConfiguration();
     app.UseSerilogRequestLogging(options =>
@@ -117,9 +117,9 @@ finally
     Log.CloseAndFlush();
 }
 
-async Task EnsureDatabaseCreatedAsync<T>(IHost webApplication) where T : DbContext
+async Task ApplyMigrationsAsync<T>(IHost webApplication) where T : DbContext
 {
     using var scope = webApplication.Services.CreateScope();
     var plannerContext = scope.ServiceProvider.GetRequiredService<T>();
-    await plannerContext.Database.EnsureCreatedAsync();
+    await plannerContext.Database.MigrateAsync();
 }
