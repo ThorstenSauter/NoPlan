@@ -16,7 +16,6 @@ public sealed class GetAllToDosEndpoint : EndpointWithMapping<EmptyRequest, ToDo
         Get("/todos");
         Version(1);
         Policies("User");
-        Description(b => b.WithName("ToDos.GetAll"));
     }
 
     public override async Task HandleAsync(EmptyRequest req, CancellationToken ct) =>
@@ -30,7 +29,7 @@ public sealed class GetAllToDosEndpoint : EndpointWithMapping<EmptyRequest, ToDo
                 Id = t.Id,
                 Title = t.Title,
                 Description = t.Description,
-                Tags = t.Tags.Select(ta => new TagResponse { Name = ta.Name, AssignedAt = ta.AssignedAt }),
+                Tags = t.Tags.Select(ta => new TagResponse { Id = ta.Id, Name = ta.Name, AssignedAt = ta.AssignedAt }),
                 CreatedAt = t.CreatedAt
             })
     };

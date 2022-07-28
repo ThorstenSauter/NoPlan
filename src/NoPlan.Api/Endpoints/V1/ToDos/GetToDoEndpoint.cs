@@ -38,7 +38,7 @@ public sealed class GetToDoEndpoint : EndpointWithMapping<GetToDoRequest, ToDoRe
             Id = e.Id,
             Title = e.Title,
             Description = e.Description,
-            Tags = e.Tags.Select(ta => new TagResponse { Name = ta.Name, AssignedAt = ta.AssignedAt }),
+            Tags = e.Tags.Select(ta => new TagResponse { Id = ta.Id, Name = ta.Name, AssignedAt = ta.AssignedAt }),
             CreatedAt = e.CreatedAt
         };
 }

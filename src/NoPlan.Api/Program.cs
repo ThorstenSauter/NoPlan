@@ -18,30 +18,33 @@ try
 {
     var builder = WebApplication.CreateBuilder();
     var configuration = builder.Configuration;
-    builder.Host.ConfigureAppConfiguration((context, config) =>
-        config.AddAzureAppConfiguration(options =>
-        {
-            var appConfigurationOptions = context.Configuration.GetSection(AppConfigurationOptions.SectionName).Get<AppConfigurationOptions>() ??
-                                          throw new ConfigurationErrorsException("AppConfigurationOptions not found");
-
-            var isDevelopment = builder.Environment.IsDevelopment();
-            var credential = isDevelopment
-                ? new DefaultAzureCredential()
-                : new(new DefaultAzureCredentialOptions
-                {
-                    ManagedIdentityClientId = context.Configuration.GetValue<string>("ManagedIdentityClientId")
-                });
-
-            options.Connect(appConfigurationOptions.EndPoint, credential);
-            options.ConfigureKeyVault(c => c.SetCredential(credential));
-            var label = isDevelopment ? "dev" : "prod";
-            options.Select(KeyFilter.Any, label);
-            options.ConfigureRefresh(refreshOptions =>
+    if (!builder.Environment.IsTesting())
+    {
+        builder.Host.ConfigureAppConfiguration((context, config) =>
+            config.AddAzureAppConfiguration(options =>
             {
-                refreshOptions.SetCacheExpiration(TimeSpan.FromSeconds(appConfigurationOptions.RefreshInterval));
-                refreshOptions.Register("Sentinel", label, true);
-            });
-        }));
+                var appConfigurationOptions = context.Configuration.GetSection(AppConfigurationOptions.SectionName).Get<AppConfigurationOptions>() ??
+                                              throw new ConfigurationErrorsException("AppConfigurationOptions not found");
+
+                var isDevelopment = builder.Environment.IsDevelopment();
+                var credential = isDevelopment
+                    ? new DefaultAzureCredential()
+                    : new(new DefaultAzureCredentialOptions
+                    {
+                        ManagedIdentityClientId = context.Configuration.GetValue<string>("ManagedIdentityClientId")
+                    });
+
+                options.Connect(appConfigurationOptions.EndPoint, credential);
+                options.ConfigureKeyVault(c => c.SetCredential(credential));
+                var label = isDevelopment ? "dev" : "prod";
+                options.Select(KeyFilter.Any, label);
+                options.ConfigureRefresh(refreshOptions =>
+                {
+                    refreshOptions.SetCacheExpiration(TimeSpan.FromSeconds(appConfigurationOptions.RefreshInterval));
+                    refreshOptions.Register("Sentinel", label, true);
+                });
+            }));
+    }
 
     builder.Services
         .AddFastEndpoints(options => options.SourceGeneratorDiscoveredTypes = DiscoveredTypes.All)
@@ -67,7 +70,7 @@ try
             .Enrich.WithProperty("Version", typeof(Program).Assembly.GetName().Version));
 
     var app = builder.Build();
-    await EnsureDatabaseCreatedAsync<PlannerContext>(app);
+    await ApplyMigrationsAsync<PlannerContext>(app);
 
     app.UseAzureAppConfiguration();
     app.UseSerilogRequestLogging(options =>
@@ -114,9 +117,9 @@ finally
     Log.CloseAndFlush();
 }
 
-async Task EnsureDatabaseCreatedAsync<T>(IHost webApplication) where T : DbContext
+async Task ApplyMigrationsAsync<T>(IHost webApplication) where T : DbContext
 {
     using var scope = webApplication.Services.CreateScope();
     var plannerContext = scope.ServiceProvider.GetRequiredService<T>();
-    await plannerContext.Database.EnsureCreatedAsync();
+    await plannerContext.Database.MigrateAsync();
 }

@@ -20,7 +20,7 @@ public sealed record UpdateToDoRequest
     /// <summary>
     ///     The required list of tags should be associated with the new ToDo.
     /// </summary>
-    public HashSet<UpdateTagRequest> Tags { get; init; } = new();
+    public ICollection<UpdateTagRequest> Tags { get; init; } = null!;
 }
 
 public sealed class UpdateToDoRequestValidator : Validator<UpdateToDoRequest>

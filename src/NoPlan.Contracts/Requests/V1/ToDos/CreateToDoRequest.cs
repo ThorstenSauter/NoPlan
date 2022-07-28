@@ -15,7 +15,7 @@ public sealed record CreateToDoRequest
     /// <summary>
     ///     The required list of tags that should be associated with the new ToDo.
     /// </summary>
-    public HashSet<CreateTagRequest> Tags { get; init; } = new();
+    public ICollection<CreateTagRequest> Tags { get; init; } = null!;
 }
 
 public sealed class CreateToDoRequestValidator : Validator<CreateToDoRequest>

@@ -17,7 +17,6 @@ public sealed class DeleteToDoEndpoint : EndpointWithMapping<DeleteToDoRequest, 
         Delete("/todos/{Id}");
         Version(1);
         Policies("User");
-        Description(b => b.WithName("ToDos.Delete"));
     }
 
     public override async Task HandleAsync(DeleteToDoRequest req, CancellationToken ct)
@@ -38,7 +37,7 @@ public sealed class DeleteToDoEndpoint : EndpointWithMapping<DeleteToDoRequest, 
             Id = e.Id,
             Title = e.Title,
             Description = e.Description,
-            Tags = e.Tags.Select(ta => new TagResponse { Name = ta.Name, AssignedAt = ta.AssignedAt }),
+            Tags = e.Tags.Select(ta => new TagResponse { Id = ta.Id, Name = ta.Name, AssignedAt = ta.AssignedAt }),
             CreatedAt = e.CreatedAt
         };
 }

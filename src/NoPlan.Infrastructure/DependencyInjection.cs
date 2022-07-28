@@ -8,8 +8,8 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        var cosmosConnectionString = configuration.GetConnectionString("Default") ??
-                                     throw new ConfigurationErrorsException("Missing connection string 'Default'");
+        var connectionString = configuration.GetConnectionString("Default") ??
+                               throw new ConfigurationErrorsException("Missing connection string 'Default'");
 
         var databaseName = configuration.GetValue<string>("DatabaseName") ??
                            throw new ConfigurationErrorsException("Missing configuration value 'DatabaseName'");
@@ -17,12 +17,12 @@ public static class DependencyInjection
         services
             .AddHealthChecks()
             .AddCosmosDb(
-                cosmosConnectionString,
+                connectionString,
                 databaseName,
                 "cosmosdb",
                 timeout: TimeSpan.FromSeconds(15),
                 tags: new[] { "db" });
 
-        return services.AddDbContext<PlannerContext>(options => options.UseCosmos(cosmosConnectionString, databaseName));
+        return services.AddDbContext<PlannerContext>(options => options.UseSqlServer(connectionString));
     }
 }
