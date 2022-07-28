@@ -177,16 +177,16 @@
       },
       "Azure.Identity": {
         "type": "Transitive",
-        "resolved": "1.3.0",
-        "contentHash": "l1SYfZKOFBuUFG7C2SWHmJcrQQaiXgBdVCycx4vcZQkC6efDVt7mzZ5pfJAFEJDBUq7mjRQ0RPq9ZDGdSswqMg==",
+        "resolved": "1.5.0",
+        "contentHash": "VfF88dqrgKXZNOS/y4XrX/jmIfP3pkY+hBUzBNpoKml1nR+QshX6XlXWyToLtWV80TDQ1CmUVCJksktDg5+j1w==",
         "dependencies": {
-          "Azure.Core": "1.6.0",
-          "Microsoft.Identity.Client": "4.22.0",
-          "Microsoft.Identity.Client.Extensions.Msal": "2.16.5",
-          "System.Memory": "4.5.3",
+          "Azure.Core": "1.20.0",
+          "Microsoft.Identity.Client": "4.30.1",
+          "Microsoft.Identity.Client.Extensions.Msal": "2.18.4",
+          "System.Memory": "4.5.4",
           "System.Security.Cryptography.ProtectedData": "4.5.0",
           "System.Text.Json": "4.6.0",
-          "System.Threading.Tasks.Extensions": "4.5.2"
+          "System.Threading.Tasks.Extensions": "4.5.4"
         }
       },
       "Azure.Messaging.EventGrid": {
@@ -418,10 +418,10 @@
       },
       "Microsoft.Azure.Cosmos": {
         "type": "Transitive",
-        "resolved": "3.28.0",
-        "contentHash": "0xAcu2g19qRS0nVS5V1CKvnSuAkyw+hG41ZRHXwjHTvzoF1cP8DIqDRhlpe270bPS4wLnGc1hh2+bzRmo3DJ1w==",
+        "resolved": "3.22.1",
+        "contentHash": "tMEVikHgX8pj+lUNHuKKseYTd9m0TDFQEGfnAYMF5d0nfJw4R0+gxCaxhVmzOgQgICFqJAakuUZdjKTwZ3lFXw==",
         "dependencies": {
-          "Azure.Core": "1.19.0",
+          "Azure.Core": "1.3.0",
           "Microsoft.Bcl.AsyncInterfaces": "1.0.0",
           "Microsoft.Bcl.HashCode": "1.1.0",
           "Newtonsoft.Json": "10.0.2",
@@ -430,7 +430,7 @@
           "System.Configuration.ConfigurationManager": "4.7.0",
           "System.Memory": "4.5.4",
           "System.Numerics.Vectors": "4.5.0",
-          "System.Runtime.CompilerServices.Unsafe": "4.6.0",
+          "System.Runtime.CompilerServices.Unsafe": "4.5.3",
           "System.Threading.Tasks.Extensions": "4.5.4",
           "System.ValueTuple": "4.5.0"
         }
@@ -449,6 +449,34 @@
         "type": "Transitive",
         "resolved": "4.5.0",
         "contentHash": "kaj6Wb4qoMuH3HySFJhxwQfe8R/sJsNJnANrvv8WdFPMoNbKY5htfNscv+LHCu5ipz+49m2e+WQXpLXr9XYemQ=="
+      },
+      "Microsoft.Data.SqlClient": {
+        "type": "Transitive",
+        "resolved": "5.0.0-preview2.22096.2",
+        "contentHash": "jCh0+/3Sjsnhx8m9P9rXZMRbnFrAaPUwf0h+xsnwgedJEozKw0D09z1Q3vZ5jDquFc9YnM2Gv4kVBXMrQ3aEEg==",
+        "dependencies": {
+          "Azure.Identity": "1.5.0",
+          "Microsoft.Data.SqlClient.SNI.runtime": "5.0.0-preview2.22084.1",
+          "Microsoft.Identity.Client": "4.30.1",
+          "Microsoft.IdentityModel.JsonWebTokens": "6.8.0",
+          "Microsoft.IdentityModel.Protocols.OpenIdConnect": "6.8.0",
+          "Microsoft.Win32.Registry": "5.0.0",
+          "System.Buffers": "4.5.1",
+          "System.Configuration.ConfigurationManager": "5.0.0",
+          "System.Diagnostics.DiagnosticSource": "5.0.0",
+          "System.IO": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime.Caching": "5.0.0",
+          "System.Security.Cryptography.Cng": "5.0.0",
+          "System.Security.Principal.Windows": "5.0.0",
+          "System.Text.Encoding.CodePages": "5.0.0",
+          "System.Text.Encodings.Web": "4.7.2"
+        }
+      },
+      "Microsoft.Data.SqlClient.SNI.runtime": {
+        "type": "Transitive",
+        "resolved": "5.0.0-preview2.22084.1",
+        "contentHash": "4EbBwjppGsy0Qa/wruTV29wSBfjmgqa7oZJUGHERVFe9XBX942d6lq2RJAPLf4FlQ9G3TkLbX8e6o2JOWPnVSg=="
       },
       "Microsoft.EntityFrameworkCore": {
         "type": "Transitive",
@@ -472,15 +500,6 @@
         "resolved": "7.0.0-preview.6.22329.4",
         "contentHash": "wciKlMqLzvT8KC2dmTh0sjuKPudqJvMVI0yzY5YgymPovv+12MH9HbjhxuQLbh1xOhHo8Sti9nP1MmuH0oJUNQ=="
       },
-      "Microsoft.EntityFrameworkCore.Cosmos": {
-        "type": "Transitive",
-        "resolved": "7.0.0-preview.6.22329.4",
-        "contentHash": "ozwYlCN7/s1vGj2VyOvNM5it5dC8dkTQExqatgxSpIB7ayPQIIfhDv+gUDhC0y8myeOhQXKRnDdTgAN1edAuKQ==",
-        "dependencies": {
-          "Microsoft.Azure.Cosmos": "3.28.0",
-          "Microsoft.EntityFrameworkCore": "7.0.0-preview.6.22329.4"
-        }
-      },
       "Microsoft.EntityFrameworkCore.Relational": {
         "type": "Transitive",
         "resolved": "7.0.0-preview.6.22329.4",
@@ -488,6 +507,15 @@
         "dependencies": {
           "Microsoft.EntityFrameworkCore": "7.0.0-preview.6.22329.4",
           "Microsoft.Extensions.Configuration.Abstractions": "7.0.0-preview.6.22324.4"
+        }
+      },
+      "Microsoft.EntityFrameworkCore.SqlServer": {
+        "type": "Transitive",
+        "resolved": "7.0.0-preview.6.22329.4",
+        "contentHash": "rMyAfZ+Q1KnbJwxOoYo49ruzL9scZuFLvV64t0NZOKMMUXh/CeKwnROQ7kd9BvhoF7SYrrisoxtNurITfTogLw==",
+        "dependencies": {
+          "Microsoft.Data.SqlClient": "5.0.0-preview2.22096.2",
+          "Microsoft.EntityFrameworkCore.Relational": "7.0.0-preview.6.22329.4"
         }
       },
       "Microsoft.Extensions.ApiDescription.Server": {
@@ -718,10 +746,10 @@
       },
       "Microsoft.Identity.Client.Extensions.Msal": {
         "type": "Transitive",
-        "resolved": "2.16.5",
-        "contentHash": "VlGUZEpF8KP/GCfFI59sdE0WA0o9quqwM1YQY0dSp6jpGy5EOBkureaybLfpwCuYUUjQbLkN2p7neUIcQCfbzA==",
+        "resolved": "2.18.4",
+        "contentHash": "HpG4oLwhQsy0ce7OWq9iDdLtJKOvKRStIKoSEOeBMKuohfuOWNDyhg8fMAJkpG/kFeoe4J329fiMHcJmmB+FPw==",
         "dependencies": {
-          "Microsoft.Identity.Client": "4.22.0",
+          "Microsoft.Identity.Client": "4.30.0",
           "System.Security.Cryptography.ProtectedData": "4.5.0"
         }
       },
@@ -1322,11 +1350,11 @@
       },
       "System.Configuration.ConfigurationManager": {
         "type": "Transitive",
-        "resolved": "4.7.0",
-        "contentHash": "/anOTeSZCNNI2zDilogWrZ8pNqCmYbzGNexUnNhjW8k0sHqEZ2nHJBp147jBV3hGYswu5lINpNg1vxR7bnqvVA==",
+        "resolved": "5.0.0",
+        "contentHash": "aM7cbfEfVNlEEOj3DsZP+2g9NRwbkyiAv2isQEzw7pnkDg9ekCU2m1cdJLM02Uq691OaCS91tooaxcEn8d0q5w==",
         "dependencies": {
-          "System.Security.Cryptography.ProtectedData": "4.7.0",
-          "System.Security.Permissions": "4.7.0"
+          "System.Security.Cryptography.ProtectedData": "5.0.0",
+          "System.Security.Permissions": "5.0.0"
         }
       },
       "System.Console": {
@@ -1750,6 +1778,14 @@
           "Microsoft.NETCore.Targets": "1.1.0"
         }
       },
+      "System.Runtime.Caching": {
+        "type": "Transitive",
+        "resolved": "5.0.0",
+        "contentHash": "30D6MkO8WF9jVGWZIP0hmCN8l9BTY4LCsAzLIe4xFSXzs+AjDotR7DpSmj27pFskDURzUvqYYY0ikModgBTxWw==",
+        "dependencies": {
+          "System.Configuration.ConfigurationManager": "5.0.0"
+        }
+      },
       "System.Runtime.CompilerServices.Unsafe": {
         "type": "Transitive",
         "resolved": "6.0.0",
@@ -1956,8 +1992,8 @@
       },
       "System.Security.Cryptography.ProtectedData": {
         "type": "Transitive",
-        "resolved": "4.7.0",
-        "contentHash": "ehYW0m9ptxpGWvE4zgqongBVWpSDU/JCFD4K7krxkQwSz/sFQjEXCUqpvencjy6DYDbn7Ig09R8GFffu8TtneQ=="
+        "resolved": "5.0.0",
+        "contentHash": "HGxMSAFAPLNoxBvSfW08vHde0F9uh7BjASwu6JF9JnXuEPhCY3YUqURn0+bQV/4UWeaqymmrHWV+Aw9riQCtCA=="
       },
       "System.Security.Cryptography.X509Certificates": {
         "type": "Transitive",
@@ -2022,6 +2058,14 @@
           "Microsoft.NETCore.Platforms": "1.1.0",
           "Microsoft.NETCore.Targets": "1.1.0",
           "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Text.Encoding.CodePages": {
+        "type": "Transitive",
+        "resolved": "5.0.0",
+        "contentHash": "NyscU59xX6Uo91qvhOs2Ccho3AR2TnZPomo1Z0K6YpyztBPM/A5VbkzOO19sy3A3i1TtEnTxA7bCe3Us+r5MWg==",
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "5.0.0"
         }
       },
       "System.Text.Encoding.Extensions": {
@@ -2181,7 +2225,7 @@
         "dependencies": {
           "AspNetCore.HealthChecks.CosmosDb": "[6.0.2, )",
           "Microsoft.EntityFrameworkCore": "[7.0.0-preview.6.22329.4, )",
-          "Microsoft.EntityFrameworkCore.Cosmos": "[7.0.0-preview.6.22329.4, )",
+          "Microsoft.EntityFrameworkCore.SqlServer": "[7.0.0-preview.6.22329.4, )",
           "Microsoft.Extensions.Configuration.Binder": "[7.0.0-preview.6.22324.4, )"
         }
       }
