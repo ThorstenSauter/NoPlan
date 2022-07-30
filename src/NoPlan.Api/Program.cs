@@ -23,9 +23,7 @@ try
         builder.Host.ConfigureAppConfiguration((context, config) =>
             config.AddAzureAppConfiguration(options =>
             {
-                var appConfigurationOptions = context.Configuration.GetSection(AppConfigurationOptions.SectionName).Get<AppConfigurationOptions>() ??
-                                              throw new ConfigurationErrorsException("AppConfigurationOptions not found");
-
+                var appConfigurationOptions = context.Configuration.GetSection(AppConfigurationOptions.SectionName).Get<AppConfigurationOptions>();
                 var isDevelopment = builder.Environment.IsDevelopment();
                 var credential = isDevelopment
                     ? new DefaultAzureCredential()
@@ -34,7 +32,7 @@ try
                         ManagedIdentityClientId = context.Configuration.GetValue<string>("ManagedIdentityClientId")
                     });
 
-                options.Connect(appConfigurationOptions.EndPoint, credential);
+                options.Connect(appConfigurationOptions!.EndPoint, credential);
                 options.ConfigureKeyVault(c => c.SetCredential(credential));
                 var label = isDevelopment ? "dev" : "prod";
                 options.Select(KeyFilter.Any, label);
