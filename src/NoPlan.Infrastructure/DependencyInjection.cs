@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using NoPlan.Infrastructure.Data;
+﻿using NoPlan.Infrastructure.Data;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection;
@@ -8,21 +7,16 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("Default") ??
-                               throw new ConfigurationErrorsException("Missing connection string 'Default'");
-
-        var databaseName = configuration.GetValue<string>("DatabaseName") ??
-                           throw new ConfigurationErrorsException("Missing configuration value 'DatabaseName'");
+        var connectionString = configuration.GetConnectionString("Default");
 
         services
             .AddHealthChecks()
-            .AddCosmosDb(
-                connectionString,
-                databaseName,
-                "cosmosdb",
+            .AddSqlServer(
+                connectionString!,
+                "SQL Server",
                 timeout: TimeSpan.FromSeconds(15),
-                tags: new[] { "db" });
+                tags: new[] { "db", "sql" });
 
-        return services.AddDbContext<PlannerContext>(options => options.UseSqlServer(connectionString));
+        return services.AddDbContext<PlannerContext>(options => options.UseSqlServer(connectionString!));
     }
 }
