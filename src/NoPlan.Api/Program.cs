@@ -1,4 +1,3 @@
-using System.Configuration;
 using Azure.Identity;
 using FastEndpoints.Swagger;
 using HealthChecks.UI.Client;
