@@ -72,7 +72,11 @@ try
     var app = builder.Build();
     await ApplyMigrationsAsync<PlannerContext>(app);
 
-    app.UseAzureAppConfiguration();
+    if (!app.Environment.IsTesting())
+    {
+        app.UseAzureAppConfiguration();
+    }
+
     app.UseSerilogRequestLogging(options =>
         options.EnrichDiagnosticContext = (diagnosticsContext, httpContext) =>
         {
