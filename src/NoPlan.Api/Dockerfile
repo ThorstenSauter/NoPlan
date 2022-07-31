@@ -6,12 +6,9 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["src/NoPlan.Api/NoPlan.Api.csproj", "NoPlan.Api/"]
-COPY ["src/NoPlan.Api/packages.lock.json", "NoPlan.Api/"]
 COPY ["src/NoPlan.Infrastructure/NoPlan.Infrastructure.csproj", "NoPlan.Infrastructure/"]
-COPY ["src/NoPlan.Infrastructure/packages.lock.json", "NoPlan.Infrastructure/"]
 COPY ["src/NoPlan.Contracts/NoPlan.Contracts.csproj", "NoPlan.Contracts/"]
-COPY ["src/NoPlan.Contracts/packages.lock.json", "NoPlan.Contracts/"]
-RUN dotnet restore "NoPlan.Api/NoPlan.Api.csproj" --locked-mode
+RUN dotnet restore "NoPlan.Api/NoPlan.Api.csproj"
 COPY ["src/NoPlan.Api/", "NoPlan.Api/"]
 COPY ["src/NoPlan.Infrastructure/", "NoPlan.Infrastructure/"]
 COPY ["src/NoPlan.Contracts/", "NoPlan.Contracts/"]
