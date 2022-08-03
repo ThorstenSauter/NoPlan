@@ -16,9 +16,10 @@ permissions:
 
 env:
   APP_NAME: aca-noplan-dev-001
-  RESOURCE_GROUP: rg-noplan-dev-001
+  DOCKER_FILE: src/NoPlan.Api/Dockerfile
   IMAGE_NAME: noplan-api
-  REGISTRY_URI: crnoplandev001.azurecr.io
+  REGISTRY_NAME: crnoplandev001
+  RESOURCE_GROUP: rg-noplan-dev-001
 
 jobs:
   build:
@@ -27,8 +28,6 @@ jobs:
     steps:
       - name: Checkout the main branch
         uses: actions/checkout@v3
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
       - name: Login to Azure
         uses: azure/login@v1
         with:
@@ -36,18 +35,11 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - name: Login to Azure Container Registry
-        run: |
-          set -euo pipefail
-          access_token=$(az account get-access-token --query accessToken -o tsv)
-          refresh_token=$(curl https://$REGISTRY_URI/oauth2/exchange -v -d "grant_type=access_token&service=$REGISTRY_URI&access_token=$access_token" | jq -r .refresh_token)
-          docker login -u 00000000-0000-0000-0000-000000000000 --password-stdin $REGISTRY_URI <<< "$refresh_token"
+        run: az acr login --name ${{ env.REGISTRY_NAME }}
+      - name: Build image
+        run: docker build -t ${{ env.IMAGE_NAME }}:${{ github.sha }} -f ${{ env.DOCKER_FILE }} .
       - name: Build and push image to registry
-        uses: docker/build-push-action@v3
-        with:
-          push: true
-          tags: ${{ env.REGISTRY_URI }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-          file: ./src/NoPlan.Api/Dockerfile
-          context: .
+        run: docker push ${{ env.IMAGE_NAME }}:${{ github.sha }}
 
   deploy:
     name: Deploy to Azure Container Apps
@@ -65,4 +57,4 @@ jobs:
         with:
           inlineScript: |
             az config set extension.use_dynamic_install=yes_without_prompt
-            az containerapp update -n ${{ env.APP_NAME }} -g ${{ env.RESOURCE_GROUP }} --image ${{ env.REGISTRY_URI }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+            az containerapp update -n ${{ env.APP_NAME }} -g ${{ env.RESOURCE_GROUP }} --image ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
