@@ -11,8 +11,9 @@ on:
   workflow_dispatch:
 
 permissions:
-  id-token: write
   contents: read
+  id-token: write
+  security-events: write
 
 env:
   APP_NAME: aca-noplan-dev-001
