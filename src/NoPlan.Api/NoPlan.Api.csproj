@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
-    <PackageReference Include="FastEndpoints" Version="4.3.1" />
+    <PackageReference Include="FastEndpoints" Version="4.4.0" />
     <PackageReference Include="FastEndpoints.Generator" Version="4.3.1" />
     <PackageReference Include="FastEndpoints.Swagger" Version="4.3.1" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
