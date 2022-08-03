@@ -17,7 +17,7 @@ permissions:
 env:
   APP_NAME: aca-noplan-dev-001
   DOCKER_FILE: src/NoPlan.Api/Dockerfile
-  IMAGE_NAME: noplan-api
+  IMAGE_NAME: crnoplandev001.azurecr.io/noplan-api
   REGISTRY_NAME: crnoplandev001
   RESOURCE_GROUP: rg-noplan-dev-001
 
