@@ -21,7 +21,7 @@ updates:
       - "ThorstenSauter"
 
   - package-ecosystem: "docker"
-    directory: "/src/LIMS.Api/"
+    directory: "/src/NoPlan.Api/"
     schedule:
       interval: "daily"
       time: "06:00"
