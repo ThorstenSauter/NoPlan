@@ -1,0 +1,19 @@
+﻿name: Add issue to project
+
+on:
+  issues:
+    types:
+      - opened
+
+env:
+  PROJECT_URL: https://github.com/users/ThorstenSauter/projects/1
+
+jobs:
+  add-to-project:
+    name: Add issue to project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/add-to-project@v0.3.0
+        with:
+          project-url: ${{ env.PROJECT_URL }}
+          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
