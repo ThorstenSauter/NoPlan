@@ -13,7 +13,7 @@ public static class DependencyInjection
             .AddHealthChecks()
             .AddSqlServer(
                 connectionString!,
-                "SQL Server",
+                name: "SQL Server",
                 timeout: TimeSpan.FromSeconds(15),
                 tags: new[] { "db", "sql" });
 
