@@ -19,28 +19,24 @@ try
     var configuration = builder.Configuration;
     if (!builder.Environment.IsTesting())
     {
-        builder.Host.ConfigureAppConfiguration((context, config) =>
-            config.AddAzureAppConfiguration(options =>
-            {
-                var appConfigurationOptions = context.Configuration.GetSection(AppConfigurationOptions.SectionName).Get<AppConfigurationOptions>();
-                var isDevelopment = builder.Environment.IsDevelopment();
-                var credential = isDevelopment
-                    ? new DefaultAzureCredential()
-                    : new(new DefaultAzureCredentialOptions
-                    {
-                        ManagedIdentityClientId = context.Configuration.GetValue<string>("ManagedIdentityClientId")
-                    });
+        configuration.AddAzureAppConfiguration(options =>
+        {
+            var appConfigurationOptions = configuration.GetSection(AppConfigurationOptions.SectionName).Get<AppConfigurationOptions>();
+            var isDevelopment = builder.Environment.IsDevelopment();
+            var credential = isDevelopment
+                ? new DefaultAzureCredential()
+                : new(new DefaultAzureCredentialOptions { ManagedIdentityClientId = configuration.GetValue<string>("ManagedIdentityClientId") });
 
-                options.Connect(appConfigurationOptions!.EndPoint, credential);
-                options.ConfigureKeyVault(c => c.SetCredential(credential));
-                var label = isDevelopment ? "dev" : "prod";
-                options.Select(KeyFilter.Any, label);
-                options.ConfigureRefresh(refreshOptions =>
-                {
-                    refreshOptions.SetCacheExpiration(TimeSpan.FromSeconds(appConfigurationOptions.RefreshInterval));
-                    refreshOptions.Register("Sentinel", label, true);
-                });
-            }));
+            options.Connect(appConfigurationOptions!.EndPoint, credential);
+            options.ConfigureKeyVault(c => c.SetCredential(credential));
+            var label = isDevelopment ? "dev" : "prod";
+            options.Select(KeyFilter.Any, label);
+            options.ConfigureRefresh(refreshOptions =>
+            {
+                refreshOptions.SetCacheExpiration(TimeSpan.FromSeconds(appConfigurationOptions.RefreshInterval));
+                refreshOptions.Register("Sentinel", label, true);
+            });
+        });
     }
 
     builder.Services

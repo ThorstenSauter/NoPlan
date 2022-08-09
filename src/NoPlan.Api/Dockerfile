@@ -1,11 +1,11 @@
-FROM mcr.microsoft.com/dotnet/aspnet:7.0.0-preview.6-alpine3.16-amd64 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:7.0.0-preview.7-alpine3.16-amd64 AS base
 RUN apk add --no-cache icu-libs
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0.100-preview.6-alpine3.16-amd64 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0.100-preview.7-alpine3.16-amd64 AS build
 WORKDIR /src
 COPY ["src/NoPlan.Api/NoPlan.Api.csproj", "NoPlan.Api/"]
 COPY ["src/NoPlan.Infrastructure/NoPlan.Infrastructure.csproj", "NoPlan.Infrastructure/"]
