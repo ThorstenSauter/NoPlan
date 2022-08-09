@@ -19,12 +19,12 @@ public sealed class ToDoService : IToDoService
         _context = context;
 
     /// <inheritdoc />
-    public async Task<IEnumerable<ToDo>> GetAllAsync(Guid userId) =>
-        await _context.ToDos.Include(t => t.Tags).AsNoTracking().ToListAsync();
+    public async Task<IEnumerable<ToDo>> GetAllAsync(Guid userId, CancellationToken cancellationToken = default) =>
+        await _context.ToDos.Include(t => t.Tags).AsNoTracking().ToListAsync(cancellationToken);
 
     /// <inheritdoc />
-    public async Task<ToDo?> GetAsync(Guid id, Guid userId) =>
-        await _context.ToDos.Include(t => t.Tags).FirstOrDefaultAsync(t => t.Id == id);
+    public async Task<ToDo?> GetAsync(Guid id, Guid userId, CancellationToken cancellationToken = default) =>
+        await _context.ToDos.Include(t => t.Tags).FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
 
     /// <inheritdoc />
     public async Task<ToDo> CreateAsync(ToDo newToDo)

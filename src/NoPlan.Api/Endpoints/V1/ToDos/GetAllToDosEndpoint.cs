@@ -19,7 +19,7 @@ public sealed class GetAllToDosEndpoint : EndpointWithMapping<EmptyRequest, ToDo
     }
 
     public override async Task HandleAsync(EmptyRequest req, CancellationToken ct) =>
-        await SendAsync(MapFromEntity(await _toDoService.GetAllAsync(User.GetId())), cancellation: ct);
+        await SendAsync(MapFromEntity(await _toDoService.GetAllAsync(User.GetId(), ct)), cancellation: ct);
 
     public override ToDosResponse MapFromEntity(IEnumerable<ToDo> e) => new()
     {

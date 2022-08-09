@@ -11,16 +11,18 @@ public interface IToDoService
     ///     Retrieves all <see cref="ToDo" />s for the given user identifier.
     /// </summary>
     /// <param name="userId">The identifier of the user for which to retrieve the <see cref="ToDo" />s.</param>
+    /// <param name="cancellationToken">Allows for early cancellation of the retrieval.</param>
     /// <returns>The users <see cref="ToDo" />s.</returns>
-    Task<IEnumerable<ToDo>> GetAllAsync(Guid userId);
+    Task<IEnumerable<ToDo>> GetAllAsync(Guid userId, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Retrieves the <see cref="ToDo" /> for the given identifier and user identifier.
     /// </summary>
     /// <param name="id">The identifier of the <see cref="ToDo" /> to retrieve.</param>
     /// <param name="userId">The identifier of the user for which to retrieve the <see cref="ToDo" />.</param>
+    /// <param name="cancellationToken">Allows for early cancellation of the retrieval.</param>
     /// <returns>The specified <see cref="ToDo" />.</returns>
-    Task<ToDo?> GetAsync(Guid id, Guid userId);
+    Task<ToDo?> GetAsync(Guid id, Guid userId, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Creates a new <see cref="ToDo" />.

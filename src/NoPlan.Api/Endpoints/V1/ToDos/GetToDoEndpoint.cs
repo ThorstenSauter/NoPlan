@@ -22,7 +22,7 @@ public sealed class GetToDoEndpoint : EndpointWithMapping<GetToDoRequest, ToDoRe
 
     public override async Task HandleAsync(GetToDoRequest req, CancellationToken ct)
     {
-        var todo = await _toDoService.GetAsync(req.Id, User.GetId());
+        var todo = await _toDoService.GetAsync(req.Id, User.GetId(), ct);
         if (todo is null)
         {
             await SendNotFoundAsync(ct);
