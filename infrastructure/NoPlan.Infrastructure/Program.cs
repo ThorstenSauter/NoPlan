@@ -6,7 +6,7 @@ using Pulumi.AzureNative.AppConfiguration;
 using Pulumi.AzureNative.Authorization;
 using Pulumi.AzureNative.ContainerRegistry;
 using Pulumi.AzureNative.ContainerRegistry.Inputs;
-using Pulumi.AzureNative.Insights;
+using Pulumi.AzureNative.Insights.V20200202;
 using Pulumi.AzureNative.KeyVault;
 using Pulumi.AzureNative.KeyVault.Inputs;
 using Pulumi.AzureNative.ManagedIdentity;
@@ -86,6 +86,9 @@ return await Deployment.RunAsync(async () =>
             WorkspaceName = $"log-noplan-{stackName}-001"
         }, new() { Protect = true });
 
+    var workspaceSharedKeys = Output.Tuple(resourceGroup.Name, loganalyticsworkspace.Name).Apply(items =>
+        GetSharedKeys.InvokeAsync(new() { ResourceGroupName = items.Item1, WorkspaceName = items.Item2 }));
+
     var appInsights = new Component("appInsights",
         new()
         {
@@ -98,6 +101,7 @@ return await Deployment.RunAsync(async () =>
             ResourceName = $"appi-noplan-{stackName}-001",
             RetentionInDays = 90,
             SamplingPercentage = 0,
+            WorkspaceResourceId = loganalyticsworkspace.Id,
             Tags = tags
         }, new() { Protect = true });
 
@@ -163,13 +167,17 @@ return await Deployment.RunAsync(async () =>
         ZoneRedundant = false
     }, new() { Protect = true });
 
+
     var noplanContainerEnvironment = new ManagedEnvironment("noplanContainerEnvironment",
         new()
         {
             AppLogsConfiguration = new AppLogsConfigurationArgs
             {
                 Destination = "log-analytics",
-                LogAnalyticsConfiguration = new LogAnalyticsConfigurationArgs { CustomerId = loganalyticsworkspace.CustomerId }
+                LogAnalyticsConfiguration = new LogAnalyticsConfigurationArgs
+                    {
+                        CustomerId = loganalyticsworkspace.CustomerId, SharedKey = workspaceSharedKeys.Apply(r => r.PrimarySharedKey)!
+                    }
             },
             EnvironmentName = $"acae-noplan-{stackName}-001",
             ResourceGroupName = resourceGroup.Name,
