@@ -24,7 +24,7 @@ return await Deployment.RunAsync(async () =>
 {
     var clientConfig = await GetClientConfig.InvokeAsync();
     var stackName = Deployment.Instance.StackName;
-    var tags = new InputMap<string> { { "environment", stackName }, { "project", "noplan" }, { "managed-by", "Terraform" } };
+    var tags = new InputMap<string> { { "environment", stackName }, { "project", "noplan" }, { "managed-by", "Pulumi" } };
 
     // Create an Azure Resource Group
     var resourceGroup = new ResourceGroup("resourceGroup", new() { ResourceGroupName = $"rg-noplan-{stackName}-001", Tags = tags },
