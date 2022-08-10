@@ -1,5 +1,5 @@
 FROM mcr.microsoft.com/dotnet/aspnet:7.0.0-preview.7-alpine3.16-amd64 AS base
-RUN apk add --no-cache icu-libs
+RUN apk add --no-cache icu-libs tzdata
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 WORKDIR /app
 EXPOSE 80
