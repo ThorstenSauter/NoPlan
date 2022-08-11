@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Azure.Identity;
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Configurations;
 using DotNet.Testcontainers.Containers;
@@ -15,6 +16,7 @@ using NoPlan.Infrastructure.Data;
 
 namespace NoPlan.Api.Tests.Integration;
 
+// ReSharper disable once ClassNeverInstantiated.Global
 public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetime
 {
     private readonly TestcontainerDatabase _dbContainer = new TestcontainersBuilder<MsSqlTestcontainer>()
@@ -46,7 +48,7 @@ public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetim
                     ["password"] = _userAuthenticationSettings.Password,
                     ["client_id"] = _userAuthenticationSettings.ClientId,
                     ["client_secret"] = _userAuthenticationSettings.ClientSecret,
-                    ["scope"] = $"{_userAuthenticationSettings.Audience}/.default"
+                    ["scope"] = _userAuthenticationSettings.DefaultScope
                 })
             };
 
@@ -72,14 +74,11 @@ public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetim
         {
             configBuilder.AddInMemoryCollection(new Dictionary<string, string?> { { "ConnectionStrings:Default", connectionString } });
             configBuilder.AddUserSecrets<NoPlanApiFactory>();
-            var config = configBuilder.Build();
 
-            var keyVaultUri = config.GetValue<string>("IntegrationTest:KeyVaultUri");
-            if (!string.IsNullOrWhiteSpace(keyVaultUri))
-            {
-                configBuilder.AddAzureKeyVault(keyVaultUri);
-                config = configBuilder.Build();
-            }
+            var config = configBuilder.Build();
+            var keyVaultUri = config.GetValue<Uri>("IntegrationTest:KeyVaultUri");
+            configBuilder.AddAzureKeyVault(keyVaultUri, new DefaultAzureCredential());
+            config = configBuilder.Build();
 
             config.GetSection(nameof(UserAuthenticationSettings)).Bind(_userAuthenticationSettings);
         });
