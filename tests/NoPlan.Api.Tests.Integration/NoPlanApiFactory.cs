@@ -16,6 +16,7 @@ using NoPlan.Infrastructure.Data;
 
 namespace NoPlan.Api.Tests.Integration;
 
+// ReSharper disable once ClassNeverInstantiated.Global
 public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetime
 {
     private readonly TestcontainerDatabase _dbContainer = new TestcontainersBuilder<MsSqlTestcontainer>()
