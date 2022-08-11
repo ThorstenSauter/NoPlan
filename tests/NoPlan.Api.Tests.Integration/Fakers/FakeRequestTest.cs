@@ -8,7 +8,7 @@ public class FakeRequestTest
     private const int CreateRequestSeed = 133742069;
     private const int UpdateRequestSeed = 420691337;
 
-    public FakeRequestTest()
+    protected FakeRequestTest()
     {
         Randomizer.Seed = new();
         var createTagRequestFaker = new Faker<CreateTagRequest>()
@@ -26,14 +26,14 @@ public class FakeRequestTest
             .UseSeed(UpdateRequestSeed);
 
         UpdateRequestFaker = new Faker<UpdateToDoRequest>()
-            .RuleFor(x => x.Id, x => Guid.Empty)
+            .RuleFor(x => x.Id, _ => Guid.Empty)
             .RuleFor(x => x.Title, x => x.Lorem.Sentence())
             .RuleFor(x => x.Description, x => x.Lorem.Sentence())
             .RuleFor(x => x.Tags, _ => updateTagRequestFaker.Generate(3))
             .UseSeed(UpdateRequestSeed);
     }
 
-    public Faker<UpdateToDoRequest> UpdateRequestFaker { get; }
+    protected Faker<UpdateToDoRequest> UpdateRequestFaker { get; }
 
-    public Faker<CreateToDoRequest> CreateRequestFaker { get; }
+    protected Faker<CreateToDoRequest> CreateRequestFaker { get; }
 }
