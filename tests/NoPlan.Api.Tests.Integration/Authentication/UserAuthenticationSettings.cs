@@ -1,5 +1,8 @@
 ﻿namespace NoPlan.Api.Tests.Integration.Authentication;
 
+/// <summary>
+///     Contains all necessary information for performing the OAuth 2.0 ROPC flow for a user account.
+/// </summary>
 public sealed class UserAuthenticationSettings
 {
     /// <summary>
