@@ -457,3 +457,6 @@ $RECYCLE.BIN/
 # Docker compose
 sql/
 docker-compose.yml
+
+# Verify
+*.received.*
