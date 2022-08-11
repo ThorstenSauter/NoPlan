@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Azure.Identity;
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Configurations;
 using DotNet.Testcontainers.Containers;
@@ -72,14 +73,11 @@ public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetim
         {
             configBuilder.AddInMemoryCollection(new Dictionary<string, string?> { { "ConnectionStrings:Default", connectionString } });
             configBuilder.AddUserSecrets<NoPlanApiFactory>();
-            var config = configBuilder.Build();
 
-            var keyVaultUri = config.GetValue<string>("IntegrationTest:KeyVaultUri");
-            if (!string.IsNullOrWhiteSpace(keyVaultUri))
-            {
-                configBuilder.AddAzureKeyVault(keyVaultUri);
-                config = configBuilder.Build();
-            }
+            var config = configBuilder.Build();
+            var keyVaultUri = config.GetValue<Uri>("IntegrationTest:KeyVaultUri");
+            configBuilder.AddAzureKeyVault(keyVaultUri, new DefaultAzureCredential());
+            config = configBuilder.Build();
 
             config.GetSection(nameof(UserAuthenticationSettings)).Bind(_userAuthenticationSettings);
         });
