@@ -17,7 +17,7 @@ try
 {
     var builder = WebApplication.CreateBuilder();
     var configuration = builder.Configuration;
-    if (!builder.Environment.IsTesting())
+    if (builder.Environment.IsProduction())
     {
         configuration.AddAzureAppConfiguration(options =>
         {
@@ -65,7 +65,7 @@ try
     var app = builder.Build();
     await ApplyMigrationsAsync<PlannerContext>(app);
 
-    if (!app.Environment.IsTesting())
+    if (app.Environment.IsProduction())
     {
         app.UseAzureAppConfiguration();
     }
