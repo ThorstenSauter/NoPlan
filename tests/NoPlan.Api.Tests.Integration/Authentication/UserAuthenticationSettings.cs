@@ -6,7 +6,8 @@ public sealed class UserAuthenticationSettings
     ///     The URL to acquire the access token from, e.g.
     ///     https://login.microsoftonline.com/your-aad-tenant-id/oauth2/v2.0/token
     /// </summary>
-    public string TokenUrl => $"https://login.microsoftonline.com/{TenantId}/oauth2/v2.0/token";
+    public string TokenUrl =>
+        $"https://login.microsoftonline.com/{TenantId}/oauth2/v2.0/token";
 
     /// <summary>
     ///     The tenant id.
@@ -37,4 +38,10 @@ public sealed class UserAuthenticationSettings
     ///     The application audience.
     /// </summary>
     public string Audience { get; set; } = null!;
+
+    /// <summary>
+    ///     The applications default scope.
+    /// </summary>
+    public string DefaultScope =>
+        $"{Audience}/.default";
 }

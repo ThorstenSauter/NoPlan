@@ -47,7 +47,7 @@ public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetim
                     ["password"] = _userAuthenticationSettings.Password,
                     ["client_id"] = _userAuthenticationSettings.ClientId,
                     ["client_secret"] = _userAuthenticationSettings.ClientSecret,
-                    ["scope"] = $"{_userAuthenticationSettings.Audience}/.default"
+                    ["scope"] = _userAuthenticationSettings.DefaultScope
                 })
             };
 
