@@ -1,0 +1,23 @@
+﻿{
+  Id: Guid_1,
+  Title: Illum qui impedit dolorem.,
+  Description: Tempore praesentium praesentium sit qui.,
+  Tags: [
+    {
+      Id: Guid_2,
+      Name: qui,
+      AssignedAt: DateTime_1
+    },
+    {
+      Id: Guid_3,
+      Name: illum,
+      AssignedAt: DateTime_1
+    },
+    {
+      Id: Guid_4,
+      Name: qui,
+      AssignedAt: DateTime_1
+    }
+  ],
+  CreatedAt: DateTime_1
+}
