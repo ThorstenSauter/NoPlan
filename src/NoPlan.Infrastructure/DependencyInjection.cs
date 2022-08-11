@@ -7,16 +7,14 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("Default");
-
         services
             .AddHealthChecks()
             .AddSqlServer(
-                connectionString!,
+                provider => provider.GetRequiredService<IConfiguration>().GetConnectionString("Default")!,
                 name: "SQL Server",
                 timeout: TimeSpan.FromSeconds(15),
                 tags: new[] { "db", "sql" });
 
-        return services.AddDbContext<PlannerContext>(options => options.UseSqlServer(connectionString!));
+        return services.AddDbContext<PlannerContext>(options => options.UseSqlServer(configuration.GetConnectionString("Default")!));
     }
 }

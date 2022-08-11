@@ -1,0 +1,23 @@
+﻿{
+  Id: Guid_1,
+  Title: Aliquid doloremque in nihil aliquam et laborum vitae.,
+  Description: Aspernatur tempora nihil ad aperiam debitis aut.,
+  Tags: [
+    {
+      Id: Guid_2,
+      Name: quidem,
+      AssignedAt: DateTime_1
+    },
+    {
+      Id: Guid_3,
+      Name: aliquid,
+      AssignedAt: DateTime_1
+    },
+    {
+      Id: Guid_4,
+      Name: doloremque,
+      AssignedAt: DateTime_1
+    }
+  ],
+  CreatedAt: DateTime_2
+}

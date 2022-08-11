@@ -1,6 +1,7 @@
 using Azure.Identity;
 using FastEndpoints.Swagger;
 using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Identity.Web;
@@ -17,7 +18,7 @@ try
 {
     var builder = WebApplication.CreateBuilder();
     var configuration = builder.Configuration;
-    if (!builder.Environment.IsTesting())
+    if (builder.Environment.IsProduction())
     {
         configuration.AddAzureAppConfiguration(options =>
         {
@@ -65,7 +66,7 @@ try
     var app = builder.Build();
     await ApplyMigrationsAsync<PlannerContext>(app);
 
-    if (!app.Environment.IsTesting())
+    if (app.Environment.IsProduction())
     {
         app.UseAzureAppConfiguration();
     }
@@ -82,6 +83,23 @@ try
     app.UseAuthorization();
     app.UseFastEndpoints(c =>
     {
+        c.ErrorResponseBuilder = (failures, status) =>
+        {
+            var problemDetails = new ValidationProblemDetails
+            {
+                Title = "Validation Error",
+                Detail = "One or more validation errors occurred",
+                Type = $"https://httpstatuses.com/{status}",
+                Status = status
+            };
+
+            foreach (var failure in failures.GroupBy(f => f.PropertyName))
+            {
+                problemDetails.Errors[failure.Key] = failure.Select(g => g.ErrorMessage).ToArray();
+            }
+
+            return problemDetails;
+        };
         c.RoutingOptions = o => o.Prefix = "api";
         c.VersioningOptions = o =>
         {

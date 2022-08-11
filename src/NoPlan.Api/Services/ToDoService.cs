@@ -20,7 +20,7 @@ public sealed class ToDoService : IToDoService
 
     /// <inheritdoc />
     public async Task<IEnumerable<ToDo>> GetAllAsync(Guid userId, CancellationToken cancellationToken = default) =>
-        await _context.ToDos.Include(t => t.Tags).AsNoTracking().ToListAsync(cancellationToken);
+        await _context.ToDos.Include(t => t.Tags).OrderByDescending(t => t.CreatedAt).AsNoTracking().ToListAsync(cancellationToken);
 
     /// <inheritdoc />
     public async Task<ToDo?> GetAsync(Guid id, Guid userId, CancellationToken cancellationToken = default) =>
