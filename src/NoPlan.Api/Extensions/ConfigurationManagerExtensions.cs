@@ -1,17 +1,23 @@
 ﻿using Azure.Identity;
-using Azure.Messaging.EventGrid;
 using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
-using Microsoft.Extensions.Configuration.AzureAppConfiguration.Extensions;
 using NoPlan.Api.Options;
+using NoPlan.Api.Workers;
 
 namespace NoPlan.Api.Extensions;
 
-public static class AppConfigurationExtensions
+/// <summary>
+///     Contains extension methods for <see cref="ConfigurationManager" />.
+/// </summary>
+public static class ConfigurationManagerExtensions
 {
-    private static IConfigurationRefresher Refresher = null!;
-
-    public static IConfigurationBuilder AddAzureAppConfiguration(this ConfigurationManager configuration)
+    /// <summary>
+    ///     Configures all services related to Azure App Configuration.
+    /// </summary>
+    /// <param name="configuration">The application configuration manager.</param>
+    /// <param name="services">The service collection.</param>
+    /// <returns>The configuration manager for chaining.</returns>
+    public static ConfigurationManager AddAzureAppConfiguration(this ConfigurationManager configuration, IServiceCollection services)
     {
         var appConfigurationOptions = configuration.GetSection(AppConfigurationOptions.SectionName).Get<AppConfigurationOptions>()!;
         var credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions
@@ -31,22 +37,14 @@ public static class AppConfigurationExtensions
                 refreshOptions.Register("Sentinel", label, true);
             });
 
-            Refresher = options.GetRefresher();
+            services
+                .AddAzureAppConfiguration()
+                .AddSectionedOptions<AppConfigurationOptions>(configuration)
+                .AddSingleton(options.GetRefresher())
+                .AddSingleton(new ServiceBusClient(appConfigurationOptions.ServiceBusNamespace, credential))
+                .AddHostedService<AppConfigurationEventHandler>();
         });
 
-        var serviceBusClient = new ServiceBusClient(appConfigurationOptions.ServiceBusNamespace, credential);
-        var processor = serviceBusClient.CreateProcessor(appConfigurationOptions.ServiceBusTopicName,
-            appConfigurationOptions.ServiceBusSubscriptionName, new() { AutoCompleteMessages = true, PrefetchCount = 10 });
-
-        processor.ProcessMessageAsync += MessageHandler;
         return configuration;
-    }
-
-    private static Task MessageHandler(ProcessMessageEventArgs args)
-    {
-        var eventGridEvent = EventGridEvent.Parse(args.Message.Body);
-        eventGridEvent.TryCreatePushNotification(out var pushNotification);
-        Refresher.ProcessPushNotification(pushNotification);
-        return Task.CompletedTask;
     }
 }

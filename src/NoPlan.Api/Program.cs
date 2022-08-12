@@ -3,7 +3,6 @@ using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
-using NoPlan.Api.Options;
 using NoPlan.Api.Services;
 using NoPlan.Infrastructure.Data;
 using Serilog;
@@ -18,7 +17,7 @@ try
     var configuration = builder.Configuration;
     if (builder.Environment.IsProduction())
     {
-        configuration.AddAzureAppConfiguration();
+        configuration.AddAzureAppConfiguration(builder.Services);
     }
 
     builder.Services
@@ -30,8 +29,6 @@ try
             s.Version = "v1";
         })
         .AddInfrastructure(configuration)
-        .AddSectionedOptions<AppConfigurationOptions>(configuration)
-        .AddAzureAppConfiguration()
         .AddApplicationInsightsTelemetry()
         .AddScoped<IToDoService, ToDoService>()
         .AddSingleton<IDateTimeProvider, DateTimeProvider>()
