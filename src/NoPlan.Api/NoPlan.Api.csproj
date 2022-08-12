@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
+    <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.10.0" />
     <PackageReference Include="FastEndpoints" Version="4.4.0" />
     <PackageReference Include="FastEndpoints.Generator" Version="4.4.0" />
     <PackageReference Include="FastEndpoints.Swagger" Version="4.4.0" />
