@@ -7,30 +7,25 @@ namespace NoPlan.Api.Options;
 /// </summary>
 public sealed class AppConfigurationOptions : IOptionsSectionDefinition
 {
-    private const int DefaultRefreshInterval = 600;
-
-    private int _refreshInterval = DefaultRefreshInterval;
-
     /// <summary>
     ///     The <see cref="Uri" /> of the Azure App Configuration endpoint.
     /// </summary>
     public Uri EndPoint { get; set; } = null!;
 
     /// <summary>
+    ///     The Azure Service Bus namespace.
     /// </summary>
     public string ServiceBusNamespace { get; set; } = null!;
 
+    /// <summary>
+    ///     The name of the Azure Service Bus topic receiving App Configuration events.
+    /// </summary>
     public string ServiceBusTopicName { get; set; } = null!;
-    public string ServiceBusSubscriptionName { get; set; } = null!;
 
     /// <summary>
-    ///     The refresh interval in seconds. Defaults to 300 seconds (5 minutes) if no or an illegal value is supplied.
+    ///     The name of the Azure Service Bus subscription receiving App Configuration events.
     /// </summary>
-    public int RefreshInterval
-    {
-        get => _refreshInterval;
-        set => _refreshInterval = value <= 0 ? DefaultRefreshInterval : value;
-    }
+    public string ServiceBusSubscriptionName { get; set; } = null!;
 
     /// <inheritdoc />
     public static string SectionName => "AppConfiguration";
