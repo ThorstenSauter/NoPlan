@@ -115,11 +115,8 @@ try
         app.UseSwaggerUi3(s => s.ConfigureDefaults());
     }
 
-    app.UseEndpoints(endpoints =>
-    {
-        endpoints.MapHealthChecks("/health/ready", new() { ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse });
-        endpoints.MapHealthChecks("/health/live", new() { Predicate = _ => false, ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse });
-    });
+    app.MapHealthChecks("/health/ready", new() { ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse });
+    app.MapHealthChecks("/health/live", new() { Predicate = _ => false, ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse });
 
     await app.RunAsync();
 }
