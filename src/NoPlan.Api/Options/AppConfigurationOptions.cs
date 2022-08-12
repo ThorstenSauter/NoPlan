@@ -17,6 +17,13 @@ public sealed class AppConfigurationOptions : IOptionsSectionDefinition
     public Uri EndPoint { get; set; } = null!;
 
     /// <summary>
+    /// </summary>
+    public string ServiceBusNamespace { get; set; } = null!;
+
+    public string ServiceBusTopicName { get; set; } = null!;
+    public string ServiceBusSubscriptionName { get; set; } = null!;
+
+    /// <summary>
     ///     The refresh interval in seconds. Defaults to 300 seconds (5 minutes) if no or an illegal value is supplied.
     /// </summary>
     public int RefreshInterval
