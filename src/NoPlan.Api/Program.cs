@@ -23,14 +23,14 @@ try
         configuration.AddAzureAppConfiguration(options =>
         {
             var appConfigurationOptions = configuration.GetSection(AppConfigurationOptions.SectionName).Get<AppConfigurationOptions>();
-            var isDevelopment = builder.Environment.IsDevelopment();
-            var credential = isDevelopment
-                ? new DefaultAzureCredential()
-                : new(new DefaultAzureCredentialOptions { ManagedIdentityClientId = configuration.GetValue<string>("ManagedIdentityClientId") });
+            var credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions
+            {
+                ManagedIdentityClientId = configuration.GetValue<string>("ManagedIdentityClientId")
+            });
 
             options.Connect(appConfigurationOptions!.EndPoint, credential);
             options.ConfigureKeyVault(c => c.SetCredential(credential));
-            var label = isDevelopment ? "dev" : "prod";
+            const string label = "prod";
             options.Select(KeyFilter.Any, label);
             options.ConfigureRefresh(refreshOptions =>
             {
