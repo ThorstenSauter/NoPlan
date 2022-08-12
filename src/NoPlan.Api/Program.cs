@@ -1,11 +1,8 @@
-using Azure.Identity;
 using FastEndpoints.Swagger;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Identity.Web;
-using NoPlan.Api.Options;
 using NoPlan.Api.Services;
 using NoPlan.Infrastructure.Data;
 using Serilog;
@@ -20,24 +17,7 @@ try
     var configuration = builder.Configuration;
     if (builder.Environment.IsProduction())
     {
-        configuration.AddAzureAppConfiguration(options =>
-        {
-            var appConfigurationOptions = configuration.GetSection(AppConfigurationOptions.SectionName).Get<AppConfigurationOptions>();
-            var credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions
-            {
-                ManagedIdentityClientId = configuration.GetValue<string>("ManagedIdentityClientId")
-            });
-
-            options.Connect(appConfigurationOptions!.EndPoint, credential);
-            options.ConfigureKeyVault(c => c.SetCredential(credential));
-            const string label = "prod";
-            options.Select(KeyFilter.Any, label);
-            options.ConfigureRefresh(refreshOptions =>
-            {
-                refreshOptions.SetCacheExpiration(TimeSpan.FromSeconds(appConfigurationOptions.RefreshInterval));
-                refreshOptions.Register("Sentinel", label, true);
-            });
-        });
+        configuration.AddAzureAppConfiguration(builder.Services);
     }
 
     builder.Services
@@ -49,8 +29,6 @@ try
             s.Version = "v1";
         })
         .AddInfrastructure(configuration)
-        .AddSectionedOptions<AppConfigurationOptions>(configuration)
-        .AddAzureAppConfiguration()
         .AddApplicationInsightsTelemetry()
         .AddScoped<IToDoService, ToDoService>()
         .AddSingleton<IDateTimeProvider, DateTimeProvider>()
