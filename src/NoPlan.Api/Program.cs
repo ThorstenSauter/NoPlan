@@ -23,14 +23,14 @@ try
         configuration.AddAzureAppConfiguration(options =>
         {
             var appConfigurationOptions = configuration.GetSection(AppConfigurationOptions.SectionName).Get<AppConfigurationOptions>();
-            var isDevelopment = builder.Environment.IsDevelopment();
-            var credential = isDevelopment
-                ? new DefaultAzureCredential()
-                : new(new DefaultAzureCredentialOptions { ManagedIdentityClientId = configuration.GetValue<string>("ManagedIdentityClientId") });
+            var credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions
+            {
+                ManagedIdentityClientId = configuration.GetValue<string>("ManagedIdentityClientId")
+            });
 
             options.Connect(appConfigurationOptions!.EndPoint, credential);
             options.ConfigureKeyVault(c => c.SetCredential(credential));
-            var label = isDevelopment ? "dev" : "prod";
+            const string label = "prod";
             options.Select(KeyFilter.Any, label);
             options.ConfigureRefresh(refreshOptions =>
             {
@@ -115,11 +115,8 @@ try
         app.UseSwaggerUi3(s => s.ConfigureDefaults());
     }
 
-    app.UseEndpoints(endpoints =>
-    {
-        endpoints.MapHealthChecks("/health/ready", new() { ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse });
-        endpoints.MapHealthChecks("/health/live", new() { Predicate = _ => false, ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse });
-    });
+    app.MapHealthChecks("/health/ready", new() { ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse });
+    app.MapHealthChecks("/health/live", new() { Predicate = _ => false, ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse });
 
     await app.RunAsync();
 }
