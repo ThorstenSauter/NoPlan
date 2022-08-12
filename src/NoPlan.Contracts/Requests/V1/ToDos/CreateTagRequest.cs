@@ -8,5 +8,6 @@ public sealed record CreateTagRequest
 public sealed class CreateTagRequestValidator : Validator<CreateTagRequest>
 {
     public CreateTagRequestValidator() =>
-        RuleFor(x => x.Name).NotEmpty().WithMessage("Tag name is required");
+        RuleFor(x => x.Name)
+            .NotEmpty().WithMessage("Tag name is required");
 }
