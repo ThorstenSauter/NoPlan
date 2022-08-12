@@ -1,4 +1,5 @@
-﻿using NoPlan.Api.Tests.Integration.Fakers;
+﻿using Microsoft.AspNetCore.Mvc;
+using NoPlan.Api.Tests.Integration.Fakers;
 using NoPlan.Contracts.Responses.V1.ToDos;
 
 namespace NoPlan.Api.Tests.Integration.Endpoints.V1.ToDos;
@@ -27,6 +28,22 @@ public sealed class GetToDoEndpointTests : FakeRequestTest, IClassFixture<NoPlan
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         await Verify(toDo);
+    }
+
+    [Fact]
+    public async Task HandleAsync_ShouldReturn400_WhenRequestIsMalformed()
+    {
+        // Arrange
+        var client = _apiFactory.CreateClient();
+        await _apiFactory.AuthenticateClientAsUserAsync(client);
+
+        // Act
+        var response = await client.GetAsync($"/api/v1/todos/{Guid.Empty}");
+        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        await Verify(problemDetails);
     }
 
     [Fact]

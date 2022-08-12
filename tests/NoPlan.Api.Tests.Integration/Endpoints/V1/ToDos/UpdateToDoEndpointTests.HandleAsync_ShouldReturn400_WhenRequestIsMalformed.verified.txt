@@ -1,0 +1,20 @@
+﻿{
+  Errors: {
+    Description: [
+      A description for the ToDo to update is required
+    ],
+    Tags[0].Name: [
+      Tag name is required
+    ],
+    Tags[1].Name: [
+      Tag name is required
+    ],
+    Title: [
+      A minimum length of 3 characters is required for new title
+    ]
+  },
+  Type: https://httpstatuses.com/400,
+  Title: Validation Error,
+  Status: 400,
+  Detail: One or more validation errors occurred
+}

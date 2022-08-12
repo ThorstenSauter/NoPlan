@@ -1,0 +1,11 @@
+﻿{
+  Errors: {
+    Id: [
+      The ToDo identifier is required
+    ]
+  },
+  Type: https://httpstatuses.com/400,
+  Title: Validation Error,
+  Status: 400,
+  Detail: One or more validation errors occurred
+}

@@ -1,10 +1,11 @@
 ﻿using NoPlan.Api.Services;
+using NoPlan.Contracts.Requests.V1.ToDos;
 using NoPlan.Contracts.Responses.V1.ToDos;
 using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Api.Endpoints.V1.ToDos;
 
-public sealed class GetAllToDosEndpoint : EndpointWithMapping<EmptyRequest, ToDosResponse, IEnumerable<ToDo>>
+public sealed class GetAllToDosEndpoint : EndpointWithMapping<GetAllToDosRequest, ToDosResponse, IEnumerable<ToDo>>
 {
     private readonly IToDoService _toDoService;
 
@@ -18,7 +19,7 @@ public sealed class GetAllToDosEndpoint : EndpointWithMapping<EmptyRequest, ToDo
         Policies("User");
     }
 
-    public override async Task HandleAsync(EmptyRequest req, CancellationToken ct) =>
+    public override async Task HandleAsync(GetAllToDosRequest req, CancellationToken ct) =>
         await SendAsync(MapFromEntity(await _toDoService.GetAllAsync(User.GetId(), ct)), cancellation: ct);
 
     public override ToDosResponse MapFromEntity(IEnumerable<ToDo> e) => new()

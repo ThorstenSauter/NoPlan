@@ -1,4 +1,5 @@
-﻿using NoPlan.Api.Tests.Integration.Fakers;
+﻿using Microsoft.AspNetCore.Mvc;
+using NoPlan.Api.Tests.Integration.Fakers;
 using NoPlan.Contracts.Requests.V1.ToDos;
 using NoPlan.Contracts.Responses.V1.ToDos;
 
@@ -30,19 +31,30 @@ public sealed class CreateToDoEndpointTests : FakeRequestTest, IClassFixture<NoP
     }
 
     [Fact]
+    public async Task HandleAsync_ShouldReturn400_WhenRequestIsMalformed()
+    {
+        // Arrange
+        var client = _apiFactory.CreateClient();
+        await _apiFactory.AuthenticateClientAsUserAsync(client);
+        var request = new CreateToDoRequest { Title = "a", Description = "  ", Tags = new List<CreateTagRequest> { new() { Name = "" }, new() } };
+
+        // Act
+        var response = await client.PostAsJsonAsync("/api/v1/todos", request);
+        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        await Verify(problemDetails);
+    }
+
+    [Fact]
     public async Task HandleAsync_ShouldReturn401_WhenUserIsNotAuthenticated()
     {
         // Arrange
         var client = _apiFactory.CreateClient();
-        var request = new CreateToDoRequest
-        {
-            Title = "Integration test",
-            Description = "Create ToDo in integration test",
-            Tags = new List<CreateTagRequest> { new() { Name = "integration" }, new() { Name = "test" } }
-        };
 
         // Act
-        var response = await client.PostAsJsonAsync("/api/v1/todos", request);
+        var response = await client.PostAsJsonAsync("/api/v1/todos", CreateRequestFaker.Generate());
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
