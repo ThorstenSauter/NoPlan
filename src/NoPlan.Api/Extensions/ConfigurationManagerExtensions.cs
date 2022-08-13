@@ -1,6 +1,7 @@
 ﻿using Azure.Identity;
 using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using NoPlan.Api.Options;
 using NoPlan.Api.Workers;
 
@@ -42,7 +43,17 @@ public static class ConfigurationManagerExtensions
                 .AddSectionedOptions<AppConfigurationOptions>(configuration)
                 .AddSingleton(options.GetRefresher())
                 .AddSingleton(new ServiceBusClient(appConfigurationOptions.ServiceBusNamespace, credential))
-                .AddHostedService<AppConfigurationEventHandler>();
+                .AddHostedService<AppConfigurationEventHandler>()
+                .AddHealthChecks()
+                .AddAzureServiceBusSubscription(
+                    appConfigurationOptions.ServiceBusNamespace,
+                    appConfigurationOptions.ServiceBusTopicName,
+                    appConfigurationOptions.ServiceBusSubscriptionName,
+                    credential,
+                    "Service Bus",
+                    HealthStatus.Degraded,
+                    new[] { "app configuration", "service bus" },
+                    TimeSpan.FromSeconds(15));
         });
 
         return configuration;
