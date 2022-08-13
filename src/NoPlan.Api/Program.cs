@@ -1,8 +1,8 @@
 using FastEndpoints.Swagger;
-using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
+using NoPlan.Api.HeathChecks;
 using NoPlan.Api.Services;
 using NoPlan.Infrastructure.Data;
 using Serilog;
@@ -93,8 +93,8 @@ try
         app.UseSwaggerUi3(s => s.ConfigureDefaults());
     }
 
-    app.MapHealthChecks("/health/ready", new() { ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse });
-    app.MapHealthChecks("/health/live", new() { Predicate = _ => false, ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse });
+    app.MapHealthChecks("/health/ready", new() { ResponseWriter = JsonHealthCheckResponseWriter.WriteResponse });
+    app.MapHealthChecks("/health/live", new() { Predicate = _ => false, ResponseWriter = JsonHealthCheckResponseWriter.WriteResponse });
 
     await app.RunAsync();
 }
