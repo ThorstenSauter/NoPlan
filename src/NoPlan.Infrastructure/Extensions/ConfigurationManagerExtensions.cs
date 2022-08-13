@@ -1,14 +1,16 @@
 ﻿using Azure.Identity;
 using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using NoPlan.Api.Options;
-using NoPlan.Api.Workers;
+using Microsoft.IdentityModel.Protocols;
+using NoPlan.Infrastructure.Options;
+using NoPlan.Infrastructure.Workers;
 
-namespace NoPlan.Api.Extensions;
+namespace NoPlan.Infrastructure.Extensions;
 
 /// <summary>
-///     Contains extension methods for <see cref="ConfigurationManager" />.
+///     Contains extension methods for <see cref="ConfigurationManager{T}" />.
 /// </summary>
 public static class ConfigurationManagerExtensions
 {
