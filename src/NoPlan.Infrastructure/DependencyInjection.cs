@@ -10,6 +10,7 @@ public static class DependencyInjection
     {
         services
             .AddHealthChecks()
+            .AddApplicationInsightsPublisher(saveDetailedReport: false)
             .AddSqlServer(
                 provider => provider.GetRequiredService<IConfiguration>().GetConnectionString("Default")!,
                 failureStatus: HealthStatus.Unhealthy,
