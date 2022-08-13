@@ -33,6 +33,12 @@ public sealed class AppConfigurationEventHandler : BackgroundService
         _options = options.Value;
     }
 
+    public override Task StopAsync(CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("Stopping app configuration handler");
+        return base.StopAsync(cancellationToken);
+    }
+
     /// <inheritdoc />
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -41,6 +47,7 @@ public sealed class AppConfigurationEventHandler : BackgroundService
 
         processor.ProcessMessageAsync += MessageHandler;
         processor.ProcessErrorAsync += ErrorHandler;
+        _logger.LogInformation("Starting app configuration handler");
         await processor.StartProcessingAsync(stoppingToken);
     }
 
@@ -53,6 +60,7 @@ public sealed class AppConfigurationEventHandler : BackgroundService
     private Task MessageHandler(ProcessMessageEventArgs args)
     {
         var eventGridEvent = EventGridEvent.Parse(args.Message.Body);
+        _logger.LogInformation("Received app configuration event of type {EventType}", eventGridEvent.EventType);
         eventGridEvent.TryCreatePushNotification(out var pushNotification);
         _refresher.ProcessPushNotification(pushNotification);
         return Task.CompletedTask;
