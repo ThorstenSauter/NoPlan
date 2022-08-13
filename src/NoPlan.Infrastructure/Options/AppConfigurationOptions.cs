@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 
-namespace NoPlan.Api.Options;
+namespace NoPlan.Infrastructure.Options;
 
 /// <summary>
 ///     Contains configuration values for connecting to Azure App Configuration.

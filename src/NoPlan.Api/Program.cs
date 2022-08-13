@@ -2,9 +2,10 @@ using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
-using NoPlan.Api.HeathChecks;
 using NoPlan.Api.Services;
 using NoPlan.Infrastructure.Data;
+using NoPlan.Infrastructure.Extensions;
+using NoPlan.Infrastructure.HeathChecks;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -29,7 +30,6 @@ try
             s.Version = "v1";
         })
         .AddInfrastructure(configuration)
-        .AddApplicationInsightsTelemetry()
         .AddScoped<IToDoService, ToDoService>()
         .AddSingleton<IDateTimeProvider, DateTimeProvider>()
         .AddAuthorization(options => options.AddPolicy("User", b => b.RequireScope("User")))

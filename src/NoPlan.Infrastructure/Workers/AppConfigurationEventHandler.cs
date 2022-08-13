@@ -2,10 +2,12 @@
 using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration.Extensions;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using NoPlan.Api.Options;
+using NoPlan.Infrastructure.Options;
 
-namespace NoPlan.Api.Workers;
+namespace NoPlan.Infrastructure.Workers;
 
 /// <summary>
 ///     A background worker service that receives events from Azure Service Bus when Azure App Configuration values change.
