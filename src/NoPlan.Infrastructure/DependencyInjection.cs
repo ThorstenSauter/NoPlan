@@ -1,4 +1,5 @@
-﻿using NoPlan.Infrastructure.Data;
+﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+using NoPlan.Infrastructure.Data;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,7 @@ public static class DependencyInjection
             .AddHealthChecks()
             .AddSqlServer(
                 provider => provider.GetRequiredService<IConfiguration>().GetConnectionString("Default")!,
+                failureStatus: HealthStatus.Unhealthy,
                 name: "SQL Server",
                 timeout: TimeSpan.FromSeconds(15),
                 tags: new[] { "db", "sql" });
