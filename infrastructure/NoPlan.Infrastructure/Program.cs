@@ -1,4 +1,5 @@
-﻿using Pulumi;
+﻿using NoPlan.Infrastructure;
+using Pulumi;
 using Pulumi.AzureNative.App;
 using Pulumi.AzureNative.App.Inputs;
 using Pulumi.AzureNative.AppConfiguration;
@@ -19,6 +20,7 @@ using Pulumi.AzureNative.ServiceBus.Inputs;
 using Pulumi.AzureNative.Sql;
 using Pulumi.AzureNative.Sql.Inputs;
 using Deployment = Pulumi.Deployment;
+using PrincipalType = Pulumi.AzureNative.Authorization.PrincipalType;
 using SkuArgs = Pulumi.AzureNative.ContainerRegistry.Inputs.SkuArgs;
 using SkuName = Pulumi.AzureNative.KeyVault.SkuName;
 using Topic = Pulumi.AzureNative.ServiceBus.Topic;
@@ -26,17 +28,22 @@ using UserIdentityPropertiesArgs = Pulumi.AzureNative.EventGrid.Inputs.UserIdent
 
 return await Deployment.RunAsync(async () =>
 {
+    // Configuration
     var clientConfig = await GetClientConfig.InvokeAsync();
     var stackName = Deployment.Instance.StackName;
     var tags = new InputMap<string> { { "environment", stackName }, { "project", "noplan" }, { "managed-by", "Pulumi" } };
 
-    // Create an Azure Resource Group
-    var resourceGroup = new ResourceGroup("resourceGroup", new() { ResourceGroupName = $"rg-noplan-{stackName}-001", Tags = tags },
-        new() { Protect = true });
+    var roleDefinitions = new RoleDefinitions(clientConfig.SubscriptionId);
+    var gitHubActionsPrincipal = new Principal("NoPlan GitHub", "49e7a027-01d8-4712-aca6-6ecc3c462c61", PrincipalType.ServicePrincipal);
+    var developerGroupPrincipal = new Principal("NoPlan Developers", "914fff5e-bedf-443b-82ad-c4ceccb192c3", PrincipalType.Group);
+
+    var resourceGroup = new ResourceGroup("resourceGroup", new() { ResourceGroupName = $"rg-noplan-{stackName}-001", Tags = tags });
 
     var userAssignedManagedIdentity = new UserAssignedIdentity("noplan-identity",
-        new() { ResourceGroupName = resourceGroup.Name, ResourceName = $"id-noplan-{stackName}-westeurope-001", Tags = tags },
-        new() { Protect = true });
+        new() { ResourceGroupName = resourceGroup.Name, ResourceName = $"id-noplan-{stackName}-westeurope-001", Tags = tags });
+
+    var userAssignedManagedIdentityPrincipal =
+        new Principal("Managed Identity", userAssignedManagedIdentity.PrincipalId, PrincipalType.ServicePrincipal);
 
     var containerRegistry = new Registry("containerRegistry",
         new()
@@ -52,7 +59,7 @@ return await Deployment.RunAsync(async () =>
             ResourceGroupName = resourceGroup.Name,
             Sku = new SkuArgs { Name = "Basic" },
             Tags = tags
-        }, new() { Protect = true });
+        });
 
     var vault = new Vault("vault",
         new()
@@ -73,7 +80,7 @@ return await Deployment.RunAsync(async () =>
             ResourceGroupName = resourceGroup.Name,
             Tags = tags,
             VaultName = $"kv-noplan-{stackName}-001"
-        }, new() { Protect = true });
+        });
 
     var integrationTestsVault = new Vault("integrationTestsVault",
         new()
@@ -95,7 +102,7 @@ return await Deployment.RunAsync(async () =>
             ResourceGroupName = resourceGroup.Name,
             Tags = tags,
             VaultName = "kv-noplan-i-t-001"
-        }, new() { Protect = true });
+        });
 
     var loganalyticsworkspace = new Workspace("loganalyticsworkspace",
         new()
@@ -110,7 +117,7 @@ return await Deployment.RunAsync(async () =>
             Tags = tags,
             WorkspaceCapping = new WorkspaceCappingArgs { DailyQuotaGb = -1 },
             WorkspaceName = $"log-noplan-{stackName}-001"
-        }, new() { Protect = true });
+        });
 
     var workspaceSharedKeys = Output.Tuple(resourceGroup.Name, loganalyticsworkspace.Name).Apply(items =>
         GetSharedKeys.InvokeAsync(new() { ResourceGroupName = items.Item1, WorkspaceName = items.Item2 }));
@@ -129,7 +136,7 @@ return await Deployment.RunAsync(async () =>
             SamplingPercentage = 0,
             WorkspaceResourceId = loganalyticsworkspace.Id,
             Tags = tags
-        }, new() { Protect = true });
+        });
 
     var appConfig = new ConfigurationStore("appConfig",
         new()
@@ -138,7 +145,7 @@ return await Deployment.RunAsync(async () =>
             ResourceGroupName = resourceGroup.Name,
             Sku = new Pulumi.AzureNative.AppConfiguration.Inputs.SkuArgs { Name = "free" },
             Tags = tags
-        }, new() { Protect = true });
+        });
 
     var sqlServer = new Server("sqlServer",
         new()
@@ -159,7 +166,7 @@ return await Deployment.RunAsync(async () =>
             ServerName = $"sql-noplan-{stackName}-001",
             Tags = tags,
             Version = "12.0"
-        }, new() { Protect = true });
+        });
 
     var noplanDatabase = new Database("noplanDatabase", new()
     {
@@ -176,7 +183,7 @@ return await Deployment.RunAsync(async () =>
         Sku = new Pulumi.AzureNative.Sql.Inputs.SkuArgs { Capacity = 5, Name = "Basic", Tier = "Basic" },
         Tags = tags,
         ZoneRedundant = false
-    }, new() { Protect = true });
+    });
 
     var noplanContainerEnvironment = new ManagedEnvironment("noplanContainerEnvironment",
         new()
@@ -193,7 +200,7 @@ return await Deployment.RunAsync(async () =>
             ResourceGroupName = resourceGroup.Name,
             Tags = tags,
             ZoneRedundant = false
-        }, new() { Protect = true });
+        });
 
     var servicebus = new Namespace("servicebus",
         new()
@@ -202,7 +209,7 @@ return await Deployment.RunAsync(async () =>
             ResourceGroupName = resourceGroup.Name,
             Sku = new SBSkuArgs { Name = Pulumi.AzureNative.ServiceBus.SkuName.Standard, Tier = SkuTier.Standard },
             Tags = tags
-        }, new() { Protect = true });
+        });
 
     var appconfigChangesTopic = new Topic("appconfigChangesTopic",
         new()
@@ -220,7 +227,7 @@ return await Deployment.RunAsync(async () =>
             Status = EntityStatus.Active,
             SupportOrdering = true,
             TopicName = "appconfig-changes"
-        }, new() { Protect = true });
+        });
 
     var appconfigChangesTopicSubscription = new Subscription("appconfigChangesTopicSubscription",
         new()
@@ -238,7 +245,7 @@ return await Deployment.RunAsync(async () =>
             Status = EntityStatus.Active,
             SubscriptionName = "appconfig-changes",
             TopicName = appconfigChangesTopic.Name
-        }, new() { Protect = true });
+        });
 
     var appconfigChangesEventGridTopic = new SystemTopic("appconfigChangesEventGridTopic",
         new()
@@ -261,5 +268,32 @@ return await Deployment.RunAsync(async () =>
             Source = appConfig.Id,
             SystemTopicName = "appconfig-changes",
             TopicType = "Microsoft.AppConfiguration.ConfigurationStores"
-        }, new() { Protect = true });
+        });
+
+    var developerGroupRoleAssignments = new RoleAssignments(
+        new List<RoleAssignmentMapping>
+        {
+            new("2ae6e843-9fef-48de-bc32-ad56f9071f36", developerGroupPrincipal, RoleDefinitions.AppConfigurationDataOwner, appConfig),
+            new("2e2a22d0-c84a-4e2a-bc02-5068fc16147c", developerGroupPrincipal, RoleDefinitions.ServiceBusDataOwner, servicebus),
+            new("fbd26a9d-5df9-409b-97c3-bd3d9901a125", developerGroupPrincipal, RoleDefinitions.KeyVaultAdministrator, integrationTestsVault),
+            new("df50f6dc-6bdd-45c8-9fc6-c23156c8dfd4", developerGroupPrincipal, RoleDefinitions.KeyVaultAdministrator, vault)
+        }, roleDefinitions);
+
+    var gitHubActionsRoleAssignments = new RoleAssignments(
+        new List<RoleAssignmentMapping>
+        {
+            new("a4684096-994c-419f-a88e-481ca3463651", gitHubActionsPrincipal, RoleDefinitions.AcrPush, containerRegistry),
+            new("85249e02-ff6d-4408-8b5b-e3711a2ee140", gitHubActionsPrincipal, RoleDefinitions.KeyVaultSecretsUser, integrationTestsVault)
+        }, roleDefinitions);
+
+    var userAssignedManagedIdentityRoleAssignments = new RoleAssignments(
+        new List<RoleAssignmentMapping>
+        {
+            new("ebb66f86-96b7-96ad-02e7-8a122d7026fb", userAssignedManagedIdentityPrincipal, RoleDefinitions.AcrPull, containerRegistry),
+            new("299a51d3-d427-4841-b14a-1d2cbb93f55f", userAssignedManagedIdentityPrincipal, RoleDefinitions.ServiceBusDataReceiver, servicebus),
+            new("85b21858-907c-4af4-9658-ee0bc5ab6317", userAssignedManagedIdentityPrincipal, RoleDefinitions.ServiceBusDataSender, servicebus),
+            new("14804ea2-44ca-4c08-bcfd-ddc8d84d4dd1", userAssignedManagedIdentityPrincipal, RoleDefinitions.AppConfigurationDataReader,
+                appConfig),
+            new("c23c1c35-f6ce-44e5-b6f9-d4d16c6ab599", userAssignedManagedIdentityPrincipal, RoleDefinitions.KeyVaultSecretsUser, vault)
+        }, roleDefinitions);
 });
