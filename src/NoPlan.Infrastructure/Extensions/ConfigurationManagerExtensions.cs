@@ -46,6 +46,11 @@ public static class ConfigurationManagerExtensions
                 .AddSingleton(options.GetRefresher())
                 .AddSingleton(new ServiceBusClient(appConfigurationOptions.ServiceBusNamespace, credential))
                 .AddHostedService<AppConfigurationEventHandler>()
+                .Configure<HealthCheckPublisherOptions>(opt =>
+                {
+                    opt.Period = TimeSpan.FromMinutes(1);
+                    opt.Predicate = registration => registration.Name != "Service Bus";
+                })
                 .AddHealthChecks()
                 .AddAzureServiceBusSubscription(
                     appConfigurationOptions.ServiceBusNamespace,
