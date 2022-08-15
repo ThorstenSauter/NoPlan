@@ -14,6 +14,8 @@ namespace NoPlan.Infrastructure.Extensions;
 /// </summary>
 public static class ConfigurationManagerExtensions
 {
+    private const string ServiceBusHealthCheckName = "Service Bus";
+
     /// <summary>
     ///     Configures all services related to Azure App Configuration.
     /// </summary>
@@ -49,7 +51,7 @@ public static class ConfigurationManagerExtensions
                 .Configure<HealthCheckPublisherOptions>(opt =>
                 {
                     opt.Period = TimeSpan.FromMinutes(1);
-                    opt.Predicate = registration => registration.Name != "Service Bus";
+                    opt.Predicate = registration => registration.Name != ServiceBusHealthCheckName;
                 })
                 .AddHealthChecks()
                 .AddAzureServiceBusSubscription(
@@ -57,7 +59,7 @@ public static class ConfigurationManagerExtensions
                     appConfigurationOptions.ServiceBusTopicName,
                     appConfigurationOptions.ServiceBusSubscriptionName,
                     credential,
-                    "Service Bus",
+                    ServiceBusHealthCheckName,
                     HealthStatus.Degraded,
                     new[] { "app configuration", "service bus" },
                     TimeSpan.FromSeconds(15));
