@@ -18,7 +18,7 @@ permissions:
 env:
   APP_NAME: aca-noplan-dev-001
   DOCKER_FILE: src/NoPlan.Api/Dockerfile
-  IMAGE_NAME: crnoplandev001.azurecr.io/noplan-api
+  IMAGE_NAME: crnoplandev001.azurecr.io/noplan-api:github-${{ github.run_number }}
   REGISTRY_NAME: crnoplandev001
   RESOURCE_GROUP: rg-noplan-dev-001
 
@@ -38,21 +38,21 @@ jobs:
       - name: Login to Azure Container Registry
         run: az acr login --name ${{ env.REGISTRY_NAME }}
       - name: Build image
-        run: docker build -t ${{ env.IMAGE_NAME }}:${{ github.sha }} -f ${{ env.DOCKER_FILE }} .
+        run: docker build -t ${{ env.IMAGE_NAME }} -f ${{ env.DOCKER_FILE }} .
       - name: Run Snyk Vulnerability Scan
         uses: snyk/actions/docker@master
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_API_TOKEN }}
         with:
-          image: ${{ env.IMAGE_NAME }}:${{ github.sha }}
+          image: ${{ env.IMAGE_NAME }}
           args: --file=${{ env.DOCKER_FILE }} --severity-threshold=high
       - name: Upload result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: snyk.sarif
       - name: Push image to registry
-        run: docker push ${{ env.IMAGE_NAME }}:${{ github.sha }}
+        run: docker push ${{ env.IMAGE_NAME }}
 
   up:
     name: Pulumi up
@@ -97,4 +97,4 @@ jobs:
         with:
           inlineScript: |
             az config set extension.use_dynamic_install=yes_without_prompt
-            az containerapp update -n ${{ env.APP_NAME }} -g ${{ env.RESOURCE_GROUP }} --image ${{ env.IMAGE_NAME }}:${{ github.sha }}
+            az containerapp update -n ${{ env.APP_NAME }} -g ${{ env.RESOURCE_GROUP }} --image ${{ env.IMAGE_NAME }}
