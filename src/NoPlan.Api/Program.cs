@@ -61,7 +61,7 @@ try
     app.UseAuthorization();
     app.UseFastEndpoints(c =>
     {
-        c.ErrorResponseBuilder = (failures, status) =>
+        c.Errors.ResponseBuilder = (failures, status) =>
         {
             var problemDetails = new ValidationProblemDetails
             {
@@ -78,13 +78,10 @@ try
 
             return problemDetails;
         };
-        c.RoutingOptions = o => o.Prefix = "api";
-        c.VersioningOptions = o =>
-        {
-            o.Prefix = "v";
-            o.DefaultVersion = 1;
-            o.SuffixedVersion = false;
-        };
+        c.Endpoints.RoutePrefix = "api";
+        c.Versioning.Prefix = "v";
+        c.Versioning.DefaultVersion = 1;
+        c.Versioning.PrependToRoute = true;
     });
 
     if (app.Environment.IsDevelopment())
