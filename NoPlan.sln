@@ -41,9 +41,24 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoPlan.Api.Tests.Unit", "te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoPlan.Api.Tests.Integration", "tests\NoPlan.Api.Tests.Integration\NoPlan.Api.Tests.Integration.csproj", "{95E51505-3889-4F35-B535-F7802D677698}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infrastructure", "infrastructure", "{B487C1B4-6E43-41E7-B4A7-52FB6BC7CAE7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoPlan.Infrastructure", "infrastructure\NoPlan.Infrastructure\NoPlan.Infrastructure.csproj", "{3CC37513-D481-47C8-8A6B-02A381BB70F4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infra", "infra", "{877F7F79-71F6-4B1F-9D7E-F3A7C47D9746}"
+	ProjectSection(SolutionItems) = preProject
+		infra\main.tf = infra\main.tf
+		infra\providers.tf = infra\providers.tf
+		infra\resource-groups.tf = infra\resource-groups.tf
+		infra\variables.tf = infra\variables.tf
+		infra\managed-identities.tf = infra\managed-identities.tf
+		infra\sql-servers.tf = infra\sql-servers.tf
+		infra\key-vaults.tf = infra\key-vaults.tf
+		infra\container-registries.tf = infra\container-registries.tf
+		infra\application-insights.tf = infra\application-insights.tf
+		infra\app-configuration-stores.tf = infra\app-configuration-stores.tf
+		infra\README.MD = infra\README.MD
+		infra\.gitignore = infra\.gitignore
+		infra\.tflint.hcl = infra\.tflint.hcl
+		infra\service-bus.tf = infra\service-bus.tf
+		infra\event-grid.tf = infra\event-grid.tf
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,10 +86,6 @@ Global
 		{95E51505-3889-4F35-B535-F7802D677698}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95E51505-3889-4F35-B535-F7802D677698}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95E51505-3889-4F35-B535-F7802D677698}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3CC37513-D481-47C8-8A6B-02A381BB70F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3CC37513-D481-47C8-8A6B-02A381BB70F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3CC37513-D481-47C8-8A6B-02A381BB70F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3CC37513-D481-47C8-8A6B-02A381BB70F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,7 +98,6 @@ Global
 		{DFC618CE-925B-43A3-B9B9-139A00663BE1} = {89856EE3-7A1F-4DB4-993C-929ACD5CE834}
 		{8388437E-941B-4B1A-B822-9B83FED069CD} = {658FDE7E-6C26-4730-9951-49F81260C2B1}
 		{95E51505-3889-4F35-B535-F7802D677698} = {658FDE7E-6C26-4730-9951-49F81260C2B1}
-		{3CC37513-D481-47C8-8A6B-02A381BB70F4} = {B487C1B4-6E43-41E7-B4A7-52FB6BC7CAE7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {363F91DB-7510-4A5C-B46E-4E19B3A385F3}
