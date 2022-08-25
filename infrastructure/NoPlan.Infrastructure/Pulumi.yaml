@@ -1,3 +1,0 @@
-name: NoPlan.Infrastructure
-runtime: dotnet
-description: Provisions the infrastructure for the NoPlan.Api project.
