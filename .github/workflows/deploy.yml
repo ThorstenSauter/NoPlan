@@ -63,9 +63,9 @@ jobs:
       ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       ARM_USE_OIDC: true
       TF_CONTAINER_NAME: "tfstate"
-      TF_RESOURCE_GROUP_NAME: "rg-terraform-state-prod-001"
+      TF_RESOURCE_GROUP_NAME: "rg-terraforn-state-dev-001"
       TF_STATE_FILE_NAME: "terraform.tfstate"
-      TF_STORAGE_ACCOUNT_NAME: "tfstateb2csignupprod"
+      TF_STORAGE_ACCOUNT_NAME: "tfstatenoplandev"
       TF_USE_AZUREAD_AUTH: true
       TF_USE_OIDC: true
       TF_VAR_default-connectionstring: ${{ secrets.TF_VAR_DEFAULT_CONNECTIONSTRING }}
