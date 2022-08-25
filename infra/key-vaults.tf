@@ -83,3 +83,90 @@ resource "azurerm_role_assignment" "github-actions-integration-test-secrets-offi
 }
 
 # TODO add secrets
+#tfsec:ignore:azure-keyvault-ensure-secret-expiry
+resource "azurerm_key_vault_secret" "azuread-audience" {
+  name         = "AzureAd--Audience"
+  value        = var.azuread-audience
+  key_vault_id = azurerm_key_vault.integration-test.id
+  content_type = "text/plain"
+}
+
+#tfsec:ignore:azure-keyvault-ensure-secret-expiry
+resource "azurerm_key_vault_secret" "azuread-client-id" {
+  name         = "AzureAd--ClientId"
+  value        = var.azuread-client-id
+  key_vault_id = azurerm_key_vault.integration-test.id
+  content_type = "text/plain"
+}
+
+#tfsec:ignore:azure-keyvault-ensure-secret-expiry
+resource "azurerm_key_vault_secret" "azuread-domain" {
+  name         = "AzureAd--Domain"
+  value        = var.azuread-domain
+  key_vault_id = azurerm_key_vault.integration-test.id
+  content_type = "text/plain"
+}
+
+#tfsec:ignore:azure-keyvault-ensure-secret-expiry
+resource "azurerm_key_vault_secret" "azuread-instance" {
+  name         = "AzureAd--Instance"
+  value        = var.azuread-instance
+  key_vault_id = azurerm_key_vault.integration-test.id
+  content_type = "text/plain"
+}
+
+#tfsec:ignore:azure-keyvault-ensure-secret-expiry
+resource "azurerm_key_vault_secret" "azuread-tenant-id" {
+  name         = "AzureAd--TenantId"
+  value        = var.azuread-tenant-id
+  key_vault_id = azurerm_key_vault.integration-test.id
+  content_type = "text/plain"
+}
+
+#tfsec:ignore:azure-keyvault-ensure-secret-expiry
+resource "azurerm_key_vault_secret" "userauth-audience" {
+  name         = "UserAuthenticationSettings--Audience"
+  value        = var.azuread-audience
+  key_vault_id = azurerm_key_vault.integration-test.id
+  content_type = "text/plain"
+}
+
+#tfsec:ignore:azure-keyvault-ensure-secret-expiry
+resource "azurerm_key_vault_secret" "userauth-client-id" {
+  name         = "UserAuthenticationSettings--ClientId"
+  value        = var.userauth-client-id
+  key_vault_id = azurerm_key_vault.integration-test.id
+  content_type = "text/plain"
+}
+
+#tfsec:ignore:azure-keyvault-ensure-secret-expiry
+resource "azurerm_key_vault_secret" "userauth-client-secret" {
+  name         = "UserAuthenticationSettings--ClientSecret"
+  value        = var.userauth-client-secret
+  key_vault_id = azurerm_key_vault.integration-test.id
+  content_type = "text/plain"
+}
+
+#tfsec:ignore:azure-keyvault-ensure-secret-expiry
+resource "azurerm_key_vault_secret" "userauth-password" {
+  name         = "UserAuthenticationSettings--Password"
+  value        = var.userauth-password
+  key_vault_id = azurerm_key_vault.integration-test.id
+  content_type = "text/plain"
+}
+
+#tfsec:ignore:azure-keyvault-ensure-secret-expiry
+resource "azurerm_key_vault_secret" "userauth-tenant-id" {
+  name         = "UserAuthenticationSettings--TenantId"
+  value        = var.azuread-tenant-id
+  key_vault_id = azurerm_key_vault.integration-test.id
+  content_type = "text/plain"
+}
+
+#tfsec:ignore:azure-keyvault-ensure-secret-expiry
+resource "azurerm_key_vault_secret" "userauth-username" {
+  name         = "UserAuthenticationSettings--Username"
+  value        = var.userauth-username
+  key_vault_id = azurerm_key_vault.integration-test.id
+  content_type = "text/plain"
+}

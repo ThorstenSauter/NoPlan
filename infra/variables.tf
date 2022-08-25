@@ -4,6 +4,36 @@ variable "appconfig-label" {
   description = "The App Configuration label to apply to keys"
 }
 
+variable "azuread-audience" {
+  type        = string
+  default     = "https://noplan.thorstensauter.dev"
+  description = "The Azure AD audience for the API and ROPC flow"
+}
+
+variable "azuread-client-id" {
+  type        = string
+  default     = "d64c2b98-7a16-44ac-a368-7267da975eb9"
+  description = "The Azure AD client id for the API"
+}
+
+variable "azuread-domain" {
+  type        = string
+  default     = "thorstensauter.dev"
+  description = "The Azure AD domain id for the API"
+}
+
+variable "azuread-instance" {
+  type        = string
+  default     = "https://login.microsoftonline.com/"
+  description = "The Azure AD instance for the API"
+}
+
+variable "azuread-tenant-id" {
+  type        = string
+  default     = "ffab38df-cddf-433f-859a-6cfa161a5ceb"
+  description = "The Azure AD tenant id for the ROPC flow"
+}
+
 variable "azuread-configuration" {
   type        = string
   default     = <<-EOT
@@ -65,4 +95,28 @@ variable "tags" {
     "managed-by" : "Terraform"
   }
   description = "The default tags for Azure resources"
+}
+
+variable "userauth-client-id" {
+  type        = string
+  default     = "f324c25d-d563-4e15-ac1f-e302c61a388d"
+  description = "The Azure AD client id for the ROPC flow"
+}
+
+variable "userauth-client-secret" {
+  type        = string
+  sensitive   = true
+  description = "The Azure AD client secret for the ROPC flow"
+}
+
+variable "userauth-password" {
+  type        = string
+  sensitive   = true
+  description = "The Azure AD user password for the ROPC flow"
+}
+
+variable "userauth-username" {
+  type        = string
+  sensitive   = true
+  description = "The Azure AD username for the ROPC flow"
 }
