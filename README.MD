@@ -18,6 +18,6 @@ In order to easily call the API during development or after deployment, a [Postm
 
 The projects required infrastructure is hosted in [Microsoft Azure](https://azure.microsoft.com) and is mostly managed using [Terraform](https://terraform.io). The resource definitions can be found in the [infra](infra/) directory. 
 
-Until the new resource types for [Azure Container Apps]() are [added to the AzureRM provider](hashicorp/terraform-provider-azurerm#14122), these have to be managed manually.
+Until the new resource types for [Azure Container Apps]() are added to the AzureRM provider (hashicorp/terraform-provider-azurerm#14122), these have to be managed manually.
 
 The Terraform state is stored in an Azure Blob storage container and any updates to infrastructure are planned in every pull request and deployed on every push to the `main` branch.
