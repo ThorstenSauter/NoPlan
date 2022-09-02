@@ -21,3 +21,17 @@ The projects required infrastructure is hosted in [Microsoft Azure](https://azur
 Until the new resource types for [Azure Container Apps]() are added to the AzureRM provider (hashicorp/terraform-provider-azurerm#14122), these have to be managed manually.
 
 The Terraform state is stored in an Azure Blob storage container and any updates to infrastructure are planned in every pull request and deployed on every push to the `main` branch.
+
+## Health checks
+
+The API implements the following two HTTP-based health checks:
+
+### Liveness probe
+A liveness probe, which simply sends an HTTP response and does not run any additional health checks, is available on the `/health/live` endpoint.
+
+### Readiness probe
+A readiness probe is available on the `/health/ready` endpoint and runs the following health checks:
+- The Azure Service Bus subscription responsible for receiving update notifications from Azure App Configuration
+- The Azure SQL Server instance
+
+The current health check status, excluding the Azure Service Bus check, in order to reduce traffic, is also published to Azure Application Insights as a custom metric once a minute.
