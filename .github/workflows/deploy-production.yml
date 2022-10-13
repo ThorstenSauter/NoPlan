@@ -1,0 +1,32 @@
+name: Deploy infrastructure to the production environment
+
+on:
+  release:
+    types:
+      - published
+
+  workflow_dispatch:
+
+jobs:
+  apply:
+    name: Apply to production environment
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      TF_WORKSPACE: ${{ secrets.TF_WORKSPACE }}
+    defaults:
+      run:
+        working-directory: ./infra/production
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      - name: Terraform init
+        id: init
+        run: terraform init
+      - name: Terraform apply
+        id: apply
+        run: terraform apply -auto-approve -input=false
