@@ -61,7 +61,7 @@ try
     app.UseAuthorization();
     app.UseFastEndpoints(c =>
     {
-        c.Errors.ResponseBuilder = (failures, status) =>
+        c.Errors.ResponseBuilder = (failures, _, status) =>
         {
             var problemDetails = new ValidationProblemDetails
             {
