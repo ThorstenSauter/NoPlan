@@ -12,6 +12,10 @@ terraform {
   required_version = ">= 1.3.0"
 }
 
+provider "azurerm" {
+  features {}
+}
+
 data "azurerm_client_config" "current" {}
 
 module "resource_group" {

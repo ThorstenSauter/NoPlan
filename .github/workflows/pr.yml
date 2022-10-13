@@ -186,7 +186,7 @@ jobs:
       TF_WORKSPACE: ${{ secrets.TF_WORKSPACE }}
     defaults:
       run:
-        working-directory: ./infra/prod
+        working-directory: ./infra/production
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
