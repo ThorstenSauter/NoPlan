@@ -6,7 +6,6 @@ on:
       - main
     paths:
       - 'infra/**'
-      - '.github/workflows/deploy-staging-and-global.yml'
 
   workflow_dispatch:
 
