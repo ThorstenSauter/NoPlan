@@ -9,6 +9,9 @@ on:
 
   workflow_dispatch:
 
+env:
+  TF_CLOUD_ORGANIZATION: ${{ secrets.TF_CLOUD_ORGANIZATION }}
+
 jobs:
   apply-global:
     name: Apply to global environment
