@@ -119,6 +119,9 @@ jobs:
     environment: staging
     env:
       TF_WORKSPACE: ${{ secrets.TF_WORKSPACE }}
+    defaults:
+      run:
+        working-directory: ./infra/staging
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3

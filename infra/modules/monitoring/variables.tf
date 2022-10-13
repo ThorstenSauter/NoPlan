@@ -29,7 +29,8 @@ variable "retention_in_days" {
   description = "The number of days to retain data in the Log Analytics workspace."
   default     = 30
   validation {
-    condition = (var.retention_in_days >= 30 && var.retention_in_days <= 730)
+    condition     = (var.retention_in_days >= 30 && var.retention_in_days <= 730)
+    error_message = "The retention_in_days value must be between 30 and 730."
   }
 }
 
