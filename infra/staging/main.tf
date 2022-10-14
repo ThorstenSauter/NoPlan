@@ -2,18 +2,18 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "3.26.0"
+      version = "3.27.0"
     }
   }
 
   cloud {
+    organization = "ThorstenSauter"
+    workspaces {
+      name = "NoPlan-staging"
+    }
   }
 
   required_version = ">= 1.3.0"
-}
-
-provider "azurerm" {
-  features {}
 }
 
 data "azurerm_client_config" "current" {}
