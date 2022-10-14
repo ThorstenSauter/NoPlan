@@ -13,9 +13,6 @@ permissions:
   contents: read
   pull-requests: write
 
-env:
-  TF_CLOUD_ORGANIZATION: ${{ secrets.TF_CLOUD_ORGANIZATION }}
-
 jobs:
   build:
     name: Build project and run tests
@@ -116,9 +113,6 @@ jobs:
   plan-staging:
     name: Plan staging environment
     runs-on: ubuntu-latest
-    environment: staging
-    env:
-      TF_WORKSPACE: ${{ secrets.TF_WORKSPACE }}
     defaults:
       run:
         working-directory: ./infra/staging
@@ -182,9 +176,6 @@ jobs:
   plan-production:
     name: Plan production environment
     runs-on: ubuntu-latest
-    environment: production
-    env:
-      TF_WORKSPACE: ${{ secrets.TF_WORKSPACE }}
     defaults:
       run:
         working-directory: ./infra/production
@@ -247,9 +238,6 @@ jobs:
   plan-global:
     name: Plan global environment
     runs-on: ubuntu-latest
-    environment: global
-    env:
-      TF_WORKSPACE: ${{ secrets.TF_WORKSPACE }}
     defaults:
       run:
         working-directory: ./infra/global

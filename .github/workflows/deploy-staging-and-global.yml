@@ -9,16 +9,11 @@ on:
 
   workflow_dispatch:
 
-env:
-  TF_CLOUD_ORGANIZATION: ${{ secrets.TF_CLOUD_ORGANIZATION }}
-
 jobs:
   apply-global:
     name: Apply to global environment
     runs-on: ubuntu-latest
     environment: global
-    env:
-      TF_WORKSPACE: ${{ secrets.TF_WORKSPACE }}
     defaults:
       run:
         working-directory: ./infra/global
@@ -40,8 +35,6 @@ jobs:
     name: Apply to staging environment
     runs-on: ubuntu-latest
     environment: staging
-    env:
-      TF_WORKSPACE: ${{ secrets.TF_WORKSPACE }}
     defaults:
       run:
         working-directory: ./infra/staging
