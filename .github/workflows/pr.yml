@@ -62,7 +62,7 @@ jobs:
         continue-on-error: true
         run: tflint --no-color -f compact
       - name: Run tfsec
-        uses: aquasecurity/tfsec-pr-commenter-action@v1.2.0
+        uses: aquasecurity/tfsec-pr-commenter-action@v1.3.1
         with:
           working_directory: ./infra
           tfsec_args: --no-color
