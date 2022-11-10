@@ -1,4 +1,3 @@
-using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
@@ -23,12 +22,12 @@ try
 
     builder.Services
         .AddFastEndpoints(options => options.SourceGeneratorDiscoveredTypes = DiscoveredTypes.All)
-        .AddSwaggerDoc(maxEndpointVersion: 1, shortSchemaNames: true, settings: s =>
-        {
-            s.DocumentName = "Release v1";
-            s.Title = "NoPlan API";
-            s.Version = "v1";
-        })
+        // .AddSwaggerDoc(maxEndpointVersion: 1, shortSchemaNames: true, settings: s =>
+        // {
+        //     s.DocumentName = "Release v1";
+        //     s.Title = "NoPlan API";
+        //     s.Version = "v1";
+        // })
         .AddInfrastructure(configuration)
         .AddScoped<IToDoService, ToDoService>()
         .AddSingleton<IDateTimeProvider, DateTimeProvider>()
@@ -84,11 +83,11 @@ try
         c.Versioning.PrependToRoute = true;
     });
 
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseOpenApi();
-        app.UseSwaggerUi3(s => s.ConfigureDefaults());
-    }
+    // if (app.Environment.IsDevelopment())
+    // {
+    //     app.UseOpenApi();
+    //     app.UseSwaggerUi3(s => s.ConfigureDefaults());
+    // }
 
     app.MapHealthChecks("/health/ready", new() { ResponseWriter = JsonHealthCheckResponseWriter.WriteResponse });
     app.MapHealthChecks("/health/live", new() { Predicate = _ => false, ResponseWriter = JsonHealthCheckResponseWriter.WriteResponse });
