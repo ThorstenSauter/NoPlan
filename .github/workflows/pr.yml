@@ -23,10 +23,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3.0.2
+        uses: actions/setup-dotnet@v3.0.3
         with:
           dotnet-version: 7.0.x
-          dotnet-quality: preview
       - name: Restore dependencies
         run: dotnet restore
       - name: Build
@@ -62,7 +61,7 @@ jobs:
         continue-on-error: true
         run: tflint --no-color -f compact
       - name: Run tfsec
-        uses: aquasecurity/tfsec-pr-commenter-action@v1.2.0
+        uses: aquasecurity/tfsec-pr-commenter-action@v1.3.1
         with:
           working_directory: ./infra
           tfsec_args: --no-color
