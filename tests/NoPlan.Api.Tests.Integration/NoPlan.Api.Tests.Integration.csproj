@@ -1,8 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <UserSecretsId>ffa66b52-321f-4f8d-b771-4ba1d0b5c0ed</UserSecretsId>
     <NoWarn>$(NoWarn)</NoWarn>
