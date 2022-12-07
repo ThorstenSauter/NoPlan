@@ -17,7 +17,7 @@ public static class JsonHealthCheckResponseWriter
     private static readonly byte[] EmptyResponse = "{}"u8.ToArray();
     private static readonly Lazy<JsonSerializerOptions> Options = new(CreateJsonOptions);
 
-    public static async Task WriteResponse(HttpContext context, HealthReport report)
+    public static async Task WriteResponse(HttpContext context, HealthReport? report)
     {
         context.Response.ContentType = DefaultResponseContentType;
         if (report is null)
