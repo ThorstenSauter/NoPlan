@@ -1,7 +1,7 @@
 ﻿<Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    <NoWarn>NU1507</NoWarn>
+    <NoWarn>NU1507;CS1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="AspNetCore.HealthChecks.AzureServiceBus" Version="6.1.0" />
