@@ -3,22 +3,22 @@
 public sealed record UpdateToDoRequest
 {
     /// <summary>
-    ///     The identifier of the ToDo object to update.
+    ///     Gets or initializes the identifier of the object to update.
     /// </summary>
     public Guid Id { get; init; }
 
     /// <summary>
-    ///     The updated ToDo title. Must be at least 3 characters long.
+    ///     Gets or initializes the updated title. Must be at least 3 characters long.
     /// </summary>
     public string Title { get; init; } = null!;
 
     /// <summary>
-    ///     The updated ToDo description. Cannot be null or empty.
+    ///     Gets or initializes the updated description. Cannot be null or empty.
     /// </summary>
     public string Description { get; init; } = null!;
 
     /// <summary>
-    ///     The required list of tags should be associated with the new ToDo.
+    ///     Gets or initializes the required list of tags to be associated with the new entity.
     /// </summary>
     public ICollection<UpdateTagRequest> Tags { get; init; } = null!;
 }

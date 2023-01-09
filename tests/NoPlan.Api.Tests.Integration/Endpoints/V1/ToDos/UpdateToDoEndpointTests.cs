@@ -42,7 +42,10 @@ public sealed class UpdateToDoEndpointTests : FakeRequestTest, IClassFixture<NoP
         await _apiFactory.AuthenticateClientAsUserAsync(client);
         var createResponse = await client.PostAsJsonAsync("/api/v1/todos", CreateRequestFaker.Generate());
         var createdToDo = await createResponse.Content.ReadFromJsonAsync<ToDoResponse>();
-        var request = new UpdateToDoRequest { Title = "a", Description = "  ", Tags = new List<UpdateTagRequest> { new() { Name = "" }, new() } };
+        var request = new UpdateToDoRequest
+        {
+            Title = "a", Description = "  ", Tags = new List<UpdateTagRequest> { new() { Name = string.Empty }, new() }
+        };
 
         // Act
         var response = await client.PutAsJsonAsync($"/api/v1/todos/{createdToDo!.Id}", request);

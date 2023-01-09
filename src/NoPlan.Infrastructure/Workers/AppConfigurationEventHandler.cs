@@ -20,7 +20,7 @@ public sealed class AppConfigurationEventHandler : BackgroundService
     private readonly ServiceBusClient _serviceBusClient;
 
     /// <summary>
-    ///     Creates a new instance of <see cref="AppConfigurationEventHandler" />.
+    ///     Initializes a new instance of the <see cref="AppConfigurationEventHandler" /> class.
     /// </summary>
     /// <param name="refresher">The configuration refresher used to fetch new configuration values.</param>
     /// <param name="serviceBusClient">The service bus client.</param>

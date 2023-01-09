@@ -14,7 +14,7 @@ public sealed class CreateTagRequestValidatorTests
     public void Validate_ShouldFail_WhenNameIsEmpty()
     {
         // Arrange
-        var request = new CreateTagRequest { Name = "" };
+        var request = new CreateTagRequest { Name = string.Empty };
 
         // Act
         var result = _sut.TestValidate(request);

@@ -3,17 +3,17 @@
 public sealed record CreateToDoRequest
 {
     /// <summary>
-    ///     The ToDo title. Must be at least 3 characters long.
+    ///     Gets or initializes the title. Must be at least 3 characters long.
     /// </summary>
     public string Title { get; init; } = null!;
 
     /// <summary>
-    ///     The ToDo description. Cannot be null or empty.
+    ///     Gets or initializes the description. Cannot be null or empty.
     /// </summary>
     public string Description { get; init; } = null!;
 
     /// <summary>
-    ///     The required list of tags that should be associated with the new ToDo.
+    ///     Gets or initializes the required list of tags that should be associated with the new entity.
     /// </summary>
     public ICollection<CreateTagRequest> Tags { get; init; } = null!;
 }

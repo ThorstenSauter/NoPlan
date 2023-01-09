@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -41,54 +40,4 @@ public static class JsonHealthCheckResponseWriter
         options.Converters.Add(new JsonStringEnumConverter());
         return options;
     }
-}
-
-[SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
-internal sealed class MappedHealthReport
-{
-    public MappedHealthReport(HealthReport healthReport)
-    {
-        ArgumentNullException.ThrowIfNull(healthReport);
-
-        Entries = new();
-        TotalDuration = healthReport.TotalDuration;
-        Status = healthReport.Status;
-
-        foreach (var (name, reportEntry) in healthReport.Entries)
-        {
-            var entry = new MappedHealthReportEntry
-            {
-                Data = reportEntry.Data,
-                Description = reportEntry.Description,
-                Duration = reportEntry.Duration,
-                Status = reportEntry.Status,
-                Tags = reportEntry.Tags
-            };
-
-            if (reportEntry.Exception is not null)
-            {
-                var message = reportEntry.Exception?.Message;
-                entry.Exception = message;
-                entry.Description = reportEntry.Description ?? message;
-            }
-
-            Entries.Add(name, entry);
-        }
-    }
-
-    public HealthStatus Status { get; }
-    public TimeSpan TotalDuration { get; }
-
-    // ReSharper disable once CollectionNeverQueried.Global
-    public Dictionary<string, MappedHealthReportEntry> Entries { get; }
-}
-
-internal sealed class MappedHealthReportEntry
-{
-    public required IReadOnlyDictionary<string, object>? Data { get; init; }
-    public required string? Description { get; set; }
-    public required TimeSpan Duration { get; init; }
-    public string? Exception { get; set; }
-    public required HealthStatus Status { get; init; }
-    public required IEnumerable<string>? Tags { get; init; }
 }

@@ -3,7 +3,7 @@
 public sealed record ToDosResponse
 {
     /// <summary>
-    ///     The collection of ToDo entities.
+    ///     Gets or initializes the collection of <see cref="ToDoResponse"/> entities.
     /// </summary>
     public IEnumerable<ToDoResponse?> ToDos { get; init; } = null!;
 }

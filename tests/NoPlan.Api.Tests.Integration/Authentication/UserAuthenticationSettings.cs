@@ -6,44 +6,45 @@
 public sealed class UserAuthenticationSettings
 {
     /// <summary>
-    ///     The URL to acquire the access token from, e.g.
-    ///     https://login.microsoftonline.com/your-aad-tenant-id/oauth2/v2.0/token
+    ///     Gets the URL to acquire the access token from, e.g.
+    ///     https://login.microsoftonline.com/your-aad-tenant-id/oauth2/v2.0/token.
     /// </summary>
     public string TokenUrl =>
         $"https://login.microsoftonline.com/{TenantId}/oauth2/v2.0/token";
 
     /// <summary>
-    ///     The tenant id.
+    ///     Gets or sets the tenant id.
     /// </summary>
     public string TenantId { get; set; } = null!;
 
     /// <summary>
-    ///     Client id / application id for the registered test app.
+    ///     Gets or sets the client id / application id for the registered test app.
     /// </summary>
     public string ClientId { get; set; } = null!;
 
     /// <summary>
-    ///     Secret for the registered test app.
+    ///     Gets or sets the Secret for the registered test app.
     /// </summary>
     public string ClientSecret { get; set; } = null!;
 
     /// <summary>
-    ///     Username of a user registered in AAD. Should be from a test tenant, not a production one. Cannot have MFA enabled.
+    ///     Gets or sets the Username of a user registered in AAD. Should be from a test tenant, not a production one. Cannot
+    ///     have MFA enabled.
     /// </summary>
     public string Username { get; set; } = null!;
 
     /// <summary>
-    ///     Password of the user.
+    ///     Gets or sets the password of the user.
     /// </summary>
     public string Password { get; set; } = null!;
 
     /// <summary>
-    ///     The application audience.
+    ///     Gets or sets the application audience.
     /// </summary>
     public string Audience { get; set; } = null!;
 
     /// <summary>
-    ///     The applications default scope.
+    ///     Gets the applications default scope.
     /// </summary>
     public string DefaultScope =>
         $"{Audience}/.default";

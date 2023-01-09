@@ -4,7 +4,8 @@ namespace NoPlan.Infrastructure.Data;
 
 public sealed class PlannerContext : DbContext
 {
-    public PlannerContext(DbContextOptions<PlannerContext> options) : base(options)
+    public PlannerContext(DbContextOptions<PlannerContext> options)
+        : base(options)
     {
     }
 

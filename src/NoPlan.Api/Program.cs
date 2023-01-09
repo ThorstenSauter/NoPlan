@@ -104,7 +104,8 @@ finally
     Log.CloseAndFlush();
 }
 
-async Task ApplyMigrationsAsync<T>(IHost webApplication) where T : DbContext
+static async Task ApplyMigrationsAsync<T>(IHost webApplication)
+    where T : DbContext
 {
     using var scope = webApplication.Services.CreateScope();
     var plannerContext = scope.ServiceProvider.GetRequiredService<T>();

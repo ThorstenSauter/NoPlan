@@ -32,7 +32,7 @@ public sealed class UpdateToDoRequestValidatorTest : TestWithFakes
     {
         // Arrange
         var request = UpdateRequestFaker.Clone()
-            .RuleFor(x => x.Title, _ => "")
+            .RuleFor(x => x.Title, _ => string.Empty)
             .Generate();
 
         // Act
@@ -64,7 +64,7 @@ public sealed class UpdateToDoRequestValidatorTest : TestWithFakes
     {
         // Arrange
         var request = UpdateRequestFaker.Clone()
-            .RuleFor(x => x.Description, _ => "")
+            .RuleFor(x => x.Description, _ => string.Empty)
             .Generate();
 
         // Act

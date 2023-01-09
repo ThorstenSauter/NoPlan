@@ -3,7 +3,7 @@
 public sealed record GetToDoRequest
 {
     /// <summary>
-    ///     The identifier of the ToDo object that is requested.
+    ///     Gets or initializes the identifier of the object that is requested.
     /// </summary>
     public Guid Id { get; init; }
 }
