@@ -4,12 +4,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.1.32120.378
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F2AA005F-42B2-4F6E-AD84-FD5A4D8CFCC5}"
+	ProjectSection(SolutionItems) = preProject
+		src\Directory.Build.props = src\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoPlan.Api", "src\NoPlan.Api\NoPlan.Api.csproj", "{987A7C01-8FFD-42A9-A08D-04AB980AF8AB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoPlan.Contracts", "src\NoPlan.Contracts\NoPlan.Contracts.csproj", "{F69C660E-DC78-405F-B546-745E04F75415}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{658FDE7E-6C26-4730-9951-49F81260C2B1}"
+	ProjectSection(SolutionItems) = preProject
+		tests\Directory.Build.props = tests\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{89856EE3-7A1F-4DB4-993C-929ACD5CE834}"
 	ProjectSection(SolutionItems) = preProject

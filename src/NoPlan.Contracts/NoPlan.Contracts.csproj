@@ -1,9 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <NoWarn>$(NoWarn)</NoWarn>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="FastEndpoints" />
   </ItemGroup>
