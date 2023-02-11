@@ -1,4 +1,4 @@
-FROM golang:1.19.5 as chisel
+FROM golang:1.20.0 as chisel
 
 RUN git clone --depth 1 -b main https://github.com/canonical/chisel /opt/chisel
 WORKDIR /opt/chisel
@@ -40,19 +40,12 @@ RUN mkdir /rootfs \
     # Delete empty directories
     && find /rootfs -type d -empty -delete
 
-WORKDIR /src
-COPY ["src/NoPlan.Api/NoPlan.Api.csproj", "NoPlan.Api/"]
-COPY ["src/NoPlan.Infrastructure/NoPlan.Infrastructure.csproj", "NoPlan.Infrastructure/"]
-COPY ["src/NoPlan.Contracts/NoPlan.Contracts.csproj", "NoPlan.Contracts/"]
-COPY ["./Directory.Packages.props", "./"]
-RUN dotnet restore "NoPlan.Api/NoPlan.Api.csproj"
 
-COPY ["src/NoPlan.Api/", "NoPlan.Api/"]
-COPY ["src/NoPlan.Infrastructure/", "NoPlan.Infrastructure/"]
-COPY ["src/NoPlan.Contracts/", "NoPlan.Contracts/"]
-WORKDIR "/src/NoPlan.Api"
-RUN dotnet build -c Release -r linux-x64 --no-self-contained "NoPlan.Api.csproj"
-RUN dotnet publish -c Release --no-build -r linux-x64 --no-self-contained -o /app/publish "NoPlan.Api.csproj"
+WORKDIR /src
+COPY . .
+#RUN dotnet restore src/NoPlan.Api/NoPlan.Api.csproj
+#RUN dotnet build -c Release -r linux-x64 --no-self-contained src/NoPlan.Api/NoPlan.Api.csproj
+RUN dotnet publish -c Release -r linux-x64 --no-self-contained -o /app/publish src/NoPlan.Api/NoPlan.Api.csproj
 
 FROM mcr.microsoft.com/dotnet/nightly/aspnet:7.0-jammy-chiseled AS final
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false

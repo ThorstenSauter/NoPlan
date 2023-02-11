@@ -19,7 +19,9 @@ namespace NoPlan.Api.Tests.Integration;
 // ReSharper disable once ClassNeverInstantiated.Global
 public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetime
 {
+#pragma warning disable 618
     private readonly TestcontainerDatabase _dbContainer = new TestcontainersBuilder<MsSqlTestcontainer>()
+#pragma warning restore 618
         .WithDatabase(new MsSqlTestcontainerConfiguration("mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04")
         {
             Password = "ReallyComplicated01!"
