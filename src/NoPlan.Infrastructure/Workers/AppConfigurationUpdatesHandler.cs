@@ -12,22 +12,22 @@ namespace NoPlan.Infrastructure.Workers;
 /// <summary>
 ///     A background worker service that receives events from Azure Service Bus when Azure App Configuration values change.
 /// </summary>
-public sealed class AppConfigurationEventHandler : BackgroundService
+public sealed class AppConfigurationUpdatesHandler : BackgroundService
 {
-    private readonly ILogger<AppConfigurationEventHandler> _logger;
+    private readonly ILogger<AppConfigurationUpdatesHandler> _logger;
     private readonly AppConfigurationOptions _options;
     private readonly IConfigurationRefresher _refresher;
     private readonly ServiceBusClient _serviceBusClient;
 
     /// <summary>
-    ///     Creates a new instance of <see cref="AppConfigurationEventHandler" />.
+    ///     Initializes a new instance of the <see cref="AppConfigurationUpdatesHandler" /> class.
     /// </summary>
     /// <param name="refresher">The configuration refresher used to fetch new configuration values.</param>
     /// <param name="serviceBusClient">The service bus client.</param>
     /// <param name="options">The app configuration options.</param>
     /// <param name="logger">The logger.</param>
-    public AppConfigurationEventHandler(IConfigurationRefresher refresher, ServiceBusClient serviceBusClient,
-        IOptions<AppConfigurationOptions> options, ILogger<AppConfigurationEventHandler> logger)
+    public AppConfigurationUpdatesHandler(IConfigurationRefresher refresher, ServiceBusClient serviceBusClient,
+        IOptions<AppConfigurationOptions> options, ILogger<AppConfigurationUpdatesHandler> logger)
     {
         _refresher = refresher;
         _serviceBusClient = serviceBusClient;

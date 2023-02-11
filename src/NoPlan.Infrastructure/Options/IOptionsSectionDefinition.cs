@@ -9,7 +9,7 @@ namespace Microsoft.Extensions.Options;
 public interface IOptionsSectionDefinition
 {
     /// <summary>
-    ///     The <see cref="IConfiguration" /> section name.
+    ///     Gets the <see cref="IConfiguration" /> section name.
     /// </summary>
     static abstract string SectionName { get; }
 }

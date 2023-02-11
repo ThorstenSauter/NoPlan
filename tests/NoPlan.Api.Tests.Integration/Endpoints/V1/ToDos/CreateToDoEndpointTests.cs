@@ -36,7 +36,10 @@ public sealed class CreateToDoEndpointTests : FakeRequestTest, IClassFixture<NoP
         // Arrange
         var client = _apiFactory.CreateClient();
         await _apiFactory.AuthenticateClientAsUserAsync(client);
-        var request = new CreateToDoRequest { Title = "a", Description = "  ", Tags = new List<CreateTagRequest> { new() { Name = "" }, new() } };
+        var request = new CreateToDoRequest
+        {
+            Title = "a", Description = "  ", Tags = new List<CreateTagRequest> { new() { Name = string.Empty }, new() }
+        };
 
         // Act
         var response = await client.PostAsJsonAsync("/api/v1/todos", request);

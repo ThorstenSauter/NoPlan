@@ -3,27 +3,27 @@
 public sealed record ToDoResponse
 {
     /// <summary>
-    ///     The unique identifier.
+    ///     Gets or initializes the unique identifier.
     /// </summary>
     public Guid Id { get; init; }
 
     /// <summary>
-    ///     The title.
+    ///     Gets or initializes the title.
     /// </summary>
     public string Title { get; init; } = null!;
 
     /// <summary>
-    ///     The description.
+    ///     Gets or initializes the description.
     /// </summary>
     public string Description { get; init; } = null!;
 
     /// <summary>
-    ///     The list of associated tags.
+    ///     Gets or sets the list of associated tags.
     /// </summary>
     public IEnumerable<TagResponse> Tags { get; set; } = new List<TagResponse>();
 
     /// <summary>
-    ///     The time of creation.
+    ///     Gets or sets the time of creation.
     /// </summary>
     public DateTime CreatedAt { get; set; }
 }

@@ -8,7 +8,7 @@ namespace NoPlan.Api.Tests.Integration.Authentication;
 public sealed class TokenResponse
 {
     /// <summary>
-    ///     The access token used to access the defined application.
+    ///     Gets or sets the access token used to access the defined application.
     /// </summary>
     [JsonPropertyName("access_token")]
     public string AccessToken { get; set; } = null!;

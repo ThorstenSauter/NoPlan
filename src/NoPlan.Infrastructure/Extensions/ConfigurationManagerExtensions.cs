@@ -47,7 +47,7 @@ public static class ConfigurationManagerExtensions
                 .AddSectionedOptions<AppConfigurationOptions>(configuration)
                 .AddSingleton(options.GetRefresher())
                 .AddSingleton(new ServiceBusClient(appConfigurationOptions.ServiceBusNamespace, credential))
-                .AddHostedService<AppConfigurationEventHandler>()
+                .AddHostedService<AppConfigurationUpdatesHandler>()
                 .Configure<HealthCheckPublisherOptions>(opt =>
                 {
                     opt.Period = TimeSpan.FromMinutes(1);

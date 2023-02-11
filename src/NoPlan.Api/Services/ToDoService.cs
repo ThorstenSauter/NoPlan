@@ -12,7 +12,7 @@ public sealed class ToDoService : IToDoService
     private readonly PlannerContext _context;
 
     /// <summary>
-    ///     Creates a new instance of <see cref="ToDoService" />.
+    ///     Initializes a new instance of the <see cref="ToDoService" /> class.
     /// </summary>
     /// <param name="context">The <see cref="DbContext" /> to use for data access.</param>
     public ToDoService(PlannerContext context) =>

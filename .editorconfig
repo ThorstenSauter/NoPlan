@@ -155,6 +155,44 @@ csharp_space_between_method_declaration_parameter_list_parentheses = false
 csharp_space_between_parentheses = false
 csharp_space_between_square_brackets = false
 
+# Code style
+
+# SA1101: Prefix local calls with this
+dotnet_diagnostic.SA1101.severity = none
+
+# SA1117: Parameters should be on same line or separate lines
+dotnet_diagnostic.SA1117.severity = none
+
+# S1135: Track uses of "TODO" tags
+dotnet_diagnostic.S1135.severity = none
+
+# SA1206: Using directives should be ordered alphabetically by the namespaces
+dotnet_diagnostic.SA1206.severity = none
+
+# SA1309: Field names must not begin with underscore
+dotnet_diagnostic.SA1309.severity = none
+
+# SA1413: Use trailing comma in multi-line initializers
+dotnet_diagnostic.SA1413.severity = none
+
+# SA1600: Elements should be documented
+dotnet_diagnostic.SA1600.severity = none
+
+# SA1633: File must have header
+dotnet_diagnostic.SA1633.severity = none
+
+# CA1724: Type names should not match namespaces
+dotnet_diagnostic.CA1724.severity = none
+
+# CA1812: Avoid uninstantiated internal classes
+dotnet_diagnostic.CA1812.severity = none
+
+# CA1848: Use LoggerMessage delegates
+dotnet_diagnostic.CA1848.severity = none
+
+# CA2007: Consider calling ConfigureAwait on the awaited task
+dotnet_diagnostic.CA2007.severity = none
+
 # C++ Files
 [*.{cpp,h,in}]
 curly_bracket_next_line = true
