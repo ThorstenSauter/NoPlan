@@ -27,8 +27,8 @@ jobs:
         uses: azure/login@v1
         with:
           client-id: ${{ vars.AZURE_CLIENT_ID }}
-          tenant-id: ${{ vars.AZURE_TENANT_ID }}
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
       - name: Login to Azure Container Registry
         run: az acr login --name ${{ vars.REGISTRY_NAME }}
       - name: Build image
@@ -45,8 +45,8 @@ jobs:
       - name: Terraform apply
         uses: ./.github/actions/terraform-apply
         with:
-          working-directory: ./infra/global
           tf-api-token: ${{ secrets.TF_API_TOKEN }}
+          working-directory: ./infra/global
 
   apply-staging:
     name: Apply staging environment
@@ -61,6 +61,6 @@ jobs:
       - name: Terraform apply
         uses: ./.github/actions/terraform-apply
         with:
-          working-directory: ./infra/staging
-          tf-api-token: ${{ secrets.TF_API_TOKEN }}
           image-name: ${{ env.IMAGE_NAME }}
+          tf-api-token: ${{ secrets.TF_API_TOKEN }}
+          working-directory: ./infra/staging

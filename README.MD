@@ -7,7 +7,7 @@ follow best practices whenever possible.
 
 ## Deployments
 
-![Staging and global](https://github.com/ThorstenSauter/NoPlan/actions/workflows/deploy-staging-and-global.yml/badge.svg) ![Production](https://github.com/ThorstenSauter/NoPlan/actions/workflows/deploy-production.yml/badge.svg) ![Code scans](https://github.com/ThorstenSauter/NoPlan/actions/workflows/codeql-analysis.yml/badge.svg)
+![Staging and global](https://github.com/ThorstenSauter/NoPlan/actions/workflows/deploy-global-and-staging.yml/badge.svg) ![Production](https://github.com/ThorstenSauter/NoPlan/actions/workflows/deploy-production.yml/badge.svg) ![Code scans](https://github.com/ThorstenSauter/NoPlan/actions/workflows/codeql-analysis.yml/badge.svg)
 
 ## Call the API
 

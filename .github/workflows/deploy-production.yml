@@ -27,8 +27,8 @@ jobs:
         uses: azure/login@v1
         with:
           client-id: ${{ vars.AZURE_CLIENT_ID }}
-          tenant-id: ${{ vars.AZURE_TENANT_ID }}
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
       - name: Tag staging image as production
         run: |
           az acr import \
@@ -47,6 +47,6 @@ jobs:
       - name: Terraform apply
         uses: ./.github/actions/terraform-apply
         with:
-          working-directory: ./infra/production
-          tf-api-token: ${{ secrets.TF_API_TOKEN }}
           image-name: ${{ env.IMAGE_NAME }}
+          tf-api-token: ${{ secrets.TF_API_TOKEN }}
+          working-directory: ./infra/production
