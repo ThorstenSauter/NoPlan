@@ -34,7 +34,9 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       continue-on-error: true
-      run: terraform plan -no-color -var container_image="${{ inputs.image-name }}"
+      env:
+        TF_VAR_container_image: ${{ inputs.image-name }}
+      run: terraform plan -no-color
     - name: Create or update PR comment
       uses: actions/github-script@v6
       if: github.event_name == 'pull_request'

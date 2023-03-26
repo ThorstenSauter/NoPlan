@@ -26,13 +26,8 @@ runs:
       run: terraform init
     - name: Terraform Apply
       id: apply
-      if: "${{ inputs.image-name == '' }}"
+      env:
+        TF_VAR_container_image: ${{ inputs.image-name }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       run: terraform apply -auto-approve -input=false
-    - name: Terraform Apply
-      id: apply-with-image
-      if: "${{ inputs.image-name != '' }}"
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-      run: terraform apply -auto-approve -input=false -var container_image="${{ inputs.image-name }}"
