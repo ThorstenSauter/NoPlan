@@ -9,9 +9,10 @@ follow best practices whenever possible.
 
 ![Staging and global](https://github.com/ThorstenSauter/NoPlan/actions/workflows/deploy-global-and-staging.yml/badge.svg) ![Production](https://github.com/ThorstenSauter/NoPlan/actions/workflows/deploy-production.yml/badge.svg) ![Code scans](https://github.com/ThorstenSauter/NoPlan/actions/workflows/codeql-analysis.yml/badge.svg)
 
-## Call the API
+## Calling the API
 
-In order to easily call the API during development or after deployment, a [Postman](https://www.postman.com/) collection
+In order to coveniently call the API during development or after deployment, a [Postman](https://www.postman.com/)
+collection
 is available to be forked. Make sure to set up the proper authentication parameters before calling any protected
 endpoints.
 
@@ -19,13 +20,10 @@ endpoints.
 
 ## Infrastructure
 
-The projects required infrastructure is hosted in [Microsoft Azure](https://azure.microsoft.com) and is mostly managed
-using [Terraform](https://terraform.io). The resource definitions can be found in the [infra](infra/) directory.
+The projects required infrastructure is hosted in [Microsoft Azure](https://azure.microsoft.com) and is managed
+using [Terraform](https://terraform.io). The resource definitions can be found in the [infra](infra) directory.
 
-Until the new resource types for [Azure Container Apps](https://github.com/microsoft/azure-container-apps) are added to
-the AzureRM provider (hashicorp/terraform-provider-azurerm#14122), these have to be managed manually.
-
-The Terraform state is managed by Terraform Cloud. Pushed to the `main` branch result in the global and staging
+The Terraform state is managed by Terraform Cloud. Pushes to the `main` branch result in the global and staging
 environments being deployed. The publishing of a GitHub release results in the production environment being deployed.
 
 ## Health checks
@@ -41,8 +39,15 @@ the `/health/live` endpoint.
 
 A readiness probe is available on the `/health/ready` endpoint and runs the following health checks:
 
-- The Azure Service Bus subscription responsible for receiving update notifications from Azure App Configuration
 - The Azure SQL Server instance
 
-The current health check status, excluding the Azure Service Bus check, in order to reduce traffic, is also published to
-Azure Application Insights as a custom metric once a minute.
+## Observability
+
+Metrics, traces and logs are all handled using [OpenTelemetry](https://opentelemetry.io).
+
+During development the OpenTelemetry Collector is the target for exporting data and subsequently transferring it to
+Prometheus, Grafaka Loki and Jaeger. The complete stack can be run locally using
+the provided [Docker Compose file](local-development-stack/docker-compose.yaml).
+
+In production all data is exported using the Azure Monitor Exporter, which makes the observability data available in
+Azure Application Insights.
