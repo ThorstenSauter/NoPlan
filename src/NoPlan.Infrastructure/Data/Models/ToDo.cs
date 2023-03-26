@@ -12,5 +12,7 @@ public sealed class ToDo
 
     public Guid CreatedBy { get; set; }
 
+#pragma warning disable CA2227
     public ICollection<Tag> Tags { get; set; } = new HashSet<Tag>();
+#pragma warning restore CA2227
 }

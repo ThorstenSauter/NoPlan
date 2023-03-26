@@ -1,17 +1,19 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using NoPlan.Infrastructure.Data;
+using NoPlan.Infrastructure.Observability;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static WebApplicationBuilder AddInfrastructure(this WebApplicationBuilder builder)
     {
-        services
-            .AddApplicationInsightsTelemetry()
+        ArgumentNullException.ThrowIfNull(builder);
+
+        builder.Services
             .AddHealthChecks()
-            .AddApplicationInsightsPublisher(saveDetailedReport: false)
             .AddSqlServer(
                 provider => provider.GetRequiredService<IConfiguration>().GetConnectionString("Default")!,
                 failureStatus: HealthStatus.Unhealthy,
@@ -19,6 +21,7 @@ public static class DependencyInjection
                 timeout: TimeSpan.FromSeconds(15),
                 tags: new[] { "db", "sql" });
 
-        return services.AddDbContext<PlannerContext>(options => options.UseSqlServer(configuration.GetConnectionString("Default")!));
+        builder.Services.AddDbContext<PlannerContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Default")!));
+        return builder.AddOpenTelemetry();
     }
 }

@@ -35,8 +35,11 @@ public sealed class UpdateToDoEndpoint : EndpointWithMapping<UpdateToDoRequest, 
         await SendAsync(MapFromEntity(updatedToDo), cancellation: ct);
     }
 
-    public override ToDoResponse MapFromEntity(ToDo e) =>
-        new()
+    public override ToDoResponse MapFromEntity(ToDo e)
+    {
+        ArgumentNullException.ThrowIfNull(e);
+
+        return new()
         {
             Id = e.Id,
             Title = e.Title,
@@ -44,9 +47,11 @@ public sealed class UpdateToDoEndpoint : EndpointWithMapping<UpdateToDoRequest, 
             Tags = e.Tags.Select(MapFromEntity),
             CreatedAt = e.CreatedAt
         };
+    }
 
     public override ToDo MapToEntity(UpdateToDoRequest r)
     {
+        ArgumentNullException.ThrowIfNull(r);
         var updateTime = _dateTimeProvider.UtcNow();
         return new()
         {
@@ -58,9 +63,9 @@ public sealed class UpdateToDoEndpoint : EndpointWithMapping<UpdateToDoRequest, 
         };
     }
 
-    private Tag MapToEntity(UpdateTagRequest r, DateTime updateTime) =>
+    private static Tag MapToEntity(UpdateTagRequest r, DateTime updateTime) =>
         new() { Id = r.Id, Name = r.Name, AssignedAt = updateTime };
 
-    private TagResponse MapFromEntity(Tag e) =>
+    private static TagResponse MapFromEntity(Tag e) =>
         new() { Id = e.Id, Name = e.Name, AssignedAt = e.AssignedAt };
 }

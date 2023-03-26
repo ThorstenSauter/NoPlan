@@ -1,3 +1,3 @@
-output "connection-string" {
-  value = azurerm_application_insights.app_insights.connection_string
+output "app_insights_connection_string" {
+  value = azurerm_application_insights.appinsights.connection_string
 }

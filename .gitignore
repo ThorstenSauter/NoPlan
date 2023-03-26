@@ -455,8 +455,8 @@ $RECYCLE.BIN/
 !.vscode/extensions.json
 
 # Docker compose
-sql/
-docker-compose.yml
+local-development-stack/sql/
+local-development-stack/grafana/
 
 # Verify
 *.received.*

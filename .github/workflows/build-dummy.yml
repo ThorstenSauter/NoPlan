@@ -1,0 +1,24 @@
+﻿name: Dummy build solution and run tests
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '**'
+      - '!Directory.Packages.props'
+      - '!NoPlan.sln'
+      - '!src/**'
+      - '!tests/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build project and run tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Succeed
+        run: exit 0
