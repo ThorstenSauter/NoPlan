@@ -22,282 +22,52 @@ jobs:
   validate:
     name: Validate Terraform configuration
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./infra
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-      - name: Terraform formatting check
-        id: fmt
-        continue-on-error: true
-        run: terraform fmt -check -recursive
-      - name: Setup TFLint
-        uses: terraform-linters/setup-tflint@v3
-        continue-on-error: true
+      - name: Terraform validate
+        uses: ./.github/actions/terraform-validate
         with:
-          tflint_version: latest
-      - name: Init TFLint
-        run: tflint --init
-      - name: Run TFLint
-        id: tflint
-        continue-on-error: true
-        run: tflint --no-color -f compact
-      - name: Run tfsec
-        uses: aquasecurity/tfsec-pr-commenter-action@v1.3.1
-        with:
-          working_directory: ./infra
-          tfsec_args: --no-color
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Terraform Validate
-        id: validate
-        continue-on-error: true
-        run: terraform validate -no-color
-      - name: Create or update PR comment
-        uses: actions/github-script@v6
-        if: github.event_name == 'pull_request'
-        env:
-          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const { data: comments } = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-            })
-            const botComment = comments.find(comment => {
-              return comment.user.type === 'Bot' && comment.body.includes('Terraform validation')
-            })
-
-            const output = `### Terraform validation
-            #### Terraform format 🖌\`${{ steps.fmt.outcome }}\`
-            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
-            #### TFLint 👓\`${{ steps.tflint.outcome }}\``;
-
-            if (botComment) {
-              github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: output
-              })
-            } else {
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: output
-              })
-            }
-      - name: Validation status
-        if: steps.validate.outcome == 'failure' || steps.tflint.outcome == 'failure'
-        run: exit 1
+          working-directory: ./infra
 
   plan-staging:
     name: Plan staging environment
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./infra/staging
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-      - name: Terraform init
-        id: init
-        run: terraform init
       - name: Terraform plan
-        id: plan
-        continue-on-error: true
-        run: terraform plan -no-color -var container_image="${{ env.IMAGE_NAME }}"
-      - name: Create or update PR comment
-        uses: actions/github-script@v6
-        if: github.event_name == 'pull_request'
-        env:
-          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        uses: ./.github/actions/terraform-plan
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const { data: comments } = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-            })
-            const botComment = comments.find(comment => {
-              return comment.user.type === 'Bot' && comment.body.includes('Staging environment')
-            })
-
-            const output = `### Staging environment
-            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-
-            <details><summary>Show Plan</summary>
-
-            \`\`\`\n
-            ${process.env.PLAN}
-            \`\`\`
-
-            </details>`;
-
-            if (botComment) {
-              github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: output
-              })
-            } else {
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: output
-              })
-            }
-      - name: Terraform plan status
-        if: steps.plan.outcome == 'failure'
-        run: exit 1
+          working-directory: ./infra/staging
+          environment-name: Staging
+          tf-api-token: ${{ secrets.TF_API_TOKEN }}
+          image-name: ${{ env.IMAGE_NAME }}
 
   plan-production:
     name: Plan production environment
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./infra/production
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-      - name: Terraform init
-        id: init
-        run: terraform init
       - name: Terraform plan
-        id: plan
-        continue-on-error: true
-        run: terraform plan -no-color -var container_image="${{ env.IMAGE_NAME }}"
-      - name: Create or update PR comment
-        uses: actions/github-script@v6
-        if: github.event_name == 'pull_request'
-        env:
-          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        uses: ./.github/actions/terraform-plan
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const { data: comments } = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-            })
-            const botComment = comments.find(comment => {
-              return comment.user.type === 'Bot' && comment.body.includes('Production environment')
-            })
-
-            const output = `### Production environment
-            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-
-            <details><summary>Show Plan</summary>
-
-            \`\`\`\n
-            ${process.env.PLAN}
-            \`\`\`
-
-            </details>`;
-
-            if (botComment) {
-              github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: output
-              })
-            } else {
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: output
-              })
-            }
-      - name: Terraform plan status
-        if: steps.plan.outcome == 'failure'
-        run: exit 1
+          working-directory: ./infra/production
+          environment-name: Production
+          tf-api-token: ${{ secrets.TF_API_TOKEN }}
+          image-name: ${{ env.IMAGE_NAME }}
 
   plan-global:
     name: Plan global environment
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./infra/global
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-      - name: Terraform init
-        id: init
-        run: terraform init
-      - name: Terraform Plan
-        id: plan
-        continue-on-error: true
-        run: terraform plan -no-color
       - name: Terraform plan
-        id: plan-prod
-        continue-on-error: true
-        working-directory: ./infra/prod
-        run: terraform plan -no-color
-      - name: Create or update PR comment
-        uses: actions/github-script@v6
-        if: github.event_name == 'pull_request'
-        env:
-          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        uses: ./.github/actions/terraform-plan
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const { data: comments } = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-            })
-            const botComment = comments.find(comment => {
-              return comment.user.type === 'Bot' && comment.body.includes('Global environment')
-            })
-
-            const output = `### Global environment
-            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-
-            <details><summary>Show Plan</summary>
-
-            \`\`\`\n
-            ${process.env.PLAN}
-            \`\`\`
-
-            </details>`;
-
-            if (botComment) {
-              github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: output
-              })
-            } else {
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: output
-              })
-            }
-      - name: Terraform plan status
-        if: steps.plan.outcome == 'failure'
-        run: exit 1
+          working-directory: ./infra/global
+          environment-name: Global
+          tf-api-token: ${{ secrets.TF_API_TOKEN }}
+          image-name: ${{ env.IMAGE_NAME }}

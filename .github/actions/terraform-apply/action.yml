@@ -1,0 +1,38 @@
+﻿name: 'Terraform plan'
+description: 'Runs Terraform apply in the given directory'
+inputs:
+  working-directory:
+    description: 'The path to the Terraform working directory'
+    required: true
+  tf-api-token:
+    description: 'The Terraform Cloud API token'
+    required: true
+  image-name:
+    description: 'The name of the container image to use'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        cli_config_credentials_token: ${{ inputs.tf-api-token }}
+    - name: Terraform Init
+      id: init
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: terraform init
+    - name: Terraform Apply
+      id: apply
+      if: "${{ inputs.image-name == '' }}"
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: terraform apply -auto-approve -input=false
+    - name: Terraform Apply
+      id: apply-with-image
+      if: "${{ inputs.image-name != '' }}"
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: terraform apply -auto-approve -input=false -var container_image="${{ inputs.image-name }}"
