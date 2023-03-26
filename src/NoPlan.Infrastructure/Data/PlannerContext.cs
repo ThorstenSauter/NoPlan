@@ -11,6 +11,10 @@ public sealed class PlannerContext : DbContext
 
     public DbSet<ToDo> ToDos { get; set; } = null!;
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder) =>
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        ArgumentNullException.ThrowIfNull(modelBuilder);
+
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(PlannerContext).Assembly);
+    }
 }

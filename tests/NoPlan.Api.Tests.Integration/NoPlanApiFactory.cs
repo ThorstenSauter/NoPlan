@@ -1,8 +1,4 @@
 ﻿using System.Text.Json;
-using Azure.Identity;
-using DotNet.Testcontainers.Builders;
-using DotNet.Testcontainers.Configurations;
-using DotNet.Testcontainers.Containers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.SqlClient;
@@ -13,19 +9,16 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using NoPlan.Api.Tests.Integration.Authentication;
 using NoPlan.Infrastructure.Data;
+using Testcontainers.MsSql;
 
 namespace NoPlan.Api.Tests.Integration;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetime
 {
-#pragma warning disable 618
-    private readonly TestcontainerDatabase _dbContainer = new TestcontainersBuilder<MsSqlTestcontainer>()
-#pragma warning restore 618
-        .WithDatabase(new MsSqlTestcontainerConfiguration("mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04")
-        {
-            Password = "ReallyComplicated01!"
-        }).Build();
+    private readonly MsSqlContainer _dbContainer = new MsSqlBuilder()
+        .WithPassword("ReallyComplicated01!")
+        .Build();
 
     private readonly UserAuthenticationSettings _userAuthenticationSettings = new();
     private TokenResponse? _token;
@@ -67,10 +60,8 @@ public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetim
         builder.ConfigureLogging(logging => logging.ClearProviders());
         Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Testing");
 
-        var connectionString = new SqlConnectionStringBuilder(_dbContainer.ConnectionString)
-        {
-            Encrypt = false, InitialCatalog = "noplan"
-        }.ToString();
+        var connectionString = new SqlConnectionStringBuilder(_dbContainer.GetConnectionString()) { Encrypt = false, InitialCatalog = "noplan" }
+            .ToString();
 
         builder.ConfigureAppConfiguration(configBuilder =>
         {
@@ -78,10 +69,6 @@ public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetim
             configBuilder.AddUserSecrets<NoPlanApiFactory>();
 
             var config = configBuilder.Build();
-            var keyVaultUri = config.GetValue<Uri>("IntegrationTest:KeyVaultUri");
-            configBuilder.AddAzureKeyVault(keyVaultUri, new DefaultAzureCredential());
-            config = configBuilder.Build();
-
             config.GetSection(nameof(UserAuthenticationSettings)).Bind(_userAuthenticationSettings);
         });
 

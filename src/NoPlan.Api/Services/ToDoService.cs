@@ -29,6 +29,8 @@ public sealed class ToDoService : IToDoService
     /// <inheritdoc />
     public async Task<ToDo> CreateAsync(ToDo newToDo)
     {
+        ArgumentNullException.ThrowIfNull(newToDo);
+
         newToDo.Id = Guid.NewGuid();
         await _context.ToDos.AddAsync(newToDo);
         await _context.SaveChangesAsync();
@@ -38,6 +40,8 @@ public sealed class ToDoService : IToDoService
     /// <inheritdoc />
     public async Task<ToDo?> UpdateAsync(ToDo updatedToDo)
     {
+        ArgumentNullException.ThrowIfNull(updatedToDo);
+
         var toDo = await _context.ToDos.Include(t => t.Tags).FirstOrDefaultAsync(t => t.Id == updatedToDo.Id);
         if (toDo is null)
         {

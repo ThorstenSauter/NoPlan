@@ -1,0 +1,44 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+
+exporters:
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+
+  logging:
+
+  otlp/2:
+    endpoint: jaeger:4317
+    tls:
+      insecure: true
+
+  loki:
+    endpoint: http://loki:3100/loki/api/v1/push
+
+processors:
+  batch:
+  attributes:
+    actions:
+      - action: insert
+        key: log_file_name
+        from_attribute: log.file.name
+      - action: insert
+        key: loki.attribute.labels
+        value: log_file_name
+
+service:
+  pipelines:
+    traces:
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ logging, otlp/2 ]
+    metrics:
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ logging, prometheus ]
+    logs:
+      receivers: [ otlp ]
+      processors: [ attributes ]
+      exporters: [ logging, loki ]

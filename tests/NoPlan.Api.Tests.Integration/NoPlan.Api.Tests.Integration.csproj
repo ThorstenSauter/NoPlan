@@ -4,10 +4,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" />
     <PackageReference Include="Bogus" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
-    <PackageReference Include="Testcontainers" />
+    <PackageReference Include="Testcontainers.MsSql" />
     <PackageReference Include="Verify.Xunit" />
   </ItemGroup>
 

@@ -22,6 +22,8 @@ public sealed class GetToDoEndpoint : EndpointWithMapping<GetToDoRequest, ToDoRe
 
     public override async Task HandleAsync(GetToDoRequest req, CancellationToken ct)
     {
+        ArgumentNullException.ThrowIfNull(req);
+
         var todo = await _toDoService.GetAsync(req.Id, User.GetId(), ct);
         if (todo is null)
         {
@@ -32,8 +34,10 @@ public sealed class GetToDoEndpoint : EndpointWithMapping<GetToDoRequest, ToDoRe
         await SendAsync(MapFromEntity(todo), cancellation: ct);
     }
 
-    public override ToDoResponse MapFromEntity(ToDo e) =>
-        new()
+    public override ToDoResponse MapFromEntity(ToDo e)
+    {
+        ArgumentNullException.ThrowIfNull(e);
+        return new()
         {
             Id = e.Id,
             Title = e.Title,
@@ -41,4 +45,5 @@ public sealed class GetToDoEndpoint : EndpointWithMapping<GetToDoRequest, ToDoRe
             Tags = e.Tags.Select(ta => new TagResponse { Id = ta.Id, Name = ta.Name, AssignedAt = ta.AssignedAt }),
             CreatedAt = e.CreatedAt
         };
+    }
 }

@@ -18,10 +18,12 @@ public static class JsonHealthCheckResponseWriter
 
     public static async Task WriteResponse(HttpContext context, HealthReport? report)
     {
+        ArgumentNullException.ThrowIfNull(context);
+
         context.Response.ContentType = DefaultResponseContentType;
         if (report is null)
         {
-            await context.Response.BodyWriter.WriteAsync(EmptyResponse);
+            await context.Response.Body.WriteAsync(EmptyResponse);
             return;
         }
 

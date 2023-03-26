@@ -17,8 +17,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Identity.Web" />
     <PackageReference Include="Newtonsoft.Json" />
-    <PackageReference Include="Serilog.AspNetCore" />
-    <PackageReference Include="Serilog.Enrichers.Environment" />
   </ItemGroup>
 
   <ItemGroup>

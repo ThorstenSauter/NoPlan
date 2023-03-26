@@ -1,38 +1,24 @@
-name: Build, run tests and validate infrastructure
+﻿name: Terraform validate and plan
 
 on:
   pull_request:
     branches:
       - main
-
-concurrency:
-  group: ${{ github.head_ref }}
-  cancel-in-progress: true
+    paths:
+      - 'infra/**'
 
 permissions:
   contents: read
   pull-requests: write
 
-jobs:
-  build:
-    name: Build project and run tests
-    runs-on: ubuntu-latest
-    env:
-      CONFIGURATION: Release
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3.0.3
-        with:
-          dotnet-version: 7.0.x
-      - name: Restore dependencies
-        run: dotnet restore
-      - name: Build
-        run: dotnet build -c ${{ env.CONFIGURATION }} --no-restore
-      - name: Test
-        run: dotnet test -c ${{ env.CONFIGURATION }} --no-build --verbosity normal
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
+env:
+  IMAGE_NAME: ${{ vars.REGISTRY_NAME }}.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }}
+
+jobs:
   validate:
     name: Validate Terraform configuration
     runs-on: ubuntu-latest
@@ -53,7 +39,6 @@ jobs:
         continue-on-error: true
         with:
           tflint_version: latest
-          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Init TFLint
         run: tflint --init
       - name: Run TFLint
@@ -86,10 +71,12 @@ jobs:
             const botComment = comments.find(comment => {
               return comment.user.type === 'Bot' && comment.body.includes('Terraform validation')
             })
+
             const output = `### Terraform validation
             #### Terraform format 🖌\`${{ steps.fmt.outcome }}\`
             #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
             #### TFLint 👓\`${{ steps.tflint.outcome }}\``;
+
             if (botComment) {
               github.rest.issues.updateComment({
                 owner: context.repo.owner,
@@ -124,12 +111,11 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
       - name: Terraform init
         id: init
-        working-directory: ./infra/staging
         run: terraform init
       - name: Terraform plan
         id: plan
         continue-on-error: true
-        run: terraform plan -no-color
+        run: terraform plan -no-color -var container_image="${{ env.IMAGE_NAME }}"
       - name: Create or update PR comment
         uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
@@ -146,13 +132,18 @@ jobs:
             const botComment = comments.find(comment => {
               return comment.user.type === 'Bot' && comment.body.includes('Staging environment')
             })
+
             const output = `### Staging environment
             #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
             <details><summary>Show Plan</summary>
+
             \`\`\`\n
             ${process.env.PLAN}
             \`\`\`
+
             </details>`;
+
             if (botComment) {
               github.rest.issues.updateComment({
                 owner: context.repo.owner,
@@ -191,7 +182,7 @@ jobs:
       - name: Terraform plan
         id: plan
         continue-on-error: true
-        run: terraform plan -no-color
+        run: terraform plan -no-color -var container_image="${{ env.IMAGE_NAME }}"
       - name: Create or update PR comment
         uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
@@ -208,13 +199,18 @@ jobs:
             const botComment = comments.find(comment => {
               return comment.user.type === 'Bot' && comment.body.includes('Production environment')
             })
+
             const output = `### Production environment
             #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
             <details><summary>Show Plan</summary>
+
             \`\`\`\n
             ${process.env.PLAN}
             \`\`\`
+
             </details>`;
+
             if (botComment) {
               github.rest.issues.updateComment({
                 owner: context.repo.owner,
@@ -275,13 +271,18 @@ jobs:
             const botComment = comments.find(comment => {
               return comment.user.type === 'Bot' && comment.body.includes('Global environment')
             })
+
             const output = `### Global environment
             #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
             <details><summary>Show Plan</summary>
+
             \`\`\`\n
             ${process.env.PLAN}
             \`\`\`
+
             </details>`;
+
             if (botComment) {
               github.rest.issues.updateComment({
                 owner: context.repo.owner,

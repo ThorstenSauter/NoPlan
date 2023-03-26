@@ -25,7 +25,7 @@ internal sealed class MappedHealthReport
 
             if (reportEntry.Exception is not null)
             {
-                var message = reportEntry.Exception?.Message;
+                var message = reportEntry.Exception.Message;
                 entry.Exception = message;
                 entry.Description = reportEntry.Description ?? message;
             }

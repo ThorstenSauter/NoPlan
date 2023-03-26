@@ -1,9 +1,8 @@
-FROM golang:1.20.0 as chisel
+FROM golang:1.20.2 as chisel
 
 RUN git clone --depth 1 -b main https://github.com/canonical/chisel /opt/chisel
 WORKDIR /opt/chisel
 RUN go build ./cmd/chisel
-
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0-jammy AS build
 
@@ -40,12 +39,11 @@ RUN mkdir /rootfs \
     # Delete empty directories
     && find /rootfs -type d -empty -delete
 
-
 WORKDIR /src
 COPY . .
-#RUN dotnet restore src/NoPlan.Api/NoPlan.Api.csproj
-#RUN dotnet build -c Release -r linux-x64 --no-self-contained src/NoPlan.Api/NoPlan.Api.csproj
-RUN dotnet publish -c Release -r linux-x64 --no-self-contained -o /app/publish src/NoPlan.Api/NoPlan.Api.csproj
+RUN dotnet restore -r linux-x64 src/NoPlan.Api/NoPlan.Api.csproj
+RUN dotnet build --no-restore -c Release -r linux-x64 --no-self-contained -p:TreatWarningsAsErrors=false -p:CodeAnalysisTreatWarningsAsErrors=false src/NoPlan.Api/NoPlan.Api.csproj
+RUN dotnet publish --no-build -c Release -r linux-x64 --no-self-contained -o /app/publish src/NoPlan.Api/NoPlan.Api.csproj
 
 FROM mcr.microsoft.com/dotnet/nightly/aspnet:7.0-jammy-chiseled AS final
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false

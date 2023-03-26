@@ -15,6 +15,9 @@ trim_trailing_whitespace = true
 [*.json]
 indent_size = 2
 
+[*.tf]
+indent_size = 2
+
 # Generated code
 [*{_AssemblyInfo.cs,.notsupported.cs}]
 generated_code = true
@@ -157,14 +160,29 @@ csharp_space_between_square_brackets = false
 
 # Code style
 
+# CA1031: Do not catch general exception types
+dotnet_diagnostic.CA1031.severity = none
+
+# CA1724: Type names should not match namespaces
+dotnet_diagnostic.CA1724.severity = none
+
+# CA1812: Avoid uninstantiated internal classes
+dotnet_diagnostic.CA1812.severity = none
+
+# CA1848: Use LoggerMessage delegates
+dotnet_diagnostic.CA1848.severity = none
+
+# CA2007: Consider calling ConfigureAwait on the awaited task
+dotnet_diagnostic.CA2007.severity = none
+
+# S1135: Track uses of "TODO" tags
+dotnet_diagnostic.S1135.severity = none
+
 # SA1101: Prefix local calls with this
 dotnet_diagnostic.SA1101.severity = none
 
 # SA1117: Parameters should be on same line or separate lines
 dotnet_diagnostic.SA1117.severity = none
-
-# S1135: Track uses of "TODO" tags
-dotnet_diagnostic.S1135.severity = none
 
 # SA1206: Using directives should be ordered alphabetically by the namespaces
 dotnet_diagnostic.SA1206.severity = none
@@ -181,17 +199,9 @@ dotnet_diagnostic.SA1600.severity = none
 # SA1633: File must have header
 dotnet_diagnostic.SA1633.severity = none
 
-# CA1724: Type names should not match namespaces
-dotnet_diagnostic.CA1724.severity = none
-
-# CA1812: Avoid uninstantiated internal classes
-dotnet_diagnostic.CA1812.severity = none
-
-# CA1848: Use LoggerMessage delegates
-dotnet_diagnostic.CA1848.severity = none
-
-# CA2007: Consider calling ConfigureAwait on the awaited task
-dotnet_diagnostic.CA2007.severity = none
+[Program.cs]
+# CA1852: Type can be sealed
+dotnet_diagnostic.CA1852.severity = none
 
 # C++ Files
 [*.{cpp,h,in}]

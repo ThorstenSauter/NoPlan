@@ -1,0 +1,81 @@
+﻿name: Deploy global and staging environments
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  DOCKER_FILE: './Dockerfile'
+  IMAGE_NAME: ${{ vars.REGISTRY_NAME }}.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }}
+
+jobs:
+  build:
+    name: Build container image
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - name: Login to Azure Container Registry
+        run: az acr login --name ${{ vars.REGISTRY_NAME }}
+      - name: Build image
+        run: docker build -t ${{ env.IMAGE_NAME }} -f ${{ env.DOCKER_FILE }} .
+      - name: Push image to registry
+        run: docker push ${{ env.IMAGE_NAME }}
+
+  apply-global:
+    name: Apply global environment
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./infra/global
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      - name: Terraform Init
+        id: init
+        run: terraform init
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply -auto-approve -input=false
+
+  apply-staging:
+    name: Apply staging environment
+    runs-on: ubuntu-latest
+    environment: staging
+    needs:
+      - build
+      - apply-global
+    defaults:
+      run:
+        working-directory: ./infra/staging
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      - name: Terraform Init
+        id: init
+        run: terraform init
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply -auto-approve -input=false -var container_image="${{ env.IMAGE_NAME }}"

@@ -21,6 +21,8 @@ public sealed class DeleteToDoEndpoint : EndpointWithMapping<DeleteToDoRequest, 
 
     public override async Task HandleAsync(DeleteToDoRequest req, CancellationToken ct)
     {
+        ArgumentNullException.ThrowIfNull(req);
+
         var deletedToDo = await _toDoService.DeleteAsync(req.Id, User.GetId());
         if (deletedToDo is null)
         {
@@ -31,8 +33,10 @@ public sealed class DeleteToDoEndpoint : EndpointWithMapping<DeleteToDoRequest, 
         await SendAsync(MapFromEntity(deletedToDo), cancellation: ct);
     }
 
-    public override ToDoResponse MapFromEntity(ToDo e) =>
-        new()
+    public override ToDoResponse MapFromEntity(ToDo e)
+    {
+        ArgumentNullException.ThrowIfNull(e);
+        return new()
         {
             Id = e.Id,
             Title = e.Title,
@@ -40,4 +44,5 @@ public sealed class DeleteToDoEndpoint : EndpointWithMapping<DeleteToDoRequest, 
             Tags = e.Tags.Select(ta => new TagResponse { Id = ta.Id, Name = ta.Name, AssignedAt = ta.AssignedAt }),
             CreatedAt = e.CreatedAt
         };
+    }
 }
