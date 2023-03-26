@@ -7,12 +7,13 @@ inputs:
 
 runs:
   using: 'composite'
-  working-directory: ${{ inputs.working-directory }}
   steps:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
     - name: Terraform formatting check
       id: fmt
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
       continue-on-error: true
       run: terraform fmt -check -recursive
     - name: Setup TFLint
@@ -21,19 +22,25 @@ runs:
       with:
         tflint_version: latest
     - name: Init TFLint
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
       run: tflint --init
     - name: Run TFLint
       id: tflint
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
       continue-on-error: true
       run: tflint --no-color -f compact
     - name: Run tfsec
       uses: aquasecurity/tfsec-pr-commenter-action@v1.3.1
       with:
-        working_directory: ./infra
+        working_directory: ${{ inputs.working-directory }}
         tfsec_args: --no-color
         github_token: ${{ secrets.GITHUB_TOKEN }}
     - name: Terraform Validate
       id: validate
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
       continue-on-error: true
       run: terraform validate -no-color
     - name: Create or update PR comment
@@ -75,4 +82,5 @@ runs:
           }
     - name: Validation status
       if: steps.validate.outcome == 'failure' || steps.tflint.outcome == 'failure'
+      shell: bash
       run: exit 1
