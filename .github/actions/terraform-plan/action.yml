@@ -16,7 +16,6 @@ inputs:
 
 runs:
   using: 'composite'
-  working-directory: ${{ inputs.working-directory }}
   steps:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
@@ -24,9 +23,13 @@ runs:
         cli_config_credentials_token: ${{ inputs.tf-api-token }}
     - name: Terraform init
       id: init
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
       run: terraform init
     - name: Terraform plan
       id: plan
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
       continue-on-error: true
       run: terraform plan -no-color -var container_image="${{ inputs.image-name }}"
     - name: Create or update PR comment
@@ -74,4 +77,6 @@ runs:
           }
     - name: Terraform plan status
       if: steps.plan.outcome == 'failure'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
       run: exit 1
