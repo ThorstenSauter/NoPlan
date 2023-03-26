@@ -49,7 +49,7 @@ runs:
             issue_number: context.issue.number,
           })
           const botComment = comments.find(comment => {
-            return comment.user.type === 'Bot' && comment.body.includes('${{ inputs.environment-name }} environment
+            return comment.user.type === 'Bot' && comment.body.includes('${{ inputs.environment-name }} environment')
           })
 
           const output = `### ${{ inputs.environment-name }} environment
