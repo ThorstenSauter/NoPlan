@@ -1,6 +1,9 @@
 ﻿name: 'Terraform plan'
 description: 'Runs Terraform plan in the given directory'
 inputs:
+  github-token:
+    description: 'The GitHub token'
+    required: true
   working-directory:
     description: 'The path to the Terraform working directory'
     required: true
@@ -36,7 +39,7 @@ runs:
       with:
         working_directory: ${{ inputs.working-directory }}
         tfsec_args: --no-color
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ inputs.github-token }}
     - name: Terraform Validate
       id: validate
       shell: bash
@@ -49,7 +52,7 @@ runs:
       env:
         PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ inputs.github-token }}
         script: |
           const { data: comments } = await github.rest.issues.listComments({
             owner: context.repo.owner,

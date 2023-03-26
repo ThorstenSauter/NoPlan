@@ -28,6 +28,7 @@ jobs:
       - name: Terraform validate
         uses: ./.github/actions/terraform-validate
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           working-directory: ./infra
 
   plan-staging:
@@ -39,10 +40,11 @@ jobs:
       - name: Terraform plan
         uses: ./.github/actions/terraform-plan
         with:
-          working-directory: ./infra/staging
           environment-name: Staging
-          tf-api-token: ${{ secrets.TF_API_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           image-name: ${{ env.IMAGE_NAME }}
+          tf-api-token: ${{ secrets.TF_API_TOKEN }}
+          working-directory: ./infra/staging
 
   plan-production:
     name: Plan production environment
@@ -53,10 +55,11 @@ jobs:
       - name: Terraform plan
         uses: ./.github/actions/terraform-plan
         with:
-          working-directory: ./infra/production
           environment-name: Production
-          tf-api-token: ${{ secrets.TF_API_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           image-name: ${{ env.IMAGE_NAME }}
+          tf-api-token: ${{ secrets.TF_API_TOKEN }}
+          working-directory: ./infra/production
 
   plan-global:
     name: Plan global environment
@@ -67,7 +70,8 @@ jobs:
       - name: Terraform plan
         uses: ./.github/actions/terraform-plan
         with:
-          working-directory: ./infra/global
           environment-name: Global
-          tf-api-token: ${{ secrets.TF_API_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           image-name: ${{ env.IMAGE_NAME }}
+          tf-api-token: ${{ secrets.TF_API_TOKEN }}
+          working-directory: ./infra/global

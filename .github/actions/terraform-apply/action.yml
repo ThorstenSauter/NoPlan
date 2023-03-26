@@ -1,16 +1,16 @@
 ﻿name: 'Terraform plan'
 description: 'Runs Terraform apply in the given directory'
 inputs:
-  working-directory:
-    description: 'The path to the Terraform working directory'
-    required: true
-  tf-api-token:
-    description: 'The Terraform Cloud API token'
-    required: true
   image-name:
     description: 'The name of the container image to use'
     required: false
     default: ''
+  tf-api-token:
+    description: 'The Terraform Cloud API token'
+    required: true
+  working-directory:
+    description: 'The path to the Terraform working directory'
+    required: true
 
 runs:
   using: 'composite'

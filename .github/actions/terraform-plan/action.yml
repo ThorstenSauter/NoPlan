@@ -1,17 +1,20 @@
 ﻿name: 'Terraform plan'
 description: 'Runs Terraform plan in the given directory'
 inputs:
-  working-directory:
-    description: 'The path to the Terraform working directory'
-    required: true
   environment-name:
     description: 'The name of the environment to plan'
+    required: true
+  github-token:
+    description: 'The GitHub token'
+    required: true
+  image-name:
+    description: 'The name of the container image to use'
     required: true
   tf-api-token:
     description: 'The Terraform Cloud API token'
     required: true
-  image-name:
-    description: 'The name of the container image to use'
+  working-directory:
+    description: 'The path to the Terraform working directory'
     required: true
 
 runs:
@@ -38,7 +41,7 @@ runs:
       env:
         PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ inputs.github-token }}
         script: |
           const { data: comments } = await github.rest.issues.listComments({
             owner: context.repo.owner,
