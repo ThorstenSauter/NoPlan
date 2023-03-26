@@ -72,6 +72,5 @@ jobs:
         with:
           environment-name: Global
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          image-name: ${{ env.IMAGE_NAME }}
           tf-api-token: ${{ secrets.TF_API_TOKEN }}
           working-directory: ./infra/global
