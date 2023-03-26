@@ -1,0 +1,89 @@
+﻿name: 'Terraform plan'
+description: 'Runs Terraform plan in the given directory'
+inputs:
+  github-token:
+    description: 'The GitHub token'
+    required: true
+  working-directory:
+    description: 'The path to the Terraform working directory'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+    - name: Terraform formatting check
+      id: fmt
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      continue-on-error: true
+      run: terraform fmt -check -recursive
+    - name: Setup TFLint
+      uses: terraform-linters/setup-tflint@v3
+      continue-on-error: true
+      with:
+        tflint_version: latest
+    - name: Init TFLint
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: tflint --init
+    - name: Run TFLint
+      id: tflint
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      continue-on-error: true
+      run: tflint --no-color -f compact
+    - name: Run tfsec
+      uses: aquasecurity/tfsec-pr-commenter-action@v1.3.1
+      with:
+        working_directory: ${{ inputs.working-directory }}
+        tfsec_args: --no-color
+        github_token: ${{ inputs.github-token }}
+    - name: Terraform Validate
+      id: validate
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      continue-on-error: true
+      run: terraform validate -no-color
+    - name: Create or update PR comment
+      uses: actions/github-script@v6
+      if: github.event_name == 'pull_request'
+      env:
+        PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+      with:
+        github-token: ${{ inputs.github-token }}
+        script: |
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          })
+          const botComment = comments.find(comment => {
+            return comment.user.type === 'Bot' && comment.body.includes('Terraform validation')
+          })
+
+          const output = `### Terraform validation
+          #### Terraform format 🖌\`${{ steps.fmt.outcome }}\`
+          #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+          #### TFLint 👓\`${{ steps.tflint.outcome }}\``;
+
+          if (botComment) {
+            github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: botComment.id,
+              body: output
+            })
+          } else {
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+          }
+    - name: Validation status
+      if: steps.validate.outcome == 'failure' || steps.tflint.outcome == 'failure'
+      shell: bash
+      run: exit 1

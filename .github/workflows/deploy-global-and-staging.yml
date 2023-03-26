@@ -39,22 +39,14 @@ jobs:
   apply-global:
     name: Apply global environment
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./infra/global
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+      - name: Terraform apply
+        uses: ./.github/actions/terraform-apply
         with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-      - name: Terraform Init
-        id: init
-        run: terraform init
-      - name: Terraform Apply
-        id: apply
-        run: terraform apply -auto-approve -input=false
+          working-directory: ./infra/global
+          tf-api-token: ${{ secrets.TF_API_TOKEN }}
 
   apply-staging:
     name: Apply staging environment
@@ -63,19 +55,12 @@ jobs:
     needs:
       - build
       - apply-global
-    defaults:
-      run:
-        working-directory: ./infra/staging
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+      - name: Terraform apply
+        uses: ./.github/actions/terraform-apply
         with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-      - name: Terraform Init
-        id: init
-        run: terraform init
-      - name: Terraform Apply
-        id: apply
-        run: terraform apply -auto-approve -input=false -var container_image="${{ env.IMAGE_NAME }}"
+          working-directory: ./infra/staging
+          tf-api-token: ${{ secrets.TF_API_TOKEN }}
+          image-name: ${{ env.IMAGE_NAME }}

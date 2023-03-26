@@ -1,0 +1,86 @@
+﻿name: 'Terraform plan'
+description: 'Runs Terraform plan in the given directory'
+inputs:
+  environment-name:
+    description: 'The name of the environment to plan'
+    required: true
+  github-token:
+    description: 'The GitHub token'
+    required: true
+  image-name:
+    description: 'The name of the container image to use'
+    required: true
+  tf-api-token:
+    description: 'The Terraform Cloud API token'
+    required: true
+  working-directory:
+    description: 'The path to the Terraform working directory'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        cli_config_credentials_token: ${{ inputs.tf-api-token }}
+    - name: Terraform init
+      id: init
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: terraform init
+    - name: Terraform plan
+      id: plan
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      continue-on-error: true
+      env:
+        TF_VAR_container_image: ${{ inputs.image-name }}
+      run: terraform plan -no-color
+    - name: Create or update PR comment
+      uses: actions/github-script@v6
+      if: github.event_name == 'pull_request'
+      env:
+        PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+      with:
+        github-token: ${{ inputs.github-token }}
+        script: |
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          })
+          const botComment = comments.find(comment => {
+            return comment.user.type === 'Bot' && comment.body.includes('${{ inputs.environment-name }} environment')
+          })
+
+          const output = `### ${{ inputs.environment-name }} environment
+          #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+          <details><summary>Show Plan</summary>
+
+          \`\`\`\n
+          ${process.env.PLAN}
+          \`\`\`
+
+          </details>`;
+
+          if (botComment) {
+            github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: botComment.id,
+              body: output
+            })
+          } else {
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+          }
+    - name: Terraform plan status
+      if: steps.plan.outcome == 'failure'
+      shell: bash
+      run: exit 1

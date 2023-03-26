@@ -10,8 +10,7 @@ It contains three separate environments:
 ## Global environment
 
 This environment contains the resources that are shared between the other environments. This helps to reduce cost (e.g.
-by using a shared Azure Container Registry) and follows the spirit of some resources, which are already aware of the
-existence of other environments (e.g. Azure App Configuration using labels).
+by using a shared Azure Container Registry) and allows for easy promotion of images.
 
 ## Linting
 
