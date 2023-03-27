@@ -58,7 +58,6 @@ public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetim
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureLogging(logging => logging.ClearProviders());
-        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Testing");
 
         var connectionString = new SqlConnectionStringBuilder(_dbContainer.GetConnectionString()) { Encrypt = false, InitialCatalog = "noplan" }
             .ToString();
@@ -67,6 +66,7 @@ public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetim
         {
             configBuilder.AddInMemoryCollection(new Dictionary<string, string?> { { "ConnectionStrings:Default", connectionString } });
             configBuilder.AddUserSecrets<NoPlanApiFactory>();
+            configBuilder.AddEnvironmentVariables();
 
             var config = configBuilder.Build();
             config.GetSection(nameof(UserAuthenticationSettings)).Bind(_userAuthenticationSettings);
