@@ -39,16 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "load-testing", "load-testin
 		load-testing\loadTest.js = load-testing\loadTest.js
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github-actions", "github-actions", "{DFC618CE-925B-43A3-B9B9-139A00663BE1}"
-	ProjectSection(SolutionItems) = preProject
-		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
-		.github\workflows\deploy-production.yml = .github\workflows\deploy-production.yml
-		.github\workflows\build.yml = .github\workflows\build.yml
-		.github\workflows\build-dummy.yml = .github\workflows\build-dummy.yml
-		.github\workflows\deploy-global-and-staging.yml = .github\workflows\deploy-global-and-staging.yml
-		.github\workflows\terraform-plan.yml = .github\workflows\terraform-plan.yml
-		.github\workflows\terraform-plan-dummy.yml = .github\workflows\terraform-plan-dummy.yml
-	EndProjectSection
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{DFC618CE-925B-43A3-B9B9-139A00663BE1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoPlan.Api.Tests.Unit", "tests\NoPlan.Api.Tests.Unit\NoPlan.Api.Tests.Unit.csproj", "{8388437E-941B-4B1A-B822-9B83FED069CD}"
 EndProject
@@ -59,6 +50,34 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "local-development-stack", "
 		local-development-stack\docker-compose.yaml = local-development-stack\docker-compose.yaml
 		local-development-stack\otel-collector-config.yaml = local-development-stack\otel-collector-config.yaml
 		local-development-stack\prometheus.yml = local-development-stack\prometheus.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "actions", "actions", "{A3667D6E-FE72-461C-986A-B89AF131D7DE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{12DC82CF-15C0-40BB-BEA8-08741B1F1EFB}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build.yml = .github\workflows\build.yml
+		.github\workflows\build-dummy.yml = .github\workflows\build-dummy.yml
+		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
+		.github\workflows\deploy-global-and-staging.yml = .github\workflows\deploy-global-and-staging.yml
+		.github\workflows\deploy-production.yml = .github\workflows\deploy-production.yml
+		.github\workflows\terraform-plan.yml = .github\workflows\terraform-plan.yml
+		.github\workflows\terraform-plan-dummy.yml = .github\workflows\terraform-plan-dummy.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "terraform-apply", "terraform-apply", "{6911537D-CAA4-4F44-BD46-D26909A809E4}"
+	ProjectSection(SolutionItems) = preProject
+		.github\actions\terraform-apply\action.yml = .github\actions\terraform-apply\action.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "terraform-validate", "terraform-validate", "{9BB98FB5-D09B-4778-A148-60A538D6C001}"
+	ProjectSection(SolutionItems) = preProject
+		.github\actions\terraform-validate\action.yml = .github\actions\terraform-validate\action.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "terraform-plan", "terraform-plan", "{C16144D4-1B5C-4A0F-BE1C-3D0891F906F9}"
+	ProjectSection(SolutionItems) = preProject
+		.github\actions\terraform-plan\action.yml = .github\actions\terraform-plan\action.yml
 	EndProjectSection
 EndProject
 Global
@@ -100,6 +119,11 @@ Global
 		{8388437E-941B-4B1A-B822-9B83FED069CD} = {658FDE7E-6C26-4730-9951-49F81260C2B1}
 		{95E51505-3889-4F35-B535-F7802D677698} = {658FDE7E-6C26-4730-9951-49F81260C2B1}
 		{893982A6-41A2-4E12-9B32-09A8500E4DA3} = {89856EE3-7A1F-4DB4-993C-929ACD5CE834}
+		{A3667D6E-FE72-461C-986A-B89AF131D7DE} = {DFC618CE-925B-43A3-B9B9-139A00663BE1}
+		{12DC82CF-15C0-40BB-BEA8-08741B1F1EFB} = {DFC618CE-925B-43A3-B9B9-139A00663BE1}
+		{6911537D-CAA4-4F44-BD46-D26909A809E4} = {A3667D6E-FE72-461C-986A-B89AF131D7DE}
+		{9BB98FB5-D09B-4778-A148-60A538D6C001} = {A3667D6E-FE72-461C-986A-B89AF131D7DE}
+		{C16144D4-1B5C-4A0F-BE1C-3D0891F906F9} = {A3667D6E-FE72-461C-986A-B89AF131D7DE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {363F91DB-7510-4A5C-B46E-4E19B3A385F3}

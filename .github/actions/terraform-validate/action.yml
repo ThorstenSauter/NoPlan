@@ -1,4 +1,4 @@
-﻿name: 'Terraform plan'
+﻿name: 'Terraform validate'
 description: 'Runs Terraform plan in the given directory'
 inputs:
   github-token:
