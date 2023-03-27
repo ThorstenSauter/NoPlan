@@ -1,4 +1,4 @@
-﻿name: 'Terraform plan'
+﻿name: 'Terraform apply'
 description: 'Runs Terraform apply in the given directory'
 inputs:
   image-name:
