@@ -1,4 +1,4 @@
-﻿name: Deploy global and staging environments
+name: Deploy global and staging environments
 
 on:
   push:
@@ -39,6 +39,7 @@ jobs:
   apply-global:
     name: Apply global environment
     runs-on: ubuntu-latest
+    environment: global
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
