@@ -6,16 +6,9 @@
 public sealed class UserAuthenticationSettings
 {
     /// <summary>
-    ///     Gets the URL to acquire the access token from, e.g.
-    ///     https://login.microsoftonline.com/your-aad-tenant-id/oauth2/v2.0/token.
+    ///     Gets or sets the application audience.
     /// </summary>
-    public string TokenUrl =>
-        $"https://login.microsoftonline.com/{TenantId}/oauth2/v2.0/token";
-
-    /// <summary>
-    ///     Gets or sets the tenant id.
-    /// </summary>
-    public string TenantId { get; set; } = null!;
+    public string Audience { get; set; } = null!;
 
     /// <summary>
     ///     Gets or sets the client id / application id for the registered test app.
@@ -28,10 +21,10 @@ public sealed class UserAuthenticationSettings
     public string ClientSecret { get; set; } = null!;
 
     /// <summary>
-    ///     Gets or sets the Username of a user registered in AAD. Should be from a test tenant, not a production one. Cannot
-    ///     have MFA enabled.
+    ///     Gets the applications default scope.
     /// </summary>
-    public string Username { get; set; } = null!;
+    public string DefaultScope =>
+        $"{Audience}/.default";
 
     /// <summary>
     ///     Gets or sets the password of the user.
@@ -39,13 +32,20 @@ public sealed class UserAuthenticationSettings
     public string Password { get; set; } = null!;
 
     /// <summary>
-    ///     Gets or sets the application audience.
+    ///     Gets or sets the tenant id.
     /// </summary>
-    public string Audience { get; set; } = null!;
+    public string TenantId { get; set; } = null!;
 
     /// <summary>
-    ///     Gets the applications default scope.
+    ///     Gets the URL to acquire the access token from, e.g.
+    ///     https://login.microsoftonline.com/your-aad-tenant-id/oauth2/v2.0/token.
     /// </summary>
-    public string DefaultScope =>
-        $"{Audience}/.default";
+    public string TokenUrl =>
+        $"https://login.microsoftonline.com/{TenantId}/oauth2/v2.0/token";
+
+    /// <summary>
+    ///     Gets or sets the Username of a user registered in AAD. Should be from a test tenant, not a production one. Cannot
+    ///     have MFA enabled.
+    /// </summary>
+    public string Username { get; set; } = null!;
 }

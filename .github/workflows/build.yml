@@ -36,6 +36,18 @@ jobs:
       - name: Build
         run: dotnet build -c ${{ env.CONFIGURATION }} --no-restore
       - name: Test
+        env:
+          AzureAD_Audience: ${{ vars.AZUREAD_AUDIENCE }}
+          AzureAD__ClientId: ${{ vars.AZUREAD_CLIENTID }}
+          AzureAD__Domain: ${{ vars.AZUREAD_DOMAIN }}
+          AzureAD__Instance: ${{ vars.AZUREAD_INSTANCE }}
+          AzureAD__TenantId: ${{ vars.AZURE_TENANT_ID }}
+          UserAuthenticationSettings__Audience: ${{ vars.AZUREAD_AUDIENCE }}
+          UserAuthenticationSettings__ClientId: ${{ vars.INTEGRATION_TEST_CLIENT_ID }}
+          UserAuthenticationSettings__ClientSecret: ${{ secrets.INTEGRATION_TEST_CLIENT_SECRET }}
+          UserAuthenticationSettings__Password: ${{ secrets.INTEGRATION_TEST_PASSWORD }}
+          UserAuthenticationSettings__TenantId: ${{ vars.AZURE_TENANT_ID }}
+          UserAuthenticationSettings__Username: ${{ vars.INTEGRATION_TEST_USERNAME }}
         run: dotnet test -c ${{ env.CONFIGURATION }} --no-build --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./coverage
       - name: ReportGenerator
         uses: danielpalme/ReportGenerator-GitHub-Action@5.1.19
