@@ -37,7 +37,7 @@ jobs:
         run: dotnet build -c ${{ env.CONFIGURATION }} --no-restore
       - name: Test
         env:
-          AzureAD_Audience: ${{ vars.AZUREAD_AUDIENCE }}
+          AzureAD__Audience: ${{ vars.AZUREAD_AUDIENCE }}
           AzureAD__ClientId: ${{ vars.AZUREAD_CLIENTID }}
           AzureAD__Domain: ${{ vars.AZUREAD_DOMAIN }}
           AzureAD__Instance: ${{ vars.AZUREAD_INSTANCE }}
