@@ -1,0 +1,69 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "assigneesFromCodeOwners": true,
+  "prHourlyLimit": 0,
+  "packageRules": [
+    {
+      "matchManagers": [
+        "terraform"
+      ],
+      "groupName": "Terraform providers and TFLint plugins",
+      "groupSlug": "terraform-providers-and-tflint-plugins",
+      "labels": [
+        "terraform"
+      ]
+    },
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "groupName": "GitHub Actions",
+      "groupSlug": "github-actions",
+      "labels": [
+        "github_actions"
+      ]
+    },
+    {
+      "matchManagers": [
+        "dockerfile",
+        "docker-compose"
+      ],
+      "groupName": "Docker",
+      "groupSlug": "docker",
+      "labels": [
+        "docker"
+      ]
+    },
+    {
+      "matchManagers": [
+        "nuget"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "Non-major NuGet dependencies",
+      "groupSlug": "non-major-nuget-dependencies",
+      "labels": [
+        "dependencies",
+        ".NET"
+      ]
+    },
+    {
+      "matchManagers": [
+        "nuget"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "labels": [
+        "dependencies",
+        ".NET",
+        "breaking"
+      ]
+    }
+  ]
+}
