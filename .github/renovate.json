@@ -1,19 +1,24 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:base",
+    ":disableRateLimiting",
+    "schedule:daily"
   ],
   "assigneesFromCodeOwners": true,
-  "prHourlyLimit": 0,
+  "labels": [
+    "dependencies"
+  ],
   "packageRules": [
     {
       "matchManagers": [
-        "terraform"
+        "dockerfile",
+        "docker-compose"
       ],
-      "groupName": "Terraform providers and TFLint plugins",
-      "groupSlug": "terraform-providers-and-tflint-plugins",
-      "labels": [
-        "terraform"
+      "groupName": "Docker",
+      "groupSlug": "docker",
+      "addLabels": [
+        "docker"
       ]
     },
     {
@@ -22,19 +27,8 @@
       ],
       "groupName": "GitHub Actions",
       "groupSlug": "github-actions",
-      "labels": [
+      "addLabels": [
         "github_actions"
-      ]
-    },
-    {
-      "matchManagers": [
-        "dockerfile",
-        "docker-compose"
-      ],
-      "groupName": "Docker",
-      "groupSlug": "docker",
-      "labels": [
-        "docker"
       ]
     },
     {
@@ -47,7 +41,7 @@
       ],
       "groupName": "Non-major NuGet dependencies",
       "groupSlug": "non-major-nuget-dependencies",
-      "labels": [
+      "addLabels": [
         "dependencies",
         ".NET"
       ]
@@ -59,10 +53,21 @@
       "matchUpdateTypes": [
         "major"
       ],
-      "labels": [
+      "addLabels": [
         "dependencies",
         ".NET",
         "breaking"
+      ]
+    },
+    {
+      "matchManagers": [
+        "terraform",
+        "tflint-plugin"
+      ],
+      "groupName": "Terraform providers and TFLint plugins",
+      "groupSlug": "terraform-providers-and-tflint-plugins",
+      "addLabels": [
+        "terraform"
       ]
     }
   ]
