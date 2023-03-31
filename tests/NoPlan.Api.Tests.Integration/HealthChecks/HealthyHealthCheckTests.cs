@@ -1,10 +1,10 @@
 ﻿namespace NoPlan.Api.Tests.Integration.HealthChecks;
 
-public sealed class HealthCheckTests : IClassFixture<NoPlanApiFactory>
+public sealed class HealthyHealthCheckTests : IClassFixture<NoPlanApiFactory>
 {
     private readonly NoPlanApiFactory _apiFactory;
 
-    public HealthCheckTests(NoPlanApiFactory apiFactory) =>
+    public HealthyHealthCheckTests(NoPlanApiFactory apiFactory) =>
         _apiFactory = apiFactory;
 
     [Fact]

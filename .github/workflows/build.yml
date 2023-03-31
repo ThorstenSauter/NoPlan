@@ -4,11 +4,6 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - 'Directory.Packages.props'
-      - 'NoPlan.sln'
-      - 'src/**'
-      - 'tests/**'
 
 permissions:
   contents: read
