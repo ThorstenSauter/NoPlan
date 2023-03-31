@@ -5,9 +5,11 @@
 This project aims to deliver task tracking capabilities and is primarily to learn about new technologies. The goal is to
 follow best practices whenever possible.
 
-## Deployments
+## Status
 
-![Staging and global](https://github.com/ThorstenSauter/NoPlan/actions/workflows/deploy-global-and-staging.yml/badge.svg) ![Production](https://github.com/ThorstenSauter/NoPlan/actions/workflows/deploy-production.yml/badge.svg) ![Code scans](https://github.com/ThorstenSauter/NoPlan/actions/workflows/codeql-analysis.yml/badge.svg)
+![Staging and global](https://github.com/ThorstenSauter/NoPlan/actions/workflows/deploy-global-and-staging.yml/badge.svg) ![Production](https://github.com/ThorstenSauter/NoPlan/actions/workflows/deploy-production.yml/badge.svg)
+
+![Code scans](https://github.com/ThorstenSauter/NoPlan/actions/workflows/codeql-analysis.yml/badge.svg) [![codecov](https://codecov.io/gh/ThorstenSauter/NoPlan/branch/main/graph/badge.svg?token=ZSYIYFC9D6)](https://codecov.io/gh/ThorstenSauter/NoPlan)
 
 ## Calling the API
 
