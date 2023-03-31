@@ -58,7 +58,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{12DC82CF-15C0-40BB-BEA8-08741B1F1EFB}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\build.yml = .github\workflows\build.yml
-		.github\workflows\build-dummy.yml = .github\workflows\build-dummy.yml
 		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
 		.github\workflows\deploy-global-and-staging.yml = .github\workflows\deploy-global-and-staging.yml
 		.github\workflows\deploy-production.yml = .github\workflows\deploy-production.yml
