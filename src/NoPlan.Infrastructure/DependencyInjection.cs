@@ -18,7 +18,7 @@ public static class DependencyInjection
                 provider => provider.GetRequiredService<IConfiguration>().GetConnectionString("Default")!,
                 failureStatus: HealthStatus.Unhealthy,
                 name: "SQL Server",
-                timeout: TimeSpan.FromSeconds(15),
+                timeout: TimeSpan.FromSeconds(10),
                 tags: new[] { "db", "sql" });
 
         builder.Services.AddDbContext<PlannerContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Default")!));

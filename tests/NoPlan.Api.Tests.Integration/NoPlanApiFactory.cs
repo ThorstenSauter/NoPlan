@@ -55,6 +55,9 @@ public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetim
         client.DefaultRequestHeaders.Authorization = new("Bearer", _token!.AccessToken);
     }
 
+    public async Task ShutdownDatabaseAsync() =>
+        await _dbContainer.StopAsync();
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureLogging(logging => logging.ClearProviders());
