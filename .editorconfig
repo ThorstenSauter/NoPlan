@@ -163,6 +163,9 @@ csharp_space_between_square_brackets = false
 # CA1031: Do not catch general exception types
 dotnet_diagnostic.CA1031.severity = none
 
+# CA1040: Avoid empty interfaces
+dotnet_diagnostic.CA1040.severity = none
+
 # CA1724: Type names should not match namespaces
 dotnet_diagnostic.CA1724.severity = none
 
