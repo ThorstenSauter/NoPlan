@@ -22,9 +22,9 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageVersion Include="OpenTelemetry.Exporter.Console" Version="1.5.0-alpha.1" />
-    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol.Logs" Version="1.5.0-alpha.1" />
-    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.5.0-alpha.1" />
+    <PackageVersion Include="OpenTelemetry.Exporter.Console" Version="1.5.0-alpha.2" />
+    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol.Logs" Version="1.5.0-alpha.2" />
+    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.5.0-alpha.2" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.0.0-rc9.14" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.0.0-beta.6" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.EventCounters" Version="1.0.0-alpha.2" />
