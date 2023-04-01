@@ -50,7 +50,7 @@ public sealed class ToDoService : IToDoService
 
         foreach (var tag in updatedToDo.Tags)
         {
-            var existingToDo = toDo.Tags.FirstOrDefault(t => t == tag);
+            var existingToDo = toDo.Tags.FirstOrDefault(t => t.Id == tag.Id);
             if (existingToDo is not null)
             {
                 tag.AssignedAt = existingToDo.AssignedAt;

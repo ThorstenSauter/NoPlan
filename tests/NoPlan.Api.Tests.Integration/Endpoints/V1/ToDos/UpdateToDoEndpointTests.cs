@@ -9,23 +9,50 @@ namespace NoPlan.Api.Tests.Integration.Endpoints.V1.ToDos;
 public sealed class UpdateToDoEndpointTests : FakeRequestTest, IClassFixture<NoPlanApiFactory>
 {
     private readonly NoPlanApiFactory _apiFactory;
+    private readonly HttpClient _client;
 
-    public UpdateToDoEndpointTests(NoPlanApiFactory apiFactory) =>
+    public UpdateToDoEndpointTests(NoPlanApiFactory apiFactory)
+    {
         _apiFactory = apiFactory;
+        _client = _apiFactory.CreateClient();
+    }
 
     [Fact]
     public async Task HandleAsync_ShouldReturn200AndToDos_WhenToDoExistsAndUserIsAuthenticated()
     {
         // Arrange
-        var client = _apiFactory.CreateClient();
-        await _apiFactory.AuthenticateClientAsUserAsync(client);
-        var createResponse = await client.PostAsJsonAsync("/api/v1/todos", CreateRequestFaker.Generate());
+        await _apiFactory.AuthenticateClientAsUserAsync(_client);
+        var createResponse = await _client.PostAsJsonAsync("/api/v1/todos", CreateRequestFaker.Generate());
         var createdToDo = await createResponse.Content.ReadFromJsonAsync<ToDoResponse>();
 
         var updateRequest = UpdateRequestFaker.Generate();
 
         // Act
-        var response = await client.PutAsJsonAsync($"/api/v1/todos/{createdToDo!.Id}", updateRequest);
+        var response = await _client.PutAsJsonAsync($"/api/v1/todos/{createdToDo!.Id}", updateRequest);
+        var toDo = await response.Content.ReadFromJsonAsync<ToDoResponse>();
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        toDo!.Id.Should().Be(createdToDo.Id);
+        await Verify(toDo);
+    }
+
+    [Fact]
+    public async Task HandleAsync_ShouldReturn200AndUpdatedTagsToDos_WhenExistingTagIsUpdatedAndUserIsAuthenticated()
+    {
+        // Arrange
+        await _apiFactory.AuthenticateClientAsUserAsync(_client);
+        var createResponse = await _client.PostAsJsonAsync("/api/v1/todos", CreateRequestFaker.Generate());
+        var createdToDo = await createResponse.Content.ReadFromJsonAsync<ToDoResponse>();
+
+        var updateRequest = UpdateRequestFaker.Generate();
+        updateRequest.Tags.Clear();
+        var updateTagRequests = createdToDo!.Tags.Take(2).Select(t => new UpdateTagRequest { Id = t.Id, Name = t.Name }).ToList();
+        updateTagRequests.Add(new() { Id = createdToDo.Tags.Last().Id, Name = "new tag" });
+        updateRequest.Tags.AddRange(updateTagRequests);
+
+        // Act
+        var response = await _client.PutAsJsonAsync($"/api/v1/todos/{createdToDo!.Id}", updateRequest);
         var toDo = await response.Content.ReadFromJsonAsync<ToDoResponse>();
 
         // Assert
@@ -38,9 +65,8 @@ public sealed class UpdateToDoEndpointTests : FakeRequestTest, IClassFixture<NoP
     public async Task HandleAsync_ShouldReturn400_WhenRequestIsMalformed()
     {
         // Arrange
-        var client = _apiFactory.CreateClient();
-        await _apiFactory.AuthenticateClientAsUserAsync(client);
-        var createResponse = await client.PostAsJsonAsync("/api/v1/todos", CreateRequestFaker.Generate());
+        await _apiFactory.AuthenticateClientAsUserAsync(_client);
+        var createResponse = await _client.PostAsJsonAsync("/api/v1/todos", CreateRequestFaker.Generate());
         var createdToDo = await createResponse.Content.ReadFromJsonAsync<ToDoResponse>();
         var request = new UpdateToDoRequest
         {
@@ -48,7 +74,7 @@ public sealed class UpdateToDoEndpointTests : FakeRequestTest, IClassFixture<NoP
         };
 
         // Act
-        var response = await client.PutAsJsonAsync($"/api/v1/todos/{createdToDo!.Id}", request);
+        var response = await _client.PutAsJsonAsync($"/api/v1/todos/{createdToDo!.Id}", request);
         var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
 
         // Assert
@@ -60,13 +86,12 @@ public sealed class UpdateToDoEndpointTests : FakeRequestTest, IClassFixture<NoP
     public async Task HandleAsync_ShouldReturn404_WhenToDoDoesNotExistAndUserIsAuthenticated()
     {
         // Arrange
-        var client = _apiFactory.CreateClient();
-        await _apiFactory.AuthenticateClientAsUserAsync(client);
+        await _apiFactory.AuthenticateClientAsUserAsync(_client);
         var toDoId = Guid.NewGuid();
         var request = UpdateRequestFaker.Generate();
 
         // Act
-        var response = await client.PutAsJsonAsync($"/api/v1/todos/{toDoId}", request);
+        var response = await _client.PutAsJsonAsync($"/api/v1/todos/{toDoId}", request);
         var body = await response.Content.ReadAsStringAsync();
 
         // Assert
@@ -78,11 +103,10 @@ public sealed class UpdateToDoEndpointTests : FakeRequestTest, IClassFixture<NoP
     public async Task HandleAsync_ShouldReturn401_WhenUserIsNotAuthenticated()
     {
         // Arrange
-        var client = _apiFactory.CreateClient();
         var toDoId = Guid.NewGuid().ToString();
 
         // Act
-        var response = await client.GetAsync($"/api/v1/todos/{toDoId}");
+        var response = await _client.GetAsync($"/api/v1/todos/{toDoId}");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);

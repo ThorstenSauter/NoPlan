@@ -20,7 +20,9 @@ public sealed record UpdateToDoRequest
     /// <summary>
     ///     Gets or initializes the required list of tags to be associated with the new entity.
     /// </summary>
-    public ICollection<UpdateTagRequest> Tags { get; init; } = null!;
+#pragma warning disable CA1002
+    public List<UpdateTagRequest> Tags { get; init; } = null!;
+#pragma warning restore CA1002
 }
 
 public sealed class UpdateToDoRequestValidator : Validator<UpdateToDoRequest>
