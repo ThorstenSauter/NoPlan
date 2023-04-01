@@ -1,6 +1,9 @@
 ﻿name: Build solution and run tests
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
     branches:
       - main
