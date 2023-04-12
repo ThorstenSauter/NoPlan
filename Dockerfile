@@ -42,7 +42,7 @@ RUN mkdir /rootfs \
 WORKDIR /src
 COPY . .
 RUN dotnet restore -r linux-x64 src/NoPlan.Api/NoPlan.Api.csproj
-RUN dotnet build --no-restore -c Release -r linux-x64 --no-self-contained -p:TreatWarningsAsErrors=false -p:CodeAnalysisTreatWarningsAsErrors=false src/NoPlan.Api/NoPlan.Api.csproj
+RUN dotnet build --no-restore -c Release -r linux-x64 --no-self-contained src/NoPlan.Api/NoPlan.Api.csproj
 RUN dotnet publish --no-build -c Release -r linux-x64 --no-self-contained -o /app/publish src/NoPlan.Api/NoPlan.Api.csproj
 
 FROM mcr.microsoft.com/dotnet/nightly/aspnet:7.0-jammy-chiseled AS final

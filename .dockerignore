@@ -1,6 +1,5 @@
 ﻿**/.dockerignore
 **/.env
-**/.git
 **/.gitignore
 **/.project
 **/.settings
@@ -23,4 +22,7 @@
 **/values.dev.yaml
 LICENSE
 README.md
+infra/
+load-testing/
 local-development-stack/
+tests/
