@@ -1,14 +1,15 @@
 ﻿using Bogus;
 using NoPlan.Contracts.Requests.V1.ToDos;
 
-namespace NoPlan.Api.Tests.Integration.Fakers;
+namespace NoPlan.Api.Tests.Integration.TestBases;
 
-public class FakeRequestTest
+// ReSharper disable once ClassNeverInstantiated.Global
+public class FakeRequestTest : EndpointTestBase
 {
     private const int CreateRequestSeed = 133742069;
     private const int UpdateRequestSeed = 420691337;
 
-    protected FakeRequestTest()
+    protected FakeRequestTest(NoPlanApiFactory factory) : base(factory)
     {
         Randomizer.Seed = new();
         var createTagRequestFaker = new Faker<CreateTagRequest>()

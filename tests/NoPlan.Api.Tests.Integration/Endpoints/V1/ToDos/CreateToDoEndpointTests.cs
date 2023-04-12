@@ -1,28 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NoPlan.Api.Tests.Integration.Fakers;
+using NoPlan.Api.Tests.Integration.TestBases;
 using NoPlan.Contracts.Requests.V1.ToDos;
 using NoPlan.Contracts.Responses.V1.ToDos;
 
 namespace NoPlan.Api.Tests.Integration.Endpoints.V1.ToDos;
 
 [UsesVerify]
-public sealed class CreateToDoEndpointTests : FakeRequestTest, IClassFixture<NoPlanApiFactory>
+public sealed class CreateToDoEndpointTests : FakeRequestTest
 {
-    private readonly NoPlanApiFactory _apiFactory;
-
-    public CreateToDoEndpointTests(NoPlanApiFactory apiFactory) =>
-        _apiFactory = apiFactory;
+    public CreateToDoEndpointTests(NoPlanApiFactory factory)
+        : base(factory)
+    {
+    }
 
     [Fact]
     public async Task HandleAsync_ShouldReturn201AndToDo_WhenRequestIsValidAndUserIsAuthenticated()
     {
         // Arrange
-        var client = _apiFactory.CreateClient();
-        await _apiFactory.AuthenticateClientAsUserAsync(client);
         var request = CreateRequestFaker.Generate();
 
         // Act
-        var response = await client.PostAsJsonAsync("/api/v1/todos", request);
+        var response = await AuthenticatedClientClient.PostAsJsonAsync("/api/v1/todos", request);
         var toDos = await response.Content.ReadFromJsonAsync<ToDoResponse>();
 
         // Assert
@@ -34,15 +32,13 @@ public sealed class CreateToDoEndpointTests : FakeRequestTest, IClassFixture<NoP
     public async Task HandleAsync_ShouldReturn400_WhenRequestIsMalformed()
     {
         // Arrange
-        var client = _apiFactory.CreateClient();
-        await _apiFactory.AuthenticateClientAsUserAsync(client);
         var request = new CreateToDoRequest
         {
             Title = "a", Description = "  ", Tags = new List<CreateTagRequest> { new() { Name = string.Empty }, new() }
         };
 
         // Act
-        var response = await client.PostAsJsonAsync("/api/v1/todos", request);
+        var response = await AuthenticatedClientClient.PostAsJsonAsync("/api/v1/todos", request);
         var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
 
         // Assert
@@ -54,10 +50,8 @@ public sealed class CreateToDoEndpointTests : FakeRequestTest, IClassFixture<NoP
     public async Task HandleAsync_ShouldReturn401_WhenUserIsNotAuthenticated()
     {
         // Arrange
-        var client = _apiFactory.CreateClient();
-
         // Act
-        var response = await client.PostAsJsonAsync("/api/v1/todos", CreateRequestFaker.Generate());
+        var response = await AnonymousClient.PostAsJsonAsync("/api/v1/todos", CreateRequestFaker.Generate());
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);

@@ -1,29 +1,27 @@
-﻿using NoPlan.Api.Tests.Integration.Fakers;
+﻿using NoPlan.Api.Tests.Integration.TestBases;
 using NoPlan.Contracts.Responses.V1.ToDos;
 
 namespace NoPlan.Api.Tests.Integration.Endpoints.V1.ToDos;
 
 [UsesVerify]
-public sealed class GetAllToDosEndpointTests : FakeRequestTest, IClassFixture<NoPlanApiFactory>
+public sealed class GetAllToDosEndpointTests : FakeRequestTest
 {
-    private readonly NoPlanApiFactory _apiFactory;
-
-    public GetAllToDosEndpointTests(NoPlanApiFactory apiFactory) =>
-        _apiFactory = apiFactory;
+    public GetAllToDosEndpointTests(NoPlanApiFactory factory)
+        : base(factory)
+    {
+    }
 
     [Fact]
     public async Task HandleAsync_ShouldReturn200AndToDos_WhenUserIsAuthenticated()
     {
         // Arrange
-        var client = _apiFactory.CreateClient();
-        await _apiFactory.AuthenticateClientAsUserAsync(client);
         foreach (var request in CreateRequestFaker.Generate(3))
         {
-            await client.PostAsJsonAsync("/api/v1/todos", request);
+            await AuthenticatedClientClient.PostAsJsonAsync("/api/v1/todos", request);
         }
 
         // Act
-        var response = await client.GetAsync("/api/v1/todos");
+        var response = await AuthenticatedClientClient.GetAsync("/api/v1/todos");
         var toDos = await response.Content.ReadFromJsonAsync<ToDosResponse>();
 
         // Assert
@@ -35,10 +33,8 @@ public sealed class GetAllToDosEndpointTests : FakeRequestTest, IClassFixture<No
     public async Task HandleAsync_ShouldReturn401_WhenUserIsNotAuthenticated()
     {
         // Arrange
-        var client = _apiFactory.CreateClient();
-
         // Act
-        var response = await client.GetAsync("/api/v1/todos");
+        var response = await AnonymousClient.GetAsync("/api/v1/todos");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
