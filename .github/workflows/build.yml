@@ -42,7 +42,6 @@ jobs:
           AzureAD__TenantId: ${{ vars.AZURE_TENANT_ID }}
           UserAuthenticationSettings__Audience: ${{ vars.AZUREAD_AUDIENCE }}
           UserAuthenticationSettings__ClientId: ${{ vars.INTEGRATION_TEST_CLIENT_ID }}
-          UserAuthenticationSettings__ClientSecret: ${{ secrets.INTEGRATION_TEST_CLIENT_SECRET }}
           UserAuthenticationSettings__Password: ${{ secrets.INTEGRATION_TEST_PASSWORD }}
           UserAuthenticationSettings__TenantId: ${{ vars.AZURE_TENANT_ID }}
           UserAuthenticationSettings__Username: ${{ vars.INTEGRATION_TEST_USERNAME }}

@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using Azure.Core;
+using Azure.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.SqlClient;
@@ -21,39 +22,23 @@ public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetim
         .Build();
 
     private readonly UserAuthenticationSettings _userAuthenticationSettings = new();
-    private TokenResponse? _token;
+    private AccessToken? _token;
+
+    public NoPlanApiFactory() =>
+        AuthenticatedClient = new(async () =>
+        {
+            var client = CreateClient();
+            await AuthenticateClientAsUserAsync(client);
+            return client;
+        });
+
+    public AsyncLazy<HttpClient> AuthenticatedClient { get; }
 
     public async Task InitializeAsync() =>
         await _dbContainer.StartAsync();
 
     public new async Task DisposeAsync() =>
         await _dbContainer.DisposeAsync();
-
-    public async Task AuthenticateClientAsUserAsync(HttpClient client)
-    {
-        if (_token is null)
-        {
-            var tokenClient = new HttpClient();
-            var tokenReq = new HttpRequestMessage(HttpMethod.Post, _userAuthenticationSettings.TokenUrl)
-            {
-                Content = new FormUrlEncodedContent(new Dictionary<string, string>
-                {
-                    ["grant_type"] = "password",
-                    ["username"] = _userAuthenticationSettings.Username,
-                    ["password"] = _userAuthenticationSettings.Password,
-                    ["client_id"] = _userAuthenticationSettings.ClientId,
-                    ["client_secret"] = _userAuthenticationSettings.ClientSecret,
-                    ["scope"] = _userAuthenticationSettings.DefaultScope
-                })
-            };
-
-            var res = await tokenClient.SendAsync(tokenReq);
-            var json = await res.Content.ReadAsStringAsync();
-            _token = JsonSerializer.Deserialize<TokenResponse>(json);
-        }
-
-        client.DefaultRequestHeaders.Authorization = new("Bearer", _token!.AccessToken);
-    }
 
     public async Task ShutdownDatabaseAsync() =>
         await _dbContainer.StopAsync();
@@ -80,5 +65,18 @@ public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetim
             services.RemoveAll<DbContextOptions<PlannerContext>>();
             services.AddDbContext<PlannerContext>(options => options.UseSqlServer(connectionString));
         });
+    }
+
+    private async Task AuthenticateClientAsUserAsync(HttpClient client)
+    {
+        if (!_token.HasValue)
+        {
+            var credential = new UsernamePasswordCredential(_userAuthenticationSettings.Username, _userAuthenticationSettings.Password,
+                _userAuthenticationSettings.TenantId, _userAuthenticationSettings.ClientId);
+
+            _token = await credential.GetTokenAsync(new(new[] { _userAuthenticationSettings.DefaultScope }));
+        }
+
+        client.DefaultRequestHeaders.Authorization = new("Bearer", _token.Value.Token);
     }
 }
