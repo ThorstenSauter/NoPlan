@@ -1,24 +1,4 @@
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "3.52.0"
-    }
-    tfe = {
-      source  = "hashicorp/tfe"
-      version = "~> 0.43.0"
-    }
-  }
-
-  cloud {
-    organization = "ThorstenSauter"
-    workspaces {
-      name = "NoPlan-global"
-    }
-  }
-
-  required_version = ">= 1.4.0"
-}
+data "azuread_client_config" "current" {}
 
 data "azurerm_client_config" "current" {}
 

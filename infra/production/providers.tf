@@ -1,3 +1,25 @@
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "3.52.0"
+    }
+    tfe = {
+      source  = "hashicorp/tfe"
+      version = "~> 0.43.0"
+    }
+  }
+
+  cloud {
+    organization = "ThorstenSauter"
+    workspaces {
+      name = "NoPlan-production"
+    }
+  }
+
+  required_version = ">= 1.4.0"
+}
+
 provider "azurerm" {
   storage_use_azuread = true
   features {

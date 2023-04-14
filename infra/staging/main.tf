@@ -1,25 +1,3 @@
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "3.52.0"
-    }
-    tfe = {
-      source  = "hashicorp/tfe"
-      version = "~> 0.43.0"
-    }
-  }
-
-  cloud {
-    organization = "ThorstenSauter"
-    workspaces {
-      name = "NoPlan-staging"
-    }
-  }
-
-  required_version = ">= 1.4.0"
-}
-
 data "azurerm_client_config" "current" {}
 
 data "tfe_outputs" "global" {
@@ -28,17 +6,21 @@ data "tfe_outputs" "global" {
 }
 
 locals {
+  api_application_id      = nonsensitive(data.tfe_outputs.global.values.api_application_id)
+  api_audience            = nonsensitive(data.tfe_outputs.global.values.api_audience)
+  default_domain          = nonsensitive(data.tfe_outputs.global.values.default_domain)
+  api_tenant_id           = nonsensitive(data.tfe_outputs.global.values.api_tenant_id)
   container_registry_name = nonsensitive(data.tfe_outputs.global.values.container_registry_name)
 }
 
 module "container_app" {
   source                                = "../modules/containerapp"
   application_insights_connectionstring = module.monitoring.app_insights_connection_string
-  azure_ad_audience                     = var.azure_ad_audience
-  azure_ad_client_id                    = var.azure_ad_client_id
-  azure_ad_domain                       = var.azure_ad_domain
+  azure_ad_audience                     = local.api_audience
+  azure_ad_client_id                    = local.api_application_id
+  azure_ad_domain                       = local.default_domain
   azure_ad_instance                     = var.azure_ad_instance
-  azure_ad_tenant_id                    = var.azure_ad_tenant_id
+  azure_ad_tenant_id                    = local.api_tenant_id
   default_connectionstring              = module.database.connectionstring
   container_app_environment_id          = module.containerapp_environment.container_app_environment_id
   container_app_name                    = "aca-noplan-api-${var.env}-${var.resource_id}"
