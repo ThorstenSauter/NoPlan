@@ -1,26 +1,7 @@
-variable "azure_ad_audience" {
-  type        = string
-  description = "The Azure AD app registration audience."
-}
-
-variable "azure_ad_client_id" {
-  type        = string
-  description = "The Azure AD app registration client id."
-}
-
-variable "azure_ad_domain" {
-  type        = string
-  description = "The Azure AD app registration domain."
-}
-
 variable "azure_ad_instance" {
   type        = string
   description = "The Microsoft login instance."
-}
-
-variable "azure_ad_tenant_id" {
-  type        = string
-  description = "The Azure AD app registration tenant id."
+  default     = "https://login.microsoftonline.com"
 }
 
 variable "container_image" {
