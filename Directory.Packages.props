@@ -11,7 +11,7 @@
     <PackageVersion Include="FastEndpoints" Version="$(FastEndpointsVersion)" />
     <PackageVersion Include="FastEndpoints.Generator" Version="$(FastEndpointsVersion)" />
     <PackageVersion Include="FastEndpoints.Swagger" Version="$(FastEndpointsVersion)" />
-    <PackageVersion Include="FluentAssertions" Version="6.10.0" />
+    <PackageVersion Include="FluentAssertions" Version="6.11.0" />
     <PackageVersion Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.5" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5" />
