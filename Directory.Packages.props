@@ -1,7 +1,7 @@
 ﻿<Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    <FastEndpointsVersion>5.8.1</FastEndpointsVersion>
+    <FastEndpointsVersion>5.9.0</FastEndpointsVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="AspNetCore.HealthChecks.SqlServer" Version="6.0.2" />
