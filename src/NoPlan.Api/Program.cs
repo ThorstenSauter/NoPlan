@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,14 +29,13 @@ await ApplyMigrationsAsync<PlannerContext>(app);
 
 app.UseFastEndpoints(c =>
 {
-    c.Errors.ResponseBuilder = (failures, _, status) =>
+    c.Errors.ResponseBuilder = (failures, context, status) =>
     {
         var problemDetails = new ValidationProblemDetails
         {
-            Title = "Validation Error",
-            Detail = "One or more validation errors occurred",
-            Type = $"https://httpstatuses.com/{status}",
-            Status = status
+            Type = "https://www.rfc-editor.org/rfc/rfc7231#section-6.5.1",
+            Status = status,
+            Extensions = { ["traceId"] = Activity.Current?.TraceId.ToString() ?? context.TraceIdentifier }
         };
 
         foreach (var failure in failures.GroupBy(f => f.PropertyName))
@@ -45,6 +45,7 @@ app.UseFastEndpoints(c =>
 
         return problemDetails;
     };
+
     c.Endpoints.RoutePrefix = "api";
     c.Versioning.Prefix = "v";
     c.Versioning.DefaultVersion = 1;

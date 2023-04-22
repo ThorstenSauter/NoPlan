@@ -4,8 +4,12 @@
       The ToDo identifier is required
     ]
   },
-  Type: https://httpstatuses.com/400,
-  Title: Validation Error,
+  Type: https://www.rfc-editor.org/rfc/rfc7231#section-6.5.1,
+  Title: One or more validation errors occurred.,
   Status: 400,
-  Detail: One or more validation errors occurred
+  Extensions: {
+    traceId: {
+      ValueKind: String
+    }
+  }
 }
