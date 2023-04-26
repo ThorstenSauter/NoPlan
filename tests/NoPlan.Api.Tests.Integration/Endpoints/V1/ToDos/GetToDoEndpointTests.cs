@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FastEndpoints;
+using Microsoft.AspNetCore.Mvc;
+using NoPlan.Api.Endpoints.V1.ToDos;
 using NoPlan.Api.Tests.Integration.TestBases;
+using NoPlan.Contracts.Requests.V1.ToDos;
 using NoPlan.Contracts.Responses.V1.ToDos;
 
 namespace NoPlan.Api.Tests.Integration.Endpoints.V1.ToDos;
@@ -16,56 +19,58 @@ public sealed class GetToDoEndpointTests : FakeRequestTest
     public async Task HandleAsync_ShouldReturn200AndToDos_WhenToDoExistsAndUserIsAuthenticated()
     {
         // Arrange
-        var createResponse = await AuthenticatedClientClient.PostAsJsonAsync("/api/v1/todos", CreateRequestFaker.Generate());
-        var createdToDo = await createResponse.Content.ReadFromJsonAsync<ToDoResponse>();
+        var (_, createdToDo) =
+            await AuthenticatedClientClient.POSTAsync<CreateToDoEndpoint, CreateToDoRequest, ToDoResponse>(CreateRequestFaker.Generate());
+
+        var request = new GetToDoRequest { Id = createdToDo!.Id };
 
         // Act
-        var response = await AuthenticatedClientClient.GetAsync($"/api/v1/todos/{createdToDo!.Id}");
-        var toDo = await response.Content.ReadFromJsonAsync<ToDoResponse>();
+        var (response, result) = await AuthenticatedClientClient.GETAsync<GetToDoEndpoint, GetToDoRequest, ToDoResponse>(request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        await Verify(toDo);
+        await Verify(result);
     }
 
     [Fact]
     public async Task HandleAsync_ShouldReturn400_WhenRequestIsMalformed()
     {
         // Arrange
+        var request = new GetToDoRequest { Id = Guid.Empty };
+
         // Act
-        var response = await AuthenticatedClientClient.GetAsync($"/api/v1/todos/{Guid.Empty}");
-        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+        var (response, result) = await AuthenticatedClientClient.GETAsync<GetToDoEndpoint, GetToDoRequest, ValidationProblemDetails>(request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        await Verify(problemDetails);
+        await Verify(result);
     }
 
     [Fact]
     public async Task HandleAsync_ShouldReturn404_WhenToDoDoesNotExistAndUserIsAuthenticated()
     {
         // Arrange
-        var toDoId = Guid.NewGuid();
+        var request = new GetToDoRequest { Id = Guid.NewGuid() };
 
         // Act
-        var response = await AuthenticatedClientClient.GetAsync($"/api/v1/todos/{toDoId}");
-        var body = await response.Content.ReadAsStringAsync();
+        var (response, result) = await AuthenticatedClientClient.GETAsync<GetToDoEndpoint, GetToDoRequest, ToDoResponse>(request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-        body.Should().BeEmpty();
+        result.Should().BeNull();
     }
 
     [Fact]
     public async Task HandleAsync_ShouldReturn401_WhenUserIsNotAuthenticated()
     {
         // Arrange
-        var toDoId = Guid.NewGuid().ToString();
+        var request = new GetToDoRequest { Id = Guid.NewGuid() };
 
         // Act
-        var response = await AnonymousClient.GetAsync($"/api/v1/todos/{toDoId}");
+        var (response, result) = await AnonymousClient.GETAsync<GetToDoEndpoint, GetToDoRequest, ToDoResponse>(request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        result.Should().BeNull();
     }
 }
