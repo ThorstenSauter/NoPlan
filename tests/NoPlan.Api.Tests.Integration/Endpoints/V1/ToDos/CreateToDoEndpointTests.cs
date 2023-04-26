@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FastEndpoints;
+using Microsoft.AspNetCore.Mvc;
+using NoPlan.Api.Endpoints.V1.ToDos;
 using NoPlan.Api.Tests.Integration.TestBases;
 using NoPlan.Contracts.Requests.V1.ToDos;
 using NoPlan.Contracts.Responses.V1.ToDos;
@@ -20,12 +22,11 @@ public sealed class CreateToDoEndpointTests : FakeRequestTest
         var request = CreateRequestFaker.Generate();
 
         // Act
-        var response = await AuthenticatedClientClient.PostAsJsonAsync("/api/v1/todos", request);
-        var toDos = await response.Content.ReadFromJsonAsync<ToDoResponse>();
+        var (response, result) = await AuthenticatedClientClient.POSTAsync<CreateToDoEndpoint, CreateToDoRequest, ToDoResponse>(request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
-        await Verify(toDos);
+        await Verify(result);
     }
 
     [Fact]
@@ -38,20 +39,21 @@ public sealed class CreateToDoEndpointTests : FakeRequestTest
         };
 
         // Act
-        var response = await AuthenticatedClientClient.PostAsJsonAsync("/api/v1/todos", request);
-        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+        var (response, result) = await AuthenticatedClientClient.POSTAsync<CreateToDoEndpoint, CreateToDoRequest, ValidationProblemDetails>(request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        await Verify(problemDetails);
+        await Verify(result);
     }
 
     [Fact]
     public async Task HandleAsync_ShouldReturn401_WhenUserIsNotAuthenticated()
     {
         // Arrange
+        var request = CreateRequestFaker.Generate();
+
         // Act
-        var response = await AnonymousClient.PostAsJsonAsync("/api/v1/todos", CreateRequestFaker.Generate());
+        var (response, _) = await AnonymousClient.POSTAsync<CreateToDoEndpoint, CreateToDoRequest, ToDoResponse>(request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FastEndpoints;
+using Microsoft.AspNetCore.Mvc;
+using NoPlan.Api.Endpoints.V1.ToDos;
 using NoPlan.Api.Tests.Integration.TestBases;
 using NoPlan.Contracts.Requests.V1.ToDos;
 using NoPlan.Contracts.Responses.V1.ToDos;
@@ -17,90 +19,87 @@ public sealed class UpdateToDoEndpointTests : FakeRequestTest
     public async Task HandleAsync_ShouldReturn200AndToDos_WhenToDoExistsAndUserIsAuthenticated()
     {
         // Arrange
-        var createResponse = await AuthenticatedClientClient.PostAsJsonAsync("/api/v1/todos", CreateRequestFaker.Generate());
-        var createdToDo = await createResponse.Content.ReadFromJsonAsync<ToDoResponse>();
+        var (_, createdToDo) =
+            await AuthenticatedClientClient.POSTAsync<CreateToDoEndpoint, CreateToDoRequest, ToDoResponse>(CreateRequestFaker.Generate());
 
-        var updateRequest = UpdateRequestFaker.Generate();
+        var updateRequest = UpdateRequestFaker.Generate() with { Id = createdToDo!.Id };
 
         // Act
-        var response = await AuthenticatedClientClient.PutAsJsonAsync($"/api/v1/todos/{createdToDo!.Id}", updateRequest);
-        var toDo = await response.Content.ReadFromJsonAsync<ToDoResponse>();
+        var (response, result) = await AuthenticatedClientClient.PUTAsync<UpdateToDoEndpoint, UpdateToDoRequest, ToDoResponse>(updateRequest);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        toDo!.Id.Should().Be(createdToDo.Id);
-        await Verify(toDo);
+        result!.Id.Should().Be(createdToDo.Id);
+        await Verify(result);
     }
 
     [Fact]
     public async Task HandleAsync_ShouldReturn200AndUpdatedTagsToDos_WhenExistingTagIsUpdatedAndUserIsAuthenticated()
     {
         // Arrange
-        var createResponse = await AuthenticatedClientClient.PostAsJsonAsync("/api/v1/todos", CreateRequestFaker.Generate());
-        var createdToDo = await createResponse.Content.ReadFromJsonAsync<ToDoResponse>();
+        var (_, createdToDo) =
+            await AuthenticatedClientClient.POSTAsync<CreateToDoEndpoint, CreateToDoRequest, ToDoResponse>(CreateRequestFaker.Generate());
 
-        var updateRequest = UpdateRequestFaker.Generate();
+        var updateRequest = UpdateRequestFaker.Generate() with { Id = createdToDo!.Id };
         updateRequest.Tags.Clear();
-        var updateTagRequests = createdToDo!.Tags.Take(2).Select(t => new UpdateTagRequest { Id = t.Id, Name = t.Name }).ToList();
+        var updateTagRequests = createdToDo.Tags.Take(2).Select(t => new UpdateTagRequest { Id = t.Id, Name = t.Name }).ToList();
         updateTagRequests.Add(new() { Id = createdToDo.Tags.Last().Id, Name = "new tag" });
         updateRequest.Tags.AddRange(updateTagRequests);
 
         // Act
-        var response = await AuthenticatedClientClient.PutAsJsonAsync($"/api/v1/todos/{createdToDo.Id}", updateRequest);
-        var toDo = await response.Content.ReadFromJsonAsync<ToDoResponse>();
+        var (response, result) = await AuthenticatedClientClient.PUTAsync<UpdateToDoEndpoint, UpdateToDoRequest, ToDoResponse>(updateRequest);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        toDo!.Id.Should().Be(createdToDo.Id);
-        await Verify(toDo);
+        result!.Id.Should().Be(createdToDo.Id);
+        await Verify(result);
     }
 
     [Fact]
     public async Task HandleAsync_ShouldReturn400_WhenRequestIsMalformed()
     {
         // Arrange
-        var createResponse = await AuthenticatedClientClient.PostAsJsonAsync("/api/v1/todos", CreateRequestFaker.Generate());
-        var createdToDo = await createResponse.Content.ReadFromJsonAsync<ToDoResponse>();
+        var (_, createdToDo) =
+            await AuthenticatedClientClient.POSTAsync<CreateToDoEndpoint, CreateToDoRequest, ToDoResponse>(CreateRequestFaker.Generate());
+
         var request = new UpdateToDoRequest
         {
-            Title = "a", Description = "  ", Tags = new List<UpdateTagRequest> { new() { Name = string.Empty }, new() }
+            Id = createdToDo!.Id, Title = "a", Description = "  ", Tags = new() { new() { Name = string.Empty }, new() }
         };
 
         // Act
-        var response = await AuthenticatedClientClient.PutAsJsonAsync($"/api/v1/todos/{createdToDo!.Id}", request);
-        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+        var (response, result) = await AuthenticatedClientClient.PUTAsync<UpdateToDoEndpoint, UpdateToDoRequest, ValidationProblemDetails>(request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        await Verify(problemDetails);
+        await Verify(result);
     }
 
     [Fact]
     public async Task HandleAsync_ShouldReturn404_WhenToDoDoesNotExistAndUserIsAuthenticated()
     {
         // Arrange
-        var toDoId = Guid.NewGuid();
-        var request = UpdateRequestFaker.Generate();
+        var request = UpdateRequestFaker.Generate() with { Id = Guid.NewGuid() };
 
         // Act
-        var response = await AuthenticatedClientClient.PutAsJsonAsync($"/api/v1/todos/{toDoId}", request);
-        var body = await response.Content.ReadAsStringAsync();
+        var (response, result) = await AuthenticatedClientClient.PUTAsync<UpdateToDoEndpoint, UpdateToDoRequest, ToDoResponse>(request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-        body.Should().BeEmpty();
+        result.Should().BeNull();
     }
 
     [Fact]
     public async Task HandleAsync_ShouldReturn401_WhenUserIsNotAuthenticated()
     {
         // Arrange
-        var toDoId = Guid.NewGuid().ToString();
+        var request = UpdateRequestFaker.Generate() with { Id = Guid.NewGuid() };
 
         // Act
-        var response = await AnonymousClient.GetAsync($"/api/v1/todos/{toDoId}");
+        var (response, result) = await AnonymousClient.PUTAsync<UpdateToDoEndpoint, UpdateToDoRequest, ToDoResponse>(request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        result.Should().BeNull();
     }
 }

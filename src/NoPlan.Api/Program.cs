@@ -29,6 +29,8 @@ await ApplyMigrationsAsync<PlannerContext>(app);
 
 app.UseFastEndpoints(c =>
 {
+    c.Endpoints.RoutePrefix = "api";
+
     c.Errors.ResponseBuilder = (failures, context, status) =>
     {
         var problemDetails = new ValidationProblemDetails
@@ -46,7 +48,6 @@ app.UseFastEndpoints(c =>
         return problemDetails;
     };
 
-    c.Endpoints.RoutePrefix = "api";
     c.Versioning.Prefix = "v";
     c.Versioning.DefaultVersion = 1;
     c.Versioning.PrependToRoute = true;
