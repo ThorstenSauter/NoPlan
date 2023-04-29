@@ -1,6 +1,4 @@
-﻿using Azure.Core;
-using Azure.Identity;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Identity.Client;
+using Microsoft.Identity.Client.Extensions.Msal;
 using NoPlan.Api.Tests.Integration.Authentication;
 using NoPlan.Infrastructure.Data;
 using Testcontainers.MsSql;
@@ -22,7 +22,7 @@ public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetim
         .Build();
 
     private readonly UserAuthenticationSettings _userAuthenticationSettings = new();
-    private AccessToken? _token;
+    private IPublicClientApplication? _publicClientApplication;
 
     public NoPlanApiFactory() =>
         AuthenticatedClient = new(async () =>
@@ -67,16 +67,62 @@ public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetim
         });
     }
 
-    private async Task AuthenticateClientAsUserAsync(HttpClient client)
+    private async Task<AuthenticationResult> AuthenticateAsync()
     {
-        if (!_token.HasValue)
-        {
-            var credential = new UsernamePasswordCredential(_userAuthenticationSettings.Username, _userAuthenticationSettings.Password,
-                _userAuthenticationSettings.TenantId, _userAuthenticationSettings.ClientId);
+        _publicClientApplication ??= await CreatePublicClientApplicationAsync();
 
-            _token = await credential.GetTokenAsync(new(new[] { _userAuthenticationSettings.DefaultScope }));
+        var scopes = new[] { _userAuthenticationSettings.DefaultScope };
+        var accounts = await _publicClientApplication.GetAccountsAsync();
+        var account = accounts.FirstOrDefault(a => a.Username == _userAuthenticationSettings.Username);
+
+        if (account is not null)
+        {
+            try
+            {
+                return await _publicClientApplication.AcquireTokenSilent(scopes, account).ExecuteAsync();
+            }
+            catch (MsalUiRequiredException)
+            {
+            }
         }
 
-        client.DefaultRequestHeaders.Authorization = new("Bearer", _token.Value.Token);
+        return await _publicClientApplication
+            .AcquireTokenByUsernamePassword(scopes,
+                _userAuthenticationSettings.Username,
+                _userAuthenticationSettings.Password)
+            .ExecuteAsync();
+    }
+
+    private async Task AuthenticateClientAsUserAsync(HttpClient client)
+    {
+        var authenticationResult = await AuthenticateAsync();
+        client.DefaultRequestHeaders.Authorization = new("Bearer", authenticationResult.AccessToken);
+    }
+
+    private async Task<IPublicClientApplication> CreatePublicClientApplicationAsync()
+    {
+        var storageCreationProperties = new StorageCreationPropertiesBuilder(TokenCacheConfiguration.CacheFileName, TokenCacheConfiguration.CacheDir)
+            .WithLinuxKeyring(
+                TokenCacheConfiguration.LinuxKeyRingSchema,
+                TokenCacheConfiguration.LinuxKeyRingCollection,
+                TokenCacheConfiguration.LinuxKeyRingLabel,
+                TokenCacheConfiguration.LinuxKeyRingAttr1,
+                TokenCacheConfiguration.LinuxKeyRingAttr2)
+            .WithMacKeyChain(
+                TokenCacheConfiguration.KeyChainServiceName,
+                TokenCacheConfiguration.KeyChainAccountName)
+            .Build();
+
+        var publicClientApplication = PublicClientApplicationBuilder.CreateWithApplicationOptions(new()
+        {
+            AadAuthorityAudience = AadAuthorityAudience.AzureAdMyOrg,
+            ClientId = _userAuthenticationSettings.ClientId,
+            TenantId = _userAuthenticationSettings.TenantId
+        }).Build();
+
+        var cacheHelper = await MsalCacheHelper.CreateAsync(storageCreationProperties);
+        cacheHelper.RegisterCache(publicClientApplication.UserTokenCache);
+
+        return publicClientApplication;
     }
 }
