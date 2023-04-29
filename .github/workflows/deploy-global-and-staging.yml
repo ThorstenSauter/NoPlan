@@ -7,10 +7,6 @@ on:
 
   workflow_dispatch:
 
-permissions:
-  contents: read
-  id-token: write
-
 env:
   DOCKER_FILE: './Dockerfile'
   IMAGE_NAME: ${{ vars.REGISTRY_NAME }}.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }}
@@ -20,6 +16,11 @@ jobs:
     name: Build container image
     runs-on: ubuntu-latest
     environment: staging
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+      security-events: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
