@@ -18,5 +18,5 @@ internal static class TokenCacheConfiguration
     public static readonly KeyValuePair<string, string> LinuxKeyRingAttr1 =
         new("Version", Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "1.0.0");
 
-    public static readonly KeyValuePair<string, string> LinuxKeyRingAttr2 = new("ProductGroup", "LIMS.API integration tests");
+    public static readonly KeyValuePair<string, string> LinuxKeyRingAttr2 = new("ProductGroup", "NoPlan.API integration tests");
 }
