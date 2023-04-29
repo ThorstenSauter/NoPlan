@@ -33,6 +33,18 @@ jobs:
         run: az acr login --name ${{ vars.REGISTRY_NAME }}
       - name: Build image
         run: docker build -t ${{ env.IMAGE_NAME }} -f ${{ env.DOCKER_FILE }} .
+      - name: Run Snyk to check Docker image for vulnerabilities
+        continue-on-error: true
+        uses: snyk/actions/docker@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_API_TOKEN }}
+        with:
+          image: ${{ env.IMAGE_NAME }}
+          args: --file=Dockerfile
+      - name: Upload result to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: snyk.sarif
       - name: Push image to registry
         run: docker push ${{ env.IMAGE_NAME }}
 
