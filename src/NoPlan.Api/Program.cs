@@ -13,11 +13,17 @@ var configuration = builder.Configuration;
 builder.AddInfrastructure();
 builder.Services
     .AddFastEndpoints(options => options.SourceGeneratorDiscoveredTypes = DiscoveredTypes.All)
-    .AddSwaggerDoc(maxEndpointVersion: 1, shortSchemaNames: true, settings: s =>
+    .SwaggerDocument(d =>
     {
-        s.DocumentName = "Release v1";
-        s.Title = "NoPlan API";
-        s.Version = "v1";
+        d.MaxEndpointVersion = 1;
+        d.ShortSchemaNames = true;
+
+        d.DocumentSettings = s =>
+        {
+            s.DocumentName = "Release v1";
+            s.Title = "NoPlan API";
+            s.Version = "v1";
+        };
     })
     .AddScoped<IToDoService, ToDoService>()
     .AddSingleton<IDateTimeProvider, DateTimeProvider>()
