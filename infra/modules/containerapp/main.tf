@@ -69,6 +69,10 @@ resource "azurerm_container_app" "container_app" {
         value = var.azure_ad_tenant_id
       }
       env {
+        name  = "AZURE_CLIENT_ID"
+        value = var.managed_identity_client_id
+      }
+      env {
         name        = "ConnectionStrings__Default"
         secret_name = "connectionstrings-default"
       }

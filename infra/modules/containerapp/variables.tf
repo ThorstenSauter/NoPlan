@@ -96,6 +96,11 @@ variable "liveness_probe_path" {
   default     = "/health/live"
 }
 
+variable "managed_identity_client_id" {
+  type        = string
+  description = "The client id of the user-assigned managed identity assigned to the container app."
+}
+
 variable "managed_identity_id" {
   type        = string
   description = "The resource id of the user-assigned managed identity used to pull images."

@@ -13,6 +13,11 @@ variable "log_analytics_workspace_id" {
   description = "The resource id of the Log Analytics Workspace."
 }
 
+variable "managed_identity_principal_id" {
+  type        = string
+  description = "The principle id of the user-assigned managed identity permitted to publish monitoring data."
+}
+
 variable "resource_group_name" {
   type        = string
   description = "The name of the resource group to deploy to."

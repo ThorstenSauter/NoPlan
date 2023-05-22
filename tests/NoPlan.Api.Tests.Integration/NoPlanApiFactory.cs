@@ -52,6 +52,7 @@ public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetim
 
         builder.ConfigureAppConfiguration(configBuilder =>
         {
+            Environment.SetEnvironmentVariable("APPLICATIONINSIGHTS_CONNECTION_STRING", "InstrumentationKey=00000000-0000-0000-0000-000000000000;");
             configBuilder.AddInMemoryCollection(new Dictionary<string, string?> { { "ConnectionStrings:Default", connectionString } });
             configBuilder.AddUserSecrets<NoPlanApiFactory>();
             configBuilder.AddEnvironmentVariables();
