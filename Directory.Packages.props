@@ -6,7 +6,7 @@
     <PackageVersion Include="AspNetCore.HealthChecks.SqlServer" Version="6.0.2" />
     <PackageVersion Include="Azure.Monitor.OpenTelemetry.Exporter" Version="1.0.0-beta.11" />
     <PackageVersion Include="Bogus" Version="34.0.2" />
-    <PackageVersion Include="coverlet.collector" Version="3.2.0" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.0" />
     <PackageVersion Include="FastEndpoints" Version="5.10.0" />
     <PackageVersion Include="FastEndpoints.Generator" Version="5.10.0" />
     <PackageVersion Include="FastEndpoints.Swagger" Version="5.10.0" />
