@@ -1,4 +1,5 @@
-﻿using Azure.Identity;
+﻿using System.Reflection;
+using Azure.Identity;
 using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -48,7 +49,12 @@ public static class WebApplicationBuilderExtensions
 
     private static IServiceCollection ConfigureTracing(this IServiceCollection services)
     {
-        var resourceAttributes = new Dictionary<string, object> { { "service.name", "NoPlan API" }, { "service.namespace", "NoPlan" } };
+        var resourceAttributes = new Dictionary<string, object>
+        {
+            { "service.name", "NoPlan API" },
+            { "service.namespace", "NoPlan" },
+            { "service.version", Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "unknown" }
+        };
 
         services.ConfigureOpenTelemetryTracerProvider((sp, builder) =>
             builder.ConfigureResource(resourceBuilder => resourceBuilder.AddAttributes(resourceAttributes)));
