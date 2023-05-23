@@ -3,11 +3,13 @@ using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Identity.Web;
 using OpenTelemetry.Instrumentation.AspNetCore;
 using OpenTelemetry.Instrumentation.Http;
 using OpenTelemetry.Instrumentation.SqlClient;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
 namespace NoPlan.Infrastructure.Observability;
@@ -28,7 +30,15 @@ public static class WebApplicationBuilderExtensions
 
     private static IServiceCollection ConfigureInstrumentation(this IServiceCollection services) =>
         services
-            .Configure<AspNetCoreInstrumentationOptions>(options => options.RecordException = true)
+            .Configure<AspNetCoreInstrumentationOptions>(options =>
+            {
+                options.RecordException = true;
+                options.EnrichWithHttpRequest = (activity, request) =>
+                {
+                    activity.SetTag("http.client_ip", request.HttpContext.Connection.RemoteIpAddress);
+                    activity.SetTag("enduser.id", request.HttpContext.User.GetObjectId());
+                };
+            })
             .Configure<HttpClientInstrumentationOptions>(options => options.RecordException = true)
             .Configure<SqlClientInstrumentationOptions>(options =>
             {
@@ -38,6 +48,11 @@ public static class WebApplicationBuilderExtensions
 
     private static IServiceCollection ConfigureTracing(this IServiceCollection services)
     {
+        var resourceAttributes = new Dictionary<string, object> { { "service.name", "NoPlan API" }, { "service.namespace", "NoPlan" } };
+
+        services.ConfigureOpenTelemetryTracerProvider((sp, builder) =>
+            builder.ConfigureResource(resourceBuilder => resourceBuilder.AddAttributes(resourceAttributes)));
+
         // Workaround due to an issue with the OTLP exporter registering services after the service provider has been built:
         // https://github.com/Azure/azure-sdk-for-net/issues/36339#issuecomment-1552242653
         services.AddOpenTelemetry().WithTracing(builder =>
