@@ -1,4 +1,5 @@
-﻿using Azure.Monitor.OpenTelemetry.AspNetCore;
+﻿using Azure.Identity;
+using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -15,7 +16,7 @@ public static class WebApplicationBuilderExtensions
 {
     internal static WebApplicationBuilder AddOpenTelemetry(this WebApplicationBuilder webApplicationBuilder)
     {
-        webApplicationBuilder.Services.AddOpenTelemetry().UseAzureMonitor();
+        webApplicationBuilder.Services.AddOpenTelemetry().UseAzureMonitor(options => options.Credential = new DefaultAzureCredential());
 
         webApplicationBuilder.Services
             .ConfigureInstrumentation()
