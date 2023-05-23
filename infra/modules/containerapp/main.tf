@@ -45,7 +45,7 @@ resource "azurerm_container_app" "container_app" {
         success_count_threshold = 1
       }
       env {
-        name        = "ApplicationInsights__ConnectionString"
+        name        = "APPLICATIONINSIGHTS_CONNECTION_STRING"
         secret_name = "applicationinsights-connectionstring"
       }
       env {
