@@ -39,7 +39,11 @@ public static class WebApplicationBuilderExtensions
     {
         // Workaround due to an issue with the OTLP exporter registering services after the service provider has been built:
         // https://github.com/Azure/azure-sdk-for-net/issues/36339#issuecomment-1552242653
-        services.AddOpenTelemetry().WithTracing(builder => builder.AddOtlpExporter());
+        services.AddOpenTelemetry().WithTracing(builder =>
+        {
+            builder.AddOtlpExporter();
+            builder.SetSampler(new AlwaysOnSampler());
+        });
 
         return services;
     }
