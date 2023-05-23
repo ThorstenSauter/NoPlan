@@ -28,6 +28,7 @@ module "container_app" {
   container_name                        = "noplan-api"
   container_registry                    = "${local.container_registry_name}.azurecr.io"
   managed_identity_id                   = module.identity.identity_api_id
+  managed_identity_client_id            = module.identity.identity_client_id
   resource_group_name                   = module.resource_group.name
   tags                                  = var.tags
 }
@@ -60,12 +61,13 @@ module "identity" {
 }
 
 module "monitoring" {
-  source                     = "../modules/monitoring"
-  app_insights_name          = "appi-noplan-${var.env}-${var.resource_id}"
-  location                   = module.resource_group.location
-  resource_group_name        = module.resource_group.name
-  tags                       = var.tags
-  log_analytics_workspace_id = module.containerapp_environment.log_analytics_workspace_id
+  source                        = "../modules/monitoring"
+  app_insights_name             = "appi-noplan-${var.env}-${var.resource_id}"
+  location                      = module.resource_group.location
+  resource_group_name           = module.resource_group.name
+  log_analytics_workspace_id    = module.containerapp_environment.log_analytics_workspace_id
+  managed_identity_principal_id = module.identity.identity_api_principal_id
+  tags                          = var.tags
 }
 
 module "resource_group" {
