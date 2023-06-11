@@ -56,7 +56,7 @@ public static class WebApplicationBuilderExtensions
             { "service.version", Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "unknown" }
         };
 
-        services.ConfigureOpenTelemetryTracerProvider((sp, builder) =>
+        services.ConfigureOpenTelemetryTracerProvider((_, builder) =>
             builder.ConfigureResource(resourceBuilder => resourceBuilder.AddAttributes(resourceAttributes)));
 
         // Workaround due to an issue with the OTLP exporter registering services after the service provider has been built:
