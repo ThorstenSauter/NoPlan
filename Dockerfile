@@ -4,14 +4,14 @@ RUN git clone --depth 1 -b main https://github.com/canonical/chisel /opt/chisel
 WORKDIR /opt/chisel
 RUN go build ./cmd/chisel
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0-jammy AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0-preview-jammy AS build
 
 RUN apt-get update \
     && apt-get install -y fdupes \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=chisel /opt/chisel/chisel /usr/bin/
-COPY --from=mcr.microsoft.com/dotnet/nightly/runtime:7.0-jammy-chiseled / /runtime-ref
+COPY --from=mcr.microsoft.com/dotnet/nightly/runtime:8.0-preview-jammy-chiseled / /runtime-ref
 
 RUN mkdir /rootfs \
     && chisel cut --release "ubuntu-22.04" --root /rootfs \
@@ -43,9 +43,9 @@ WORKDIR /src
 COPY . .
 RUN dotnet restore -r linux-x64 src/NoPlan.Api/NoPlan.Api.csproj
 RUN dotnet build --no-restore -c Release -r linux-x64 --no-self-contained src/NoPlan.Api/NoPlan.Api.csproj
-RUN dotnet publish --no-build -c Release -r linux-x64 --no-self-contained -o /app/publish src/NoPlan.Api/NoPlan.Api.csproj
+RUN dotnet publish --no-build -r linux-x64 --no-self-contained -o /app/publish src/NoPlan.Api/NoPlan.Api.csproj
 
-FROM mcr.microsoft.com/dotnet/nightly/aspnet:7.0-jammy-chiseled AS final
+FROM mcr.microsoft.com/dotnet/nightly/aspnet:8.0-preview-jammy-chiseled AS final
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 COPY --from=build /rootfs /
 WORKDIR /app

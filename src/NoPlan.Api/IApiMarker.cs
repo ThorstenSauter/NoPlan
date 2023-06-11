@@ -1,5 +1,3 @@
 ﻿namespace NoPlan.Api;
 
-public interface IApiMarker
-{
-}
+public interface IApiMarker;
