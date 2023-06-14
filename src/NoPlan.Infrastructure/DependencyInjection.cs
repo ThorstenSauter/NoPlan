@@ -8,6 +8,8 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class DependencyInjection
 {
+    private static readonly string[] SqlServerHealthCheckTags = { "db", "sql" };
+
     public static WebApplicationBuilder AddInfrastructure(this WebApplicationBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder);
@@ -19,7 +21,7 @@ public static class DependencyInjection
                 failureStatus: HealthStatus.Unhealthy,
                 name: "SQL Server",
                 timeout: TimeSpan.FromSeconds(10),
-                tags: new[] { "db", "sql" });
+                tags: SqlServerHealthCheckTags);
 
         builder.Services.AddDbContext<PlannerContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Default")!));
         return builder.AddOpenTelemetry();
