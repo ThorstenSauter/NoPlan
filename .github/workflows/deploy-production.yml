@@ -7,10 +7,6 @@ on:
 
   workflow_dispatch:
 
-permissions:
-  contents: read
-  id-token: write
-
 env:
   IMAGE_NAME: ${{ vars.REGISTRY_NAME }}.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.event.release.tag_name }}
 
@@ -19,6 +15,9 @@ jobs:
     name: Promote container image for production
     runs-on: ubuntu-latest
     environment: production
+    permissions:
+      contents: read
+      id-token: write
     env:
       SOURCE_IMAGE_NAME: ${{ vars.REGISTRY_NAME }}.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }}
       TARGET_IMAGE_NAME: ${{ vars.IMAGE_NAME }}:${{ github.event.release.tag_name }}
