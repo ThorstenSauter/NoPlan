@@ -30,7 +30,7 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.Process" Version="0.5.0-beta.3" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.5.0" />
     <PackageVersion Include="SecurityCodeScan.VS2019" Version="5.6.7" />
-    <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.3.0.71466" />
+    <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.4.0.72892" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.435" />
     <PackageVersion Include="Testcontainers.MsSql" Version="3.2.0" />
     <PackageVersion Include="Verify.Xunit" Version="20.4.0" />
