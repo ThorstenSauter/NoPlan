@@ -5,10 +5,7 @@ namespace NoPlan.Api.Tests.Unit.Validators.V1.ToDos;
 
 public sealed class UpdateTagRequestValidatorTests
 {
-    private readonly UpdateTagRequestValidator _sut;
-
-    public UpdateTagRequestValidatorTests() =>
-        _sut = new();
+    private readonly UpdateTagRequestValidator _sut = new();
 
     [Fact]
     public void Validate_ShouldFail_WhenNameIsEmpty()

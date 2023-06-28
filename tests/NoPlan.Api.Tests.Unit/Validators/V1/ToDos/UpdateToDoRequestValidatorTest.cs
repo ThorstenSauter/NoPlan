@@ -6,10 +6,7 @@ namespace NoPlan.Api.Tests.Unit.Validators.V1.ToDos;
 
 public sealed class UpdateToDoRequestValidatorTest : TestWithFakes
 {
-    private readonly UpdateToDoRequestValidator _sut;
-
-    public UpdateToDoRequestValidatorTest() =>
-        _sut = new();
+    private readonly UpdateToDoRequestValidator _sut = new();
 
     [Fact]
     public void Validate_ShouldFail_WhenIdIsEmpty()

@@ -8,13 +8,8 @@ using NoPlan.Contracts.Responses.V1.ToDos;
 namespace NoPlan.Api.Tests.Integration.Endpoints.V1.ToDos;
 
 [UsesVerify]
-public sealed class DeleteToDoEndpointTests : FakeRequestTest
+public sealed class DeleteToDoEndpointTests(NoPlanApiFactory factory) : FakeRequestTest(factory)
 {
-    public DeleteToDoEndpointTests(NoPlanApiFactory factory)
-        : base(factory)
-    {
-    }
-
     [Fact]
     public async Task HandleAsync_ShouldReturn204AndToDo_WhenToDoExistsAndUserIsAuthenticated()
     {

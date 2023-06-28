@@ -5,13 +5,8 @@ using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Api.Endpoints.V1.ToDos;
 
-public sealed class GetAllToDosEndpoint : EndpointWithMapping<GetAllToDosRequest, ToDosResponse, IEnumerable<ToDo>>
+public sealed class GetAllToDosEndpoint(IToDoService toDoService) : EndpointWithMapping<GetAllToDosRequest, ToDosResponse, IEnumerable<ToDo>>
 {
-    private readonly IToDoService _toDoService;
-
-    public GetAllToDosEndpoint(IToDoService toDoService) =>
-        _toDoService = toDoService;
-
     public override void Configure()
     {
         Get("/todos");
@@ -20,7 +15,7 @@ public sealed class GetAllToDosEndpoint : EndpointWithMapping<GetAllToDosRequest
     }
 
     public override async Task HandleAsync(GetAllToDosRequest req, CancellationToken ct) =>
-        await SendAsync(MapFromEntity(await _toDoService.GetAllAsync(User.GetId(), ct)), cancellation: ct);
+        await SendAsync(MapFromEntity(await toDoService.GetAllAsync(User.GetId(), ct)), cancellation: ct);
 
     public override ToDosResponse MapFromEntity(IEnumerable<ToDo> e) => new()
     {

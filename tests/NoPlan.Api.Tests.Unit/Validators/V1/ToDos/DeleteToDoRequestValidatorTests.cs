@@ -5,10 +5,7 @@ namespace NoPlan.Api.Tests.Unit.Validators.V1.ToDos;
 
 public sealed class DeleteToDoRequestValidatorTests
 {
-    private readonly DeleteToDoRequestValidator _sut;
-
-    public DeleteToDoRequestValidatorTests() =>
-        _sut = new();
+    private readonly DeleteToDoRequestValidator _sut = new();
 
     [Fact]
     public void Validate_ShouldFail_WhenIdIsEmpty()

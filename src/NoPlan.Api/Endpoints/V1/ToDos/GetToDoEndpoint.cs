@@ -5,13 +5,8 @@ using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Api.Endpoints.V1.ToDos;
 
-public sealed class GetToDoEndpoint : EndpointWithMapping<GetToDoRequest, ToDoResponse, ToDo>
+public sealed class GetToDoEndpoint(IToDoService toDoService) : EndpointWithMapping<GetToDoRequest, ToDoResponse, ToDo>
 {
-    private readonly IToDoService _toDoService;
-
-    public GetToDoEndpoint(IToDoService toDoService) =>
-        _toDoService = toDoService;
-
     public override void Configure()
     {
         Get("/todos/{Id}");
@@ -24,7 +19,7 @@ public sealed class GetToDoEndpoint : EndpointWithMapping<GetToDoRequest, ToDoRe
     {
         ArgumentNullException.ThrowIfNull(req);
 
-        var todo = await _toDoService.GetAsync(req.Id, User.GetId(), ct);
+        var todo = await toDoService.GetAsync(req.Id, User.GetId(), ct);
         if (todo is null)
         {
             await SendNotFoundAsync(ct);
