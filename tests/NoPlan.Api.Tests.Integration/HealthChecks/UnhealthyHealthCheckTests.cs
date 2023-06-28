@@ -1,18 +1,13 @@
 ﻿namespace NoPlan.Api.Tests.Integration.HealthChecks;
 
-public sealed class UnhealthyHealthCheckTests : IClassFixture<NoPlanApiFactory>
+public sealed class UnhealthyHealthCheckTests(NoPlanApiFactory apiFactory) : IClassFixture<NoPlanApiFactory>
 {
-    private readonly NoPlanApiFactory _apiFactory;
-
-    public UnhealthyHealthCheckTests(NoPlanApiFactory apiFactory) =>
-        _apiFactory = apiFactory;
-
     [Fact]
     public async Task ReadinessProbe_ShouldReturn503_WhenAppIsUnhealthy()
     {
         // Arrange
-        var client = _apiFactory.CreateClient();
-        await _apiFactory.ShutdownDatabaseAsync();
+        var client = apiFactory.CreateClient();
+        await apiFactory.ShutdownDatabaseAsync();
 
         // Act
         var response = await client.GetAsync("/health/ready");

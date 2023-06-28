@@ -5,10 +5,7 @@ namespace NoPlan.Api.Tests.Unit.Validators.V1.ToDos;
 
 public sealed class GetToDoRequestValidatorTests
 {
-    private readonly GetToDoRequestValidator _sut;
-
-    public GetToDoRequestValidatorTests() =>
-        _sut = new();
+    private readonly GetToDoRequestValidator _sut = new();
 
     [Fact]
     public void Validate_ShouldFail_WhenIdIsEmpty()

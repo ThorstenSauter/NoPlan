@@ -5,13 +5,8 @@ using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Api.Endpoints.V1.ToDos;
 
-public sealed class DeleteToDoEndpoint : EndpointWithMapping<DeleteToDoRequest, ToDoResponse, ToDo>
+public sealed class DeleteToDoEndpoint(IToDoService toDoService) : EndpointWithMapping<DeleteToDoRequest, ToDoResponse, ToDo>
 {
-    private readonly IToDoService _toDoService;
-
-    public DeleteToDoEndpoint(IToDoService toDoService) =>
-        _toDoService = toDoService;
-
     public override void Configure()
     {
         Delete("/todos/{Id}");
@@ -23,7 +18,7 @@ public sealed class DeleteToDoEndpoint : EndpointWithMapping<DeleteToDoRequest, 
     {
         ArgumentNullException.ThrowIfNull(req);
 
-        var deletedToDo = await _toDoService.DeleteAsync(req.Id, User.GetId());
+        var deletedToDo = await toDoService.DeleteAsync(req.Id, User.GetId());
         if (deletedToDo is null)
         {
             await SendNotFoundAsync(ct);
@@ -36,6 +31,7 @@ public sealed class DeleteToDoEndpoint : EndpointWithMapping<DeleteToDoRequest, 
     public override ToDoResponse MapFromEntity(ToDo e)
     {
         ArgumentNullException.ThrowIfNull(e);
+
         return new()
         {
             Id = e.Id,

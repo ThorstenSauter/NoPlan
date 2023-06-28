@@ -8,13 +8,8 @@ using NoPlan.Contracts.Responses.V1.ToDos;
 namespace NoPlan.Api.Tests.Integration.Endpoints.V1.ToDos;
 
 [UsesVerify]
-public sealed class GetToDoEndpointTests : FakeRequestTest
+public sealed class GetToDoEndpointTests(NoPlanApiFactory factory) : FakeRequestTest(factory)
 {
-    public GetToDoEndpointTests(NoPlanApiFactory factory)
-        : base(factory)
-    {
-    }
-
     [Fact]
     public async Task HandleAsync_ShouldReturn200AndToDos_WhenToDoExistsAndUserIsAuthenticated()
     {

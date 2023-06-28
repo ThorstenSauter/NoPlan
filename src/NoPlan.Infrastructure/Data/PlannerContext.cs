@@ -2,14 +2,9 @@
 
 namespace NoPlan.Infrastructure.Data;
 
-public sealed class PlannerContext : DbContext
+public sealed class PlannerContext(DbContextOptions<PlannerContext> options) : DbContext(options)
 {
-    public PlannerContext(DbContextOptions<PlannerContext> options)
-        : base(options)
-    {
-    }
-
-    public DbSet<ToDo> ToDos { get; set; } = null!;
+    public required DbSet<ToDo> ToDos { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

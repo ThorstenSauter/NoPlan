@@ -7,24 +7,19 @@ namespace NoPlan.Api.Services;
 /// <summary>
 ///     Implements the <see cref="IToDoService" /> using Entity Framework Cores <see cref="PlannerContext" />.
 /// </summary>
-public sealed class ToDoService : IToDoService
+/// <remarks>
+///     Initializes a new instance of the <see cref="ToDoService" /> class.
+/// </remarks>
+/// <param name="context">The <see cref="DbContext" /> to use for data access.</param>
+public sealed class ToDoService(PlannerContext context) : IToDoService
 {
-    private readonly PlannerContext _context;
-
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="ToDoService" /> class.
-    /// </summary>
-    /// <param name="context">The <see cref="DbContext" /> to use for data access.</param>
-    public ToDoService(PlannerContext context) =>
-        _context = context;
-
     /// <inheritdoc />
     public async Task<IEnumerable<ToDo>> GetAllAsync(Guid userId, CancellationToken cancellationToken = default) =>
-        await _context.ToDos.Include(t => t.Tags).OrderByDescending(t => t.CreatedAt).AsNoTracking().ToListAsync(cancellationToken);
+        await context.ToDos.Include(t => t.Tags).OrderByDescending(t => t.CreatedAt).AsNoTracking().ToListAsync(cancellationToken);
 
     /// <inheritdoc />
     public async Task<ToDo?> GetAsync(Guid id, Guid userId, CancellationToken cancellationToken = default) =>
-        await _context.ToDos.Include(t => t.Tags).FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
+        await context.ToDos.Include(t => t.Tags).FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
 
     /// <inheritdoc />
     public async Task<ToDo> CreateAsync(ToDo newToDo)
@@ -32,8 +27,8 @@ public sealed class ToDoService : IToDoService
         ArgumentNullException.ThrowIfNull(newToDo);
 
         newToDo.Id = Guid.NewGuid();
-        await _context.ToDos.AddAsync(newToDo);
-        await _context.SaveChangesAsync();
+        await context.ToDos.AddAsync(newToDo);
+        await context.SaveChangesAsync();
         return newToDo;
     }
 
@@ -42,7 +37,7 @@ public sealed class ToDoService : IToDoService
     {
         ArgumentNullException.ThrowIfNull(updatedToDo);
 
-        var toDo = await _context.ToDos.Include(t => t.Tags).FirstOrDefaultAsync(t => t.Id == updatedToDo.Id);
+        var toDo = await context.ToDos.Include(t => t.Tags).FirstOrDefaultAsync(t => t.Id == updatedToDo.Id);
         if (toDo is null)
         {
             return null;
@@ -60,21 +55,21 @@ public sealed class ToDoService : IToDoService
         toDo.Title = updatedToDo.Title;
         toDo.Description = updatedToDo.Description;
         toDo.Tags = updatedToDo.Tags;
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
         return toDo;
     }
 
     /// <inheritdoc />
     public async Task<ToDo?> DeleteAsync(Guid id, Guid userId)
     {
-        var toDo = await _context.ToDos.Include(t => t.Tags).FirstOrDefaultAsync(t => t.Id == id);
+        var toDo = await context.ToDos.Include(t => t.Tags).FirstOrDefaultAsync(t => t.Id == id);
         if (toDo is null)
         {
             return null;
         }
 
-        _context.ToDos.Remove(toDo);
-        await _context.SaveChangesAsync();
+        context.ToDos.Remove(toDo);
+        await context.SaveChangesAsync();
         return toDo;
     }
 }

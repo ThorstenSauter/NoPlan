@@ -1,9 +1,3 @@
 ﻿namespace NoPlan.Api.Tests.Integration;
 
-public sealed class AsyncLazy<T> : Lazy<Task<T>>
-{
-    public AsyncLazy(Func<Task<T>> taskFactory) :
-        base(() => Task.Factory.StartNew(taskFactory).Unwrap())
-    {
-    }
-}
+public sealed class AsyncLazy<T>(Func<Task<T>> taskFactory) : Lazy<Task<T>>(() => Task.Factory.StartNew(taskFactory).Unwrap());

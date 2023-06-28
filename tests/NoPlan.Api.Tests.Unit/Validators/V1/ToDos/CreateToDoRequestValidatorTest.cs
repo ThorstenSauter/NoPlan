@@ -6,10 +6,7 @@ namespace NoPlan.Api.Tests.Unit.Validators.V1.ToDos;
 
 public sealed class CreateToDoRequestValidatorTest : TestWithFakes
 {
-    private readonly CreateToDoRequestValidator _sut;
-
-    public CreateToDoRequestValidatorTest() =>
-        _sut = new();
+    private readonly CreateToDoRequestValidator _sut = new();
 
     [Fact]
     public void Validate_ShouldFail_WhenTitleIsEmpty()

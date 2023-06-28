@@ -5,17 +5,9 @@ using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Api.Endpoints.V1.ToDos;
 
-public sealed class UpdateToDoEndpoint : EndpointWithMapping<UpdateToDoRequest, ToDoResponse, ToDo>
+public sealed class UpdateToDoEndpoint(IToDoService toDoService, IDateTimeProvider dateTimeProvider)
+    : EndpointWithMapping<UpdateToDoRequest, ToDoResponse, ToDo>
 {
-    private readonly IToDoService _toDoService;
-    private readonly IDateTimeProvider _dateTimeProvider;
-
-    public UpdateToDoEndpoint(IToDoService toDoService, IDateTimeProvider dateTimeProvider)
-    {
-        _toDoService = toDoService;
-        _dateTimeProvider = dateTimeProvider;
-    }
-
     public override void Configure()
     {
         Put("/todos/{Id}");
@@ -25,7 +17,7 @@ public sealed class UpdateToDoEndpoint : EndpointWithMapping<UpdateToDoRequest, 
 
     public override async Task HandleAsync(UpdateToDoRequest req, CancellationToken ct)
     {
-        var updatedToDo = await _toDoService.UpdateAsync(MapToEntity(req));
+        var updatedToDo = await toDoService.UpdateAsync(MapToEntity(req));
         if (updatedToDo is null)
         {
             await SendNotFoundAsync(ct);
@@ -52,7 +44,7 @@ public sealed class UpdateToDoEndpoint : EndpointWithMapping<UpdateToDoRequest, 
     public override ToDo MapToEntity(UpdateToDoRequest r)
     {
         ArgumentNullException.ThrowIfNull(r);
-        var updateTime = _dateTimeProvider.UtcNow();
+        var updateTime = dateTimeProvider.UtcNow();
         return new()
         {
             Id = r.Id,

@@ -74,6 +74,6 @@ static async Task ApplyMigrationsAsync<T>(IHost webApplication)
     where T : DbContext
 {
     using var scope = webApplication.Services.CreateScope();
-    var plannerContext = scope.ServiceProvider.GetRequiredService<T>();
-    await plannerContext.Database.MigrateAsync();
+    var dbContext = scope.ServiceProvider.GetRequiredService<T>();
+    await dbContext.Database.MigrateAsync();
 }
