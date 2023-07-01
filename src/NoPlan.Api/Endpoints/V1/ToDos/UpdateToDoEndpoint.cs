@@ -5,8 +5,7 @@ using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Api.Endpoints.V1.ToDos;
 
-public sealed class UpdateToDoEndpoint(IToDoService toDoService, IDateTimeProvider dateTimeProvider)
-    : EndpointWithMapping<UpdateToDoRequest, ToDoResponse, ToDo>
+public sealed class UpdateToDoEndpoint(IToDoService toDoService, TimeProvider clock) : EndpointWithMapping<UpdateToDoRequest, ToDoResponse, ToDo>
 {
     public override void Configure()
     {
@@ -44,7 +43,7 @@ public sealed class UpdateToDoEndpoint(IToDoService toDoService, IDateTimeProvid
     public override ToDo MapToEntity(UpdateToDoRequest r)
     {
         ArgumentNullException.ThrowIfNull(r);
-        var updateTime = dateTimeProvider.UtcNow();
+        var updateTime = clock.GetUtcNow().DateTime;
         return new()
         {
             Id = r.Id,

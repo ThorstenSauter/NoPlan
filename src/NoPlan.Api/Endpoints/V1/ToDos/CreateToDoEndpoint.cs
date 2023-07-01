@@ -5,8 +5,7 @@ using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Api.Endpoints.V1.ToDos;
 
-public sealed class CreateToDoEndpoint(IToDoService toDoService, IDateTimeProvider dateTimeProvider)
-    : EndpointWithMapping<CreateToDoRequest, ToDoResponse, ToDo>
+public sealed class CreateToDoEndpoint(IToDoService toDoService, TimeProvider clock) : EndpointWithMapping<CreateToDoRequest, ToDoResponse, ToDo>
 {
     public override void Configure()
     {
@@ -39,7 +38,7 @@ public sealed class CreateToDoEndpoint(IToDoService toDoService, IDateTimeProvid
     {
         ArgumentNullException.ThrowIfNull(r);
 
-        var creationTime = dateTimeProvider.UtcNow();
+        var creationTime = clock.GetUtcNow().DateTime;
         return new()
         {
             Title = r.Title,
