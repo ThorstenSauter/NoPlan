@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Identity.Web;
 
 namespace NoPlan.Infrastructure.Auth;
 
@@ -11,6 +12,6 @@ public static class AuthorizationOptionsExtensions
     {
         ArgumentNullException.ThrowIfNull(options);
 
-        options.AddPolicy(UserPolicyName, builder => builder.RequireClaim("scp", UserScope));
+        options.AddPolicy(UserPolicyName, builder => builder.RequireScope(UserScope));
     }
 }
