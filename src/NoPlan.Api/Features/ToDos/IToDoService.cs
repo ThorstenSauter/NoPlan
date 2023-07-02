@@ -1,6 +1,6 @@
 ﻿using NoPlan.Infrastructure.Data.Models;
 
-namespace NoPlan.Api.Services;
+namespace NoPlan.Api.Features.ToDos;
 
 /// <summary>
 ///     Provides CRUD functionality for the <see cref="ToDo" /> type.

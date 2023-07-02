@@ -3,7 +3,7 @@ using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
-using NoPlan.Api.Services;
+using NoPlan.Api.Features.ToDos;
 using NoPlan.Infrastructure.Data;
 using NoPlan.Infrastructure.HeathChecks;
 
@@ -26,7 +26,7 @@ builder.Services
         };
     })
     .AddScoped<IToDoService, ToDoService>()
-    .AddAuthorization(options => options.AddPolicy("User", b => b.RequireScope("User")))
+    .AddAuthorization(options => options.AddUserPolicy())
     .AddMicrosoftIdentityWebApiAuthentication(configuration);
 
 var app = builder.Build();
