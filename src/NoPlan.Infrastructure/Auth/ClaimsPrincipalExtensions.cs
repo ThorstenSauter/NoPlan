@@ -1,11 +1,8 @@
 ﻿using System.Security.Claims;
 using Microsoft.Identity.Web;
 
-namespace NoPlan.Api.Extensions;
+namespace NoPlan.Infrastructure.Auth;
 
-/// <summary>
-///     Static class containing extension methods for the <see cref="ClaimsPrincipal" /> type.
-/// </summary>
 public static class ClaimsPrincipalExtensions
 {
     /// <summary>

@@ -2,7 +2,7 @@
 using NoPlan.Infrastructure.Data;
 using NoPlan.Infrastructure.Data.Models;
 
-namespace NoPlan.Api.Services;
+namespace NoPlan.Api.Features.ToDos;
 
 /// <summary>
 ///     Implements the <see cref="IToDoService" /> using Entity Framework Cores <see cref="PlannerContext" />.

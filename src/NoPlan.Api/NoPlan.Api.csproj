@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <Using Include="FastEndpoints" />
-    <Using Include="NoPlan.Api.Extensions" />
+    <Using Include="NoPlan.Infrastructure.Auth"/>
   </ItemGroup>
 
   <ItemGroup>
