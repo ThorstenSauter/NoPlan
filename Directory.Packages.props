@@ -12,14 +12,14 @@
     <PackageVersion Include="FastEndpoints.Swagger" Version="5.13.0" />
     <PackageVersion Include="FluentAssertions" Version="6.11.0" />
     <PackageVersion Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.0-preview.5.23302.2"/>
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0-preview.5.23280.1">
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.0-preview.6.23329.11"/>
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0-preview.6.23329.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0-preview.5.23280.1"/>
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.0-preview.5.23280.8"/>
-    <PackageVersion Include="Microsoft.Extensions.DependencyModel" Version="8.0.0-preview.5.23280.8"/>
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0-preview.6.23329.4"/>
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.0-preview.6.23329.7"/>
+    <PackageVersion Include="Microsoft.Extensions.DependencyModel" Version="8.0.0-preview.6.23329.7"/>
     <PackageVersion Include="Microsoft.Identity.Client.Extensions.Msal" Version="2.31.0" />
     <PackageVersion Include="Microsoft.Identity.Web" Version="2.12.4" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
