@@ -11,7 +11,7 @@ public sealed class GetAllToDosEndpoint(IToDoService toDoService) : EndpointWith
     {
         Get("/todos");
         Version(1);
-        Policies("User");
+        Policies(AuthorizationPolicies.Users);
     }
 
     public override async Task HandleAsync(GetAllToDosRequest req, CancellationToken ct) =>

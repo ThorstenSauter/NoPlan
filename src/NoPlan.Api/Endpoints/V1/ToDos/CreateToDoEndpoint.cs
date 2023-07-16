@@ -11,7 +11,7 @@ public sealed class CreateToDoEndpoint(IToDoService toDoService, TimeProvider cl
     {
         Post("/todos");
         Version(1);
-        Policies("User");
+        Policies(AuthorizationPolicies.Users);
     }
 
     public override async Task HandleAsync(CreateToDoRequest req, CancellationToken ct)
