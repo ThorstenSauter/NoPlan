@@ -30,10 +30,7 @@ builder.Services
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    await new MigrationRunner(app.Services).ApplyMigrationsAsync<PlannerContext>();
-}
+await new MigrationRunner(app.Services).ApplyMigrationsAsync<PlannerContext>();
 
 app.UseFastEndpoints(c =>
 {
