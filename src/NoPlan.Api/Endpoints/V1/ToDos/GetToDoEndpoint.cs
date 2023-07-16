@@ -11,7 +11,7 @@ public sealed class GetToDoEndpoint(IToDoService toDoService) : EndpointWithMapp
     {
         Get("/todos/{Id}");
         Version(1);
-        Policies("User");
+        Policies(AuthorizationPolicies.Users);
         Description(b => b.WithName("ToDos.Get"));
     }
 

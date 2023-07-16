@@ -11,7 +11,7 @@ public sealed class UpdateToDoEndpoint(IToDoService toDoService, TimeProvider cl
     {
         Put("/todos/{Id}");
         Version(1);
-        Policies("User");
+        Policies(AuthorizationPolicies.Users);
     }
 
     public override async Task HandleAsync(UpdateToDoRequest req, CancellationToken ct)

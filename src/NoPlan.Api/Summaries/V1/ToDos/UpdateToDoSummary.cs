@@ -10,7 +10,7 @@ public sealed class UpdateToDoSummary : Summary<UpdateToDoEndpoint>
         Summary = "Updates the specified ToDo entity.";
         Description = "Updates the ToDo entity with the provided identifier and data and returns the updated entity";
         Response<ToDoResponse>(200, "Returns the successfully updated ToDo entity");
-        Response(404, "The request did not pass validation checks");
+        Response(400, "The request did not pass validation checks");
         Response(404, "Returned if the specified ToDo entity does not exist");
     }
 }

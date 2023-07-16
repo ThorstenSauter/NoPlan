@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using NoPlan.Api.Features.ToDos;
 using NoPlan.Infrastructure.Data;
@@ -30,7 +29,8 @@ builder.Services
     .AddMicrosoftIdentityWebApiAuthentication(configuration);
 
 var app = builder.Build();
-await ApplyMigrationsAsync<PlannerContext>(app);
+
+await new MigrationRunner(app.Services).ApplyMigrationsAsync<PlannerContext>();
 
 app.UseFastEndpoints(c =>
 {
@@ -68,11 +68,3 @@ app.MapHealthChecks("/health/ready", new() { ResponseWriter = JsonHealthCheckRes
 app.MapHealthChecks("/health/live", new() { Predicate = _ => false, ResponseWriter = JsonHealthCheckResponseWriter.WriteResponse });
 
 await app.RunAsync();
-
-static async Task ApplyMigrationsAsync<T>(IHost webApplication)
-    where T : DbContext
-{
-    using var scope = webApplication.Services.CreateScope();
-    var dbContext = scope.ServiceProvider.GetRequiredService<T>();
-    await dbContext.Database.MigrateAsync();
-}

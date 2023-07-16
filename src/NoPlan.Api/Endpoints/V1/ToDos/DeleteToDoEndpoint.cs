@@ -11,7 +11,7 @@ public sealed class DeleteToDoEndpoint(IToDoService toDoService) : EndpointWithM
     {
         Delete("/todos/{Id}");
         Version(1);
-        Policies("User");
+        Policies(AuthorizationPolicies.Users);
     }
 
     public override async Task HandleAsync(DeleteToDoRequest req, CancellationToken ct)
