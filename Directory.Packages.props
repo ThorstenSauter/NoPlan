@@ -33,7 +33,7 @@
     <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.5.0.73987" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.507" />
     <PackageVersion Include="Testcontainers.MsSql" Version="3.3.0" />
-    <PackageVersion Include="Verify.Xunit" Version="20.5.1" />
+    <PackageVersion Include="Verify.Xunit" Version="20.6.0" />
     <PackageVersion Include="xunit" Version="2.5.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.0" />
   </ItemGroup>
