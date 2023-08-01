@@ -1,11 +1,13 @@
-﻿using NoPlan.Api.Features.ToDos;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using NoPlan.Api.Features.ToDos;
 using NoPlan.Contracts.Requests.V1.ToDos;
 using NoPlan.Contracts.Responses.V1.ToDos;
 using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Api.Endpoints.V1.ToDos;
 
-public sealed class UpdateToDoEndpoint(IToDoService toDoService, TimeProvider clock) : EndpointWithMapping<UpdateToDoRequest, ToDoResponse, ToDo>
+public sealed class UpdateToDoEndpoint(IToDoService toDoService, TimeProvider clock)
+    : Endpoint<UpdateToDoRequest, Results<Ok<ToDoResponse>, NotFound>>
 {
     public override void Configure()
     {
@@ -14,19 +16,21 @@ public sealed class UpdateToDoEndpoint(IToDoService toDoService, TimeProvider cl
         Policies(AuthorizationPolicies.Users);
     }
 
-    public override async Task HandleAsync(UpdateToDoRequest req, CancellationToken ct)
+    public override async Task<Results<Ok<ToDoResponse>, NotFound>> ExecuteAsync(UpdateToDoRequest req, CancellationToken ct)
     {
         var updatedToDo = await toDoService.UpdateAsync(MapToEntity(req));
         if (updatedToDo is null)
         {
-            await SendNotFoundAsync(ct);
-            return;
+            return TypedResults.NotFound();
         }
 
-        await SendAsync(MapFromEntity(updatedToDo), cancellation: ct);
+        return TypedResults.Ok(MapFromEntity(updatedToDo));
     }
 
-    public override ToDoResponse MapFromEntity(ToDo e)
+    private static Tag MapToEntity(UpdateTagRequest r, DateTime updateTime) =>
+        new() { Id = r.Id, Name = r.Name, AssignedAt = updateTime };
+
+    private static ToDoResponse MapFromEntity(ToDo e)
     {
         ArgumentNullException.ThrowIfNull(e);
 
@@ -40,7 +44,10 @@ public sealed class UpdateToDoEndpoint(IToDoService toDoService, TimeProvider cl
         };
     }
 
-    public override ToDo MapToEntity(UpdateToDoRequest r)
+    private static TagResponse MapFromEntity(Tag e) =>
+        new() { Id = e.Id, Name = e.Name, AssignedAt = e.AssignedAt };
+
+    private ToDo MapToEntity(UpdateToDoRequest r)
     {
         ArgumentNullException.ThrowIfNull(r);
         var updateTime = clock.GetUtcNow().DateTime;
@@ -53,10 +60,4 @@ public sealed class UpdateToDoEndpoint(IToDoService toDoService, TimeProvider cl
             CreatedBy = User.GetId()
         };
     }
-
-    private static Tag MapToEntity(UpdateTagRequest r, DateTime updateTime) =>
-        new() { Id = r.Id, Name = r.Name, AssignedAt = updateTime };
-
-    private static TagResponse MapFromEntity(Tag e) =>
-        new() { Id = e.Id, Name = e.Name, AssignedAt = e.AssignedAt };
 }

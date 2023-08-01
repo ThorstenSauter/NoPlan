@@ -1,11 +1,12 @@
-﻿using NoPlan.Api.Features.ToDos;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using NoPlan.Api.Features.ToDos;
 using NoPlan.Contracts.Requests.V1.ToDos;
 using NoPlan.Contracts.Responses.V1.ToDos;
 using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Api.Endpoints.V1.ToDos;
 
-public sealed class DeleteToDoEndpoint(IToDoService toDoService) : EndpointWithMapping<DeleteToDoRequest, ToDoResponse, ToDo>
+public sealed class DeleteToDoEndpoint(IToDoService toDoService) : Endpoint<DeleteToDoRequest, Results<Ok<ToDoResponse>, NotFound>>
 {
     public override void Configure()
     {
@@ -14,21 +15,20 @@ public sealed class DeleteToDoEndpoint(IToDoService toDoService) : EndpointWithM
         Policies(AuthorizationPolicies.Users);
     }
 
-    public override async Task HandleAsync(DeleteToDoRequest req, CancellationToken ct)
+    public override async Task<Results<Ok<ToDoResponse>, NotFound>> ExecuteAsync(DeleteToDoRequest req, CancellationToken ct)
     {
         ArgumentNullException.ThrowIfNull(req);
 
         var deletedToDo = await toDoService.DeleteAsync(req.Id, User.GetId());
         if (deletedToDo is null)
         {
-            await SendNotFoundAsync(ct);
-            return;
+            return TypedResults.NotFound();
         }
 
-        await SendAsync(MapFromEntity(deletedToDo), cancellation: ct);
+        return TypedResults.Ok(MapFromEntity(deletedToDo));
     }
 
-    public override ToDoResponse MapFromEntity(ToDo e)
+    private static ToDoResponse MapFromEntity(ToDo e)
     {
         ArgumentNullException.ThrowIfNull(e);
 

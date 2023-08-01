@@ -1,11 +1,12 @@
-﻿using NoPlan.Api.Features.ToDos;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using NoPlan.Api.Features.ToDos;
 using NoPlan.Contracts.Requests.V1.ToDos;
 using NoPlan.Contracts.Responses.V1.ToDos;
 using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Api.Endpoints.V1.ToDos;
 
-public sealed class GetToDoEndpoint(IToDoService toDoService) : EndpointWithMapping<GetToDoRequest, ToDoResponse, ToDo>
+public sealed class GetToDoEndpoint(IToDoService toDoService) : Endpoint<GetToDoRequest, Results<Ok<ToDoResponse>, NotFound>>
 {
     public override void Configure()
     {
@@ -15,21 +16,20 @@ public sealed class GetToDoEndpoint(IToDoService toDoService) : EndpointWithMapp
         Description(b => b.WithName("ToDos.Get"));
     }
 
-    public override async Task HandleAsync(GetToDoRequest req, CancellationToken ct)
+    public override async Task<Results<Ok<ToDoResponse>, NotFound>> ExecuteAsync(GetToDoRequest req, CancellationToken ct)
     {
         ArgumentNullException.ThrowIfNull(req);
 
         var todo = await toDoService.GetAsync(req.Id, User.GetId(), ct);
         if (todo is null)
         {
-            await SendNotFoundAsync(ct);
-            return;
+            return TypedResults.NotFound();
         }
 
-        await SendAsync(MapFromEntity(todo), cancellation: ct);
+        return TypedResults.Ok(MapFromEntity(todo));
     }
 
-    public override ToDoResponse MapFromEntity(ToDo e)
+    private static ToDoResponse MapFromEntity(ToDo e)
     {
         ArgumentNullException.ThrowIfNull(e);
         return new()

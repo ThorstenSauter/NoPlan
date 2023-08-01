@@ -1,11 +1,12 @@
-﻿using NoPlan.Api.Features.ToDos;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using NoPlan.Api.Features.ToDos;
 using NoPlan.Contracts.Requests.V1.ToDos;
 using NoPlan.Contracts.Responses.V1.ToDos;
 using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Api.Endpoints.V1.ToDos;
 
-public sealed class GetAllToDosEndpoint(IToDoService toDoService) : EndpointWithMapping<GetAllToDosRequest, ToDosResponse, IEnumerable<ToDo>>
+public sealed class GetAllToDosEndpoint(IToDoService toDoService) : Endpoint<GetAllToDosRequest, Ok<ToDosResponse>>
 {
     public override void Configure()
     {
@@ -14,10 +15,10 @@ public sealed class GetAllToDosEndpoint(IToDoService toDoService) : EndpointWith
         Policies(AuthorizationPolicies.Users);
     }
 
-    public override async Task HandleAsync(GetAllToDosRequest req, CancellationToken ct) =>
-        await SendAsync(MapFromEntity(await toDoService.GetAllAsync(User.GetId(), ct)), cancellation: ct);
+    public override async Task<Ok<ToDosResponse>> ExecuteAsync(GetAllToDosRequest req, CancellationToken ct) =>
+        TypedResults.Ok(MapFromEntity(await toDoService.GetAllAsync(User.GetId(), ct)));
 
-    public override ToDosResponse MapFromEntity(IEnumerable<ToDo> e) => new()
+    private static ToDosResponse MapFromEntity(IEnumerable<ToDo> e) => new()
     {
         ToDos = e.Select(t =>
             new ToDoResponse
