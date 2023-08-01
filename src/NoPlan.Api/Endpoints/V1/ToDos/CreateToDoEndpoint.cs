@@ -1,11 +1,12 @@
-﻿using NoPlan.Api.Features.ToDos;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using NoPlan.Api.Features.ToDos;
 using NoPlan.Contracts.Requests.V1.ToDos;
 using NoPlan.Contracts.Responses.V1.ToDos;
 using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Api.Endpoints.V1.ToDos;
 
-public sealed class CreateToDoEndpoint(IToDoService toDoService, TimeProvider clock) : EndpointWithMapping<CreateToDoRequest, ToDoResponse, ToDo>
+public sealed class CreateToDoEndpoint(IToDoService toDoService, TimeProvider clock) : Endpoint<CreateToDoRequest, CreatedAtRoute<ToDoResponse>>
 {
     public override void Configure()
     {
@@ -14,13 +15,13 @@ public sealed class CreateToDoEndpoint(IToDoService toDoService, TimeProvider cl
         Policies(AuthorizationPolicies.Users);
     }
 
-    public override async Task HandleAsync(CreateToDoRequest req, CancellationToken ct)
+    public override async Task<CreatedAtRoute<ToDoResponse>> ExecuteAsync(CreateToDoRequest req, CancellationToken ct)
     {
         var toDo = await toDoService.CreateAsync(MapToEntity(req));
-        await SendCreatedAtAsync("ToDos.Get", new { toDo.Id }, MapFromEntity(toDo), cancellation: ct);
+        return TypedResults.CreatedAtRoute(MapFromEntity(toDo), "ToDos.Get", new { toDo.Id });
     }
 
-    public override ToDoResponse MapFromEntity(ToDo e)
+    private static ToDoResponse MapFromEntity(ToDo e)
     {
         ArgumentNullException.ThrowIfNull(e);
 
@@ -34,7 +35,13 @@ public sealed class CreateToDoEndpoint(IToDoService toDoService, TimeProvider cl
         };
     }
 
-    public override ToDo MapToEntity(CreateToDoRequest r)
+    private static TagResponse MapFromEntity(Tag e) =>
+        new() { Id = e.Id, Name = e.Name, AssignedAt = e.AssignedAt };
+
+    private static Tag MapToEntity(CreateTagRequest r, DateTime creationTime) =>
+        new() { Name = r.Name, AssignedAt = creationTime };
+
+    private ToDo MapToEntity(CreateToDoRequest r)
     {
         ArgumentNullException.ThrowIfNull(r);
 
@@ -48,10 +55,4 @@ public sealed class CreateToDoEndpoint(IToDoService toDoService, TimeProvider cl
             CreatedBy = User.GetId()
         };
     }
-
-    private static Tag MapToEntity(CreateTagRequest r, DateTime creationTime) =>
-        new() { Name = r.Name, AssignedAt = creationTime };
-
-    private static TagResponse MapFromEntity(Tag e) =>
-        new() { Id = e.Id, Name = e.Name, AssignedAt = e.AssignedAt };
 }
