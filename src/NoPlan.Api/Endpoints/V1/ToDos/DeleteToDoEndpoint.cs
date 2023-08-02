@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using NoPlan.Api.Features.ToDos;
+using NoPlan.Api.Mappers;
 using NoPlan.Contracts.Requests.V1.ToDos;
 using NoPlan.Contracts.Responses.V1.ToDos;
-using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Api.Endpoints.V1.ToDos;
 
@@ -20,25 +20,8 @@ public sealed class DeleteToDoEndpoint(IToDoService toDoService) : Endpoint<Dele
         ArgumentNullException.ThrowIfNull(req);
 
         var deletedToDo = await toDoService.DeleteAsync(req.Id, User.GetId());
-        if (deletedToDo is null)
-        {
-            return TypedResults.NotFound();
-        }
-
-        return TypedResults.Ok(MapFromEntity(deletedToDo));
-    }
-
-    private static ToDoResponse MapFromEntity(ToDo e)
-    {
-        ArgumentNullException.ThrowIfNull(e);
-
-        return new()
-        {
-            Id = e.Id,
-            Title = e.Title,
-            Description = e.Description,
-            Tags = e.Tags.Select(ta => new TagResponse { Id = ta.Id, Name = ta.Name, AssignedAt = ta.AssignedAt }),
-            CreatedAt = e.CreatedAt
-        };
+        return deletedToDo is null
+            ? TypedResults.NotFound()
+            : TypedResults.Ok(deletedToDo.ToResponse());
     }
 }

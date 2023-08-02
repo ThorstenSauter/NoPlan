@@ -1,8 +1,7 @@
-using System.Diagnostics;
 using FastEndpoints.Swagger;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web;
 using NoPlan.Api.Features.ToDos;
+using NoPlan.Api.Validation;
 using NoPlan.Infrastructure.Data;
 using NoPlan.Infrastructure.HeathChecks;
 
@@ -35,24 +34,7 @@ await new MigrationRunner(app.Services).ApplyMigrationsAsync<PlannerContext>();
 app.UseFastEndpoints(c =>
 {
     c.Endpoints.RoutePrefix = "api";
-
-    c.Errors.ResponseBuilder = (failures, context, status) =>
-    {
-        var problemDetails = new ValidationProblemDetails
-        {
-            Type = "https://www.rfc-editor.org/rfc/rfc7231#section-6.5.1",
-            Status = status,
-            Extensions = { ["traceId"] = Activity.Current?.TraceId.ToString() ?? context.TraceIdentifier }
-        };
-
-        foreach (var failure in failures.GroupBy(f => f.PropertyName))
-        {
-            problemDetails.Errors[failure.Key] = failure.Select(g => g.ErrorMessage).ToArray();
-        }
-
-        return problemDetails;
-    };
-
+    c.Errors.ResponseBuilder = ValidationErrors.ResponseBuilder;
     c.Versioning.Prefix = "v";
     c.Versioning.DefaultVersion = 1;
     c.Versioning.PrependToRoute = true;
