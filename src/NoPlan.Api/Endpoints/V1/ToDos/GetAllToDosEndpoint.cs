@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using NoPlan.Api.Features.ToDos;
+using NoPlan.Api.Mappers;
 using NoPlan.Contracts.Requests.V1.ToDos;
 using NoPlan.Contracts.Responses.V1.ToDos;
-using NoPlan.Infrastructure.Data.Models;
 
 namespace NoPlan.Api.Endpoints.V1.ToDos;
 
@@ -16,18 +16,5 @@ public sealed class GetAllToDosEndpoint(IToDoService toDoService) : Endpoint<Get
     }
 
     public override async Task<Ok<ToDosResponse>> ExecuteAsync(GetAllToDosRequest req, CancellationToken ct) =>
-        TypedResults.Ok(MapFromEntity(await toDoService.GetAllAsync(User.GetId(), ct)));
-
-    private static ToDosResponse MapFromEntity(IEnumerable<ToDo> e) => new()
-    {
-        ToDos = e.Select(t =>
-            new ToDoResponse
-            {
-                Id = t.Id,
-                Title = t.Title,
-                Description = t.Description,
-                Tags = t.Tags.Select(ta => new TagResponse { Id = ta.Id, Name = ta.Name, AssignedAt = ta.AssignedAt }),
-                CreatedAt = t.CreatedAt
-            })
-    };
+        TypedResults.Ok((await toDoService.GetAllAsync(User.GetId(), ct)).ToResponse());
 }
