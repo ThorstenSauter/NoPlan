@@ -29,6 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.dockerignore = .dockerignore
 		.github\renovate.json = .github\renovate.json
 		.github\CODEOWNERS = .github\CODEOWNERS
+		nuget.config = nuget.config
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoPlan.Infrastructure", "src\NoPlan.Infrastructure\NoPlan.Infrastructure.csproj", "{7148D0A0-C3D5-4807-99D3-E4AB88875F03}"

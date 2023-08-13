@@ -4,9 +4,7 @@ EXPOSE 8080
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0-preview AS build
 WORKDIR /app
-COPY [".editorconfig", "./"]
-COPY ["Directory.Build.props", "./"]
-COPY ["Directory.Packages.props", "./"]
+COPY [".editorconfig", "Directory.Build.props", "Directory.Packages.props", "nuget.config", "./"]
 COPY ["src/Directory.Build.props", "src/"]
 COPY ["src/NoPlan.Api/NoPlan.Api.csproj", "src/NoPlan.Api/"]
 COPY ["src/NoPlan.Contracts/NoPlan.Contracts.csproj", "src/NoPlan.Contracts/"]
