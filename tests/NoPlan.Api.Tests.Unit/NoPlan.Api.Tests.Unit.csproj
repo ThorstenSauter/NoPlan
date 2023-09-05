@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <PackageReference Include="Bogus" />
-    <PackageReference Include="Microsoft.Extensions.DependencyModel" />
+    <PackageReference Include="Bogus"/>
+    <PackageReference Include="Microsoft.Extensions.DependencyModel"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\NoPlan.Api\NoPlan.Api.csproj" />
+    <ProjectReference Include="..\..\src\NoPlan.Api\NoPlan.Api.csproj"/>
   </ItemGroup>
 </Project>
