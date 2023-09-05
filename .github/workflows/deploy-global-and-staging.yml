@@ -23,7 +23,7 @@ jobs:
       security-events: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Login to Azure
         uses: azure/login@v1
         with:
@@ -55,7 +55,7 @@ jobs:
     environment: global
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Terraform apply
         uses: ./.github/actions/terraform-apply
         with:
@@ -71,7 +71,7 @@ jobs:
       - apply-global
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Terraform apply
         uses: ./.github/actions/terraform-apply
         with:
