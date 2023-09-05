@@ -1,5 +1,6 @@
 using FastEndpoints.Swagger;
 using Microsoft.Identity.Web;
+using NoPlan.Api;
 using NoPlan.Api.Features.ToDos;
 using NoPlan.Api.Validation;
 using NoPlan.Infrastructure.Data;
@@ -10,7 +11,11 @@ var configuration = builder.Configuration;
 
 builder.AddInfrastructure();
 builder.Services
-    .AddFastEndpoints(options => options.SourceGeneratorDiscoveredTypes = DiscoveredTypes.All)
+    .AddFastEndpoints(options =>
+    {
+        options.SourceGeneratorDiscoveredTypes.AddRange(DiscoveredTypes.All);
+        options.SourceGeneratorDiscoveredTypes.AddRange(NoPlan.Contracts.DiscoveredTypes.All);
+    })
     .SwaggerDocument(d =>
     {
         d.MaxEndpointVersion = 1;

@@ -4,19 +4,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Bogus" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
-    <PackageReference Include="Microsoft.Identity.Client.Extensions.Msal" />
-    <PackageReference Include="Testcontainers.MsSql" />
-    <PackageReference Include="Verify.Xunit" />
+    <PackageReference Include="Bogus"/>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing"/>
+    <PackageReference Include="Microsoft.Identity.Client.Extensions.Msal"/>
+    <PackageReference Include="Testcontainers.MsSql"/>
+    <PackageReference Include="Verify.Xunit"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="System.Net" />
-    <Using Include="System.Net.Http.Json" />
+    <Using Include="System.Net"/>
+    <Using Include="System.Net.Http.Json"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\NoPlan.Api\NoPlan.Api.csproj" />
+    <ProjectReference Include="..\..\src\NoPlan.Api\NoPlan.Api.csproj"/>
   </ItemGroup>
 </Project>
