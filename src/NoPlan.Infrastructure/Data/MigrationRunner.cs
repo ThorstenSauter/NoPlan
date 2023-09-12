@@ -2,7 +2,7 @@
 
 namespace NoPlan.Infrastructure.Data;
 
-public class MigrationRunner(IServiceProvider serviceProvider)
+public sealed class MigrationRunner(IServiceProvider serviceProvider)
 {
     public async Task ApplyMigrationsAsync<TContext>()
         where TContext : DbContext
