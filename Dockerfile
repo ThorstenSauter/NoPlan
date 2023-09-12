@@ -1,8 +1,8 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-preview AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 8080
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0-preview AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 COPY [".editorconfig", "Directory.Build.props", "Directory.Packages.props", "nuget.config", "./"]
 COPY ["src/Directory.Build.props", "src/"]
