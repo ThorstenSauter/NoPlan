@@ -48,7 +48,7 @@ jobs:
           UserAuthenticationSettings__Username: ${{ vars.INTEGRATION_TEST_USERNAME }}
         run: dotnet test -c ${{ env.CONFIGURATION }} --no-build --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./coverage
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: 'coverage/**/coverage.cobertura.xml'
