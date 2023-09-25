@@ -3,6 +3,7 @@ using Azure.Identity;
 using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Web;
 using OpenTelemetry.Instrumentation.AspNetCore;
@@ -19,14 +20,15 @@ public static class WebApplicationBuilderExtensions
 {
     internal static WebApplicationBuilder AddOpenTelemetry(this WebApplicationBuilder webApplicationBuilder)
     {
-        webApplicationBuilder.Services.AddOpenTelemetry().UseAzureMonitor(options => options.Credential = new DefaultAzureCredential());
+        var isDevelopment = webApplicationBuilder.Environment.IsDevelopment();
 
+        webApplicationBuilder.Services.AddOpenTelemetry().UseAzureMonitor(options => options.Credential = new DefaultAzureCredential());
         webApplicationBuilder.Services
             .ConfigureInstrumentation()
-            .ConfigureMetrics()
-            .ConfigureTracing();
+            .ConfigureMetrics(isDevelopment)
+            .ConfigureTracing(isDevelopment);
 
-        return webApplicationBuilder.ConfigureLogging();
+        return webApplicationBuilder.ConfigureLogging(isDevelopment);
     }
 
     private static IServiceCollection ConfigureInstrumentation(this IServiceCollection services) =>
@@ -47,7 +49,7 @@ public static class WebApplicationBuilderExtensions
                 options.SetDbStatementForText = true;
             });
 
-    private static IServiceCollection ConfigureTracing(this IServiceCollection services)
+    private static IServiceCollection ConfigureTracing(this IServiceCollection services, bool isDevelopment)
     {
         var resourceAttributes = new Dictionary<string, object>
         {
@@ -59,22 +61,20 @@ public static class WebApplicationBuilderExtensions
         services.ConfigureOpenTelemetryTracerProvider((_, builder) =>
             builder.ConfigureResource(resourceBuilder => resourceBuilder.AddAttributes(resourceAttributes)));
 
-        // Workaround due to an issue with the OTLP exporter registering services after the service provider has been built:
-        // https://github.com/Azure/azure-sdk-for-net/issues/36339#issuecomment-1552242653
-        services.AddOpenTelemetry().WithTracing(builder =>
+        if (isDevelopment)
         {
-            builder.AddOtlpExporter();
-            builder.SetSampler(new AlwaysOnSampler());
-        });
+            services.ConfigureOpenTelemetryTracerProvider(builder => builder.AddOtlpExporter());
+        }
 
         return services;
     }
 
-    private static IServiceCollection ConfigureMetrics(this IServiceCollection services)
+    private static IServiceCollection ConfigureMetrics(this IServiceCollection services, bool isDevelopment)
     {
-        // Workaround due to an issue with the OTLP exporter registering services after the service provider has been built:
-        // https://github.com/Azure/azure-sdk-for-net/issues/36339#issuecomment-1552242653
-        services.AddOpenTelemetry().WithMetrics(builder => builder.AddOtlpExporter());
+        if (isDevelopment)
+        {
+            services.ConfigureOpenTelemetryMeterProvider(builder => builder.AddOtlpExporter());
+        }
 
         return services.ConfigureOpenTelemetryMeterProvider((_, meterProviderBuilder) =>
         {
@@ -82,7 +82,7 @@ public static class WebApplicationBuilderExtensions
                 {
                     c.AddEventSources(
                         "Microsoft.AspNetCore.Hosting",
-                        "Microsoft-AspNetCore-Server-Kestrel",
+                        "Microsoft.AspNetCore.Server.Kestrel",
                         "System.Net.Http",
                         "System.Net.Sockets",
                         "System.Net.NameResolution",
@@ -93,9 +93,12 @@ public static class WebApplicationBuilderExtensions
         });
     }
 
-    private static WebApplicationBuilder ConfigureLogging(this WebApplicationBuilder webApplicationBuilder)
+    private static WebApplicationBuilder ConfigureLogging(this WebApplicationBuilder webApplicationBuilder, bool isDevelopment)
     {
-        webApplicationBuilder.Logging.AddOpenTelemetry(logging => logging.AddOtlpExporter());
+        if (isDevelopment)
+        {
+            webApplicationBuilder.Logging.AddOpenTelemetry(logging => logging.AddOtlpExporter());
+        }
 
         return webApplicationBuilder;
     }

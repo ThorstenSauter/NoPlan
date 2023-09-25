@@ -1,18 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <PackageReference Include="AspNetCore.HealthChecks.SqlServer" />
-    <PackageReference Include="Azure.Monitor.OpenTelemetry.AspNetCore" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
-    <PackageReference Include="Microsoft.Identity.Web" />
-    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol.Logs" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.EventCounters" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.Process" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" />
+    <PackageReference Include="AspNetCore.HealthChecks.SqlServer"/>
+    <PackageReference Include="Azure.Monitor.OpenTelemetry.AspNetCore"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder"/>
+    <PackageReference Include="Microsoft.Identity.Web"/>
+    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol"/>
+    <PackageReference Include="OpenTelemetry.Instrumentation.EventCounters"/>
+    <PackageReference Include="OpenTelemetry.Instrumentation.Process"/>
+    <PackageReference Include="OpenTelemetry.Instrumentation.Runtime"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="Microsoft.EntityFrameworkCore" />
-    <Using Include="Microsoft.Extensions.Configuration" />
+    <Using Include="Microsoft.EntityFrameworkCore"/>
+    <Using Include="Microsoft.Extensions.Configuration"/>
   </ItemGroup>
 </Project>
