@@ -10,25 +10,25 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="FastEndpoints.Swagger" />
+    <PackageReference Include="FastEndpoints.Swagger"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="Newtonsoft.Json"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="FastEndpoints" />
+    <Using Include="FastEndpoints"/>
     <Using Include="NoPlan.Infrastructure.Auth"/>
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="appsettings.Development.json" CopyToPublishDirectory="Never" />
+    <None Include="appsettings.Development.json" CopyToPublishDirectory="Never"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NoPlan.Contracts\NoPlan.Contracts.csproj" />
-    <ProjectReference Include="..\NoPlan.Infrastructure\NoPlan.Infrastructure.csproj" />
+    <ProjectReference Include="..\NoPlan.Contracts\NoPlan.Contracts.csproj"/>
+    <ProjectReference Include="..\NoPlan.Infrastructure\NoPlan.Infrastructure.csproj"/>
   </ItemGroup>
 </Project>

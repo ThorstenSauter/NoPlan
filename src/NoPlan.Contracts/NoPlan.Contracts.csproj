@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <PackageReference Include="FastEndpoints" />
+    <PackageReference Include="FastEndpoints"/>
     <PackageReference Include="FastEndpoints.Generator">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -8,7 +8,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="FastEndpoints" />
-    <Using Include="FluentValidation" />
+    <Using Include="FastEndpoints"/>
+    <Using Include="FluentValidation"/>
   </ItemGroup>
 </Project>
