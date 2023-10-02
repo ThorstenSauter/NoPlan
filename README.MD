@@ -13,7 +13,7 @@ follow best practices whenever possible.
 
 ## Calling the API
 
-In order to coveniently call the API during development or after deployment, a [Postman](https://www.postman.com/)
+In order to conveniently call the API during development or after deployment, a [Postman](https://www.postman.com/)
 collection
 is available to be forked. Make sure to set up the proper authentication parameters before calling any protected
 endpoints.
@@ -48,8 +48,8 @@ A readiness probe is available on the `/health/ready` endpoint and runs the foll
 Metrics, traces and logs are all handled using [OpenTelemetry](https://opentelemetry.io).
 
 During development the OpenTelemetry Collector is the target for exporting data and subsequently transferring it to
-Prometheus, Grafaka Loki and Jaeger. The complete stack can be run locally using
-the provided [Docker Compose file](local-development-stack/docker-compose.yaml).
+Prometheus, Grafana, Loki and Jaeger. The complete stack can be run locally using the
+provided [Docker Compose file](local-development-stack/docker-compose.yaml).
 
 In production all data is exported using the Azure Monitor Exporter, which makes the observability data available in
 Azure Application Insights.
