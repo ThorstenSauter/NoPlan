@@ -1,5 +1,5 @@
-output "api_application_id" {
-  value = azuread_application.api.application_id
+output "api_client_id" {
+  value = azuread_application.api.client_id
 }
 
 output "api_audience" {
@@ -26,8 +26,8 @@ output "default_domain" {
   value = data.azuread_domains.default_domain.domains.0.domain_name
 }
 
-output "integration_testing_application_id" {
-  value = azuread_application.integration_testing.application_id
+output "integration_testing_client_id" {
+  value = azuread_application.integration_testing.client_id
 }
 
 output "subscription_id" {

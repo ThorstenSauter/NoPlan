@@ -6,7 +6,7 @@ data "tfe_outputs" "global" {
 }
 
 locals {
-  api_application_id      = nonsensitive(data.tfe_outputs.global.values.api_application_id)
+  api_client_id           = nonsensitive(data.tfe_outputs.global.values.api_client_id)
   api_audience            = nonsensitive(data.tfe_outputs.global.values.api_audience)
   default_domain          = nonsensitive(data.tfe_outputs.global.values.default_domain)
   api_tenant_id           = nonsensitive(data.tfe_outputs.global.values.api_tenant_id)
@@ -17,7 +17,7 @@ module "container_app" {
   source                                = "../modules/containerapp"
   application_insights_connectionstring = module.monitoring.app_insights_connection_string
   azure_ad_audience                     = local.api_audience
-  azure_ad_client_id                    = local.api_application_id
+  azure_ad_client_id                    = local.api_client_id
   azure_ad_domain                       = local.default_domain
   azure_ad_instance                     = var.azure_ad_instance
   azure_ad_tenant_id                    = local.api_tenant_id

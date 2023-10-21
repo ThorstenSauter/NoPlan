@@ -73,7 +73,7 @@ resource "azuread_application" "integration_testing" {
   }
 
   required_resource_access {
-    resource_app_id = azuread_application.api.application_id
+    resource_app_id = azuread_application.api.client_id
     resource_access {
       id   = local.api_user_scope_id
       type = "Scope"
@@ -82,7 +82,7 @@ resource "azuread_application" "integration_testing" {
 }
 
 resource "azuread_service_principal" "api" {
-  application_id               = azuread_application.api.application_id
+  client_id                    = azuread_application.api.client_id
   app_role_assignment_required = false
   owners = [
     data.azuread_client_config.current.object_id
@@ -90,7 +90,7 @@ resource "azuread_service_principal" "api" {
 }
 
 resource "azuread_service_principal" "integration_testing" {
-  application_id               = azuread_application.integration_testing.application_id
+  client_id                    = azuread_application.integration_testing.client_id
   app_role_assignment_required = false
   owners = [
     data.azuread_client_config.current.object_id
@@ -98,6 +98,6 @@ resource "azuread_service_principal" "integration_testing" {
 }
 
 resource "azuread_service_principal" "msgraph" {
-  application_id = data.azuread_application_published_app_ids.well_known.result.MicrosoftGraph
-  use_existing   = true
+  client_id    = data.azuread_application_published_app_ids.well_known.result.MicrosoftGraph
+  use_existing = true
 }
