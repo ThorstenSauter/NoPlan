@@ -30,8 +30,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 8.0.x
-          dotnet-quality: preview
+          global-json-file: global.json
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
         with:

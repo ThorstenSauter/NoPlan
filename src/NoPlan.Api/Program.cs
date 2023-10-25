@@ -64,4 +64,5 @@ try
 catch (Exception ex)
 {
     bootStrapLogger.LogCritical(ex, "The application shut down unexpectedly");
+    throw;
 }

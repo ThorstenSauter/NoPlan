@@ -15,11 +15,17 @@ public sealed class ToDoService(PlannerContext context) : IToDoService
 {
     /// <inheritdoc />
     public async Task<IEnumerable<ToDo>> GetAllAsync(Guid userId, CancellationToken cancellationToken = default) =>
-        await context.ToDos.Include(t => t.Tags).OrderByDescending(t => t.CreatedAt).AsNoTracking().ToListAsync(cancellationToken);
+        await context.ToDos
+            .Include(t => t.Tags)
+            .OrderByDescending(t => t.CreatedAt)
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
 
     /// <inheritdoc />
     public async Task<ToDo?> GetAsync(Guid id, Guid userId, CancellationToken cancellationToken = default) =>
-        await context.ToDos.Include(t => t.Tags).FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
+        await context.ToDos
+            .Include(t => t.Tags)
+            .FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
 
     /// <inheritdoc />
     public async Task<ToDo> CreateAsync(ToDo newToDo)
@@ -37,7 +43,10 @@ public sealed class ToDoService(PlannerContext context) : IToDoService
     {
         ArgumentNullException.ThrowIfNull(updatedToDo);
 
-        var toDo = await context.ToDos.Include(t => t.Tags).FirstOrDefaultAsync(t => t.Id == updatedToDo.Id);
+        var toDo = await context.ToDos
+            .Include(t => t.Tags)
+            .FirstOrDefaultAsync(t => t.Id == updatedToDo.Id);
+
         if (toDo is null)
         {
             return null;
@@ -62,7 +71,10 @@ public sealed class ToDoService(PlannerContext context) : IToDoService
     /// <inheritdoc />
     public async Task<ToDo?> DeleteAsync(Guid id, Guid userId)
     {
-        var toDo = await context.ToDos.Include(t => t.Tags).FirstOrDefaultAsync(t => t.Id == id);
+        var toDo = await context.ToDos
+            .Include(t => t.Tags)
+            .FirstOrDefaultAsync(t => t.Id == id);
+
         if (toDo is null)
         {
             return null;

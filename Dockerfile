@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+FROM mcr.microsoft.com/dotnet/runtime-deps:8.0-jammy-chiseled-extra AS base
 WORKDIR /app
 EXPOSE 8080
 
@@ -17,12 +17,12 @@ COPY ["src/NoPlan.Infrastructure/", "src/NoPlan.Infrastructure/"]
 # Copy the git repository data for Source Link
 COPY [".git/", ".git/"]
 WORKDIR /app/src/NoPlan.Api
-RUN dotnet build --no-restore -c Release -r linux-x64 --no-self-contained "NoPlan.Api.csproj"
+RUN dotnet build --no-restore -c Release -r linux-x64 --sc "NoPlan.Api.csproj"
 
 FROM build AS publish
-RUN dotnet publish --no-build -r linux-x64 --no-self-contained -o /app/publish "NoPlan.Api.csproj"
+RUN dotnet publish --no-build -r linux-x64 --sc -o /app/publish "NoPlan.Api.csproj"
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "NoPlan.Api.dll"]
+ENTRYPOINT ["./NoPlan.Api"]
