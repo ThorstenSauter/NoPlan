@@ -37,6 +37,7 @@ jobs:
 
   apply:
     name: Apply production environment
+    environment: production
     runs-on: ubuntu-latest
     needs:
       - promote-image
@@ -48,4 +49,6 @@ jobs:
         with:
           image-name: ${{ env.IMAGE_NAME }}
           tf-api-token: ${{ secrets.TF_API_TOKEN }}
-          working-directory: ./infra/production
+          tf-cloud-organization: ${{ vars.TF_CLOUD_ORGANIZATION }}
+          tf-cloud-workspace: ${{ vars.TF_CLOUD_WORKSPACE }}
+          working-directory: ${{ vars.TF_WORKING_DIRECTORY }}
