@@ -24,7 +24,7 @@ runs:
     - name: Set Terraform Cloud environment variables
       shell: bash
       run: |
-        echo "TF_CLOUD_ORGANIZATION=${{ inputs.tf-cloud-workspace }}" >> $GITHUB_ENV
+        echo "TF_CLOUD_ORGANIZATION=${{ inputs.tf-cloud-organization }}" >> $GITHUB_ENV
         echo "TF_WORKSPACE=${{ inputs.tf-cloud-workspace }}" >> $GITHUB_ENV
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3

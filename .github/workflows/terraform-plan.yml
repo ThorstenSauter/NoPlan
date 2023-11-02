@@ -29,7 +29,7 @@ jobs:
         uses: ./.github/actions/terraform-validate
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          working-directory: ${{ vars.INFRA_DIRECTORY}}
+          working-directory: ${{ vars.INFRA_DIRECTORY }}
 
   plan-staging:
     name: Plan staging environment
@@ -80,4 +80,6 @@ jobs:
           environment-name: Global
           github-token: ${{ secrets.GITHUB_TOKEN }}
           tf-api-token: ${{ secrets.TF_API_TOKEN }}
+          tf-cloud-organization: ${{ vars.TF_CLOUD_ORGANIZATION }}
+          tf-cloud-workspace: ${{ vars.TF_CLOUD_WORKSPACE }}
           working-directory: ${{ vars.TF_WORKING_DIRECTORY }}
