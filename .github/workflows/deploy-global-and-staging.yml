@@ -60,7 +60,9 @@ jobs:
         uses: ./.github/actions/terraform-apply
         with:
           tf-api-token: ${{ secrets.TF_API_TOKEN }}
-          working-directory: ./infra/global
+          tf-cloud-organization: ${{ vars.TF_CLOUD_ORGANIZATION }}
+          tf-cloud-workspace: ${{ vars.TF_CLOUD_WORKSPACE }}
+          working-directory: ${{ vars.TF_WORKING_DIRECTORY }}
 
   apply-staging:
     name: Apply staging environment
@@ -77,4 +79,6 @@ jobs:
         with:
           image-name: ${{ env.IMAGE_NAME }}
           tf-api-token: ${{ secrets.TF_API_TOKEN }}
-          working-directory: ./infra/staging
+          tf-cloud-organization: ${{ vars.TF_CLOUD_ORGANIZATION }}
+          tf-cloud-workspace: ${{ vars.TF_CLOUD_WORKSPACE }}
+          working-directory: ${{ vars.TF_WORKING_DIRECTORY }}

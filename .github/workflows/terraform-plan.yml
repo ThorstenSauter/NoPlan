@@ -29,10 +29,11 @@ jobs:
         uses: ./.github/actions/terraform-validate
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          working-directory: ./infra
+          working-directory: ${{ vars.INFRA_DIRECTORY}}
 
   plan-staging:
     name: Plan staging environment
+    environment: staging
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -44,10 +45,13 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           image-name: ${{ env.IMAGE_NAME }}
           tf-api-token: ${{ secrets.TF_API_TOKEN }}
-          working-directory: ./infra/staging
+          tf-cloud-organization: ${{ vars.TF_CLOUD_ORGANIZATION }}
+          tf-cloud-workspace: ${{ vars.TF_CLOUD_WORKSPACE }}
+          working-directory: ${{ vars.TF_WORKING_DIRECTORY }}
 
   plan-production:
     name: Plan production environment
+    environment: production
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -59,10 +63,13 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           image-name: ${{ env.IMAGE_NAME }}
           tf-api-token: ${{ secrets.TF_API_TOKEN }}
-          working-directory: ./infra/production
+          tf-cloud-organization: ${{ vars.TF_CLOUD_ORGANIZATION }}
+          tf-cloud-workspace: ${{ vars.TF_CLOUD_WORKSPACE }}
+          working-directory: ${{ vars.TF_WORKING_DIRECTORY }}
 
   plan-global:
     name: Plan global environment
+    environment: global
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -73,4 +80,4 @@ jobs:
           environment-name: Global
           github-token: ${{ secrets.GITHUB_TOKEN }}
           tf-api-token: ${{ secrets.TF_API_TOKEN }}
-          working-directory: ./infra/global
+          working-directory: ${{ vars.TF_WORKING_DIRECTORY }}
