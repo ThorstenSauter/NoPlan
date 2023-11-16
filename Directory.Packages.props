@@ -22,7 +22,7 @@
     <PackageVersion Include="Microsoft.Identity.Client.Extensions.Msal" Version="4.57.0"/>
     <PackageVersion Include="Microsoft.Identity.Web" Version="2.15.3"/>
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0"/>
-    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1"/>
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0"/>
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3"/>
     <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.6.0"/>
     <PackageVersion Include="OpenTelemetry.Instrumentation.EventCounters" Version="1.5.1-alpha.1"/>
