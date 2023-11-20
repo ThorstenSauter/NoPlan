@@ -17,7 +17,7 @@ public sealed class DeleteToDoEndpointTests(NoPlanApiFactory factory) : FakeRequ
         var (_, createdToDo) =
             await AuthenticatedClientClient.POSTAsync<CreateToDoEndpoint, CreateToDoRequest, ToDoResponse>(CreateRequestFaker.Generate());
 
-        var deleteRequest = new DeleteToDoRequest { Id = createdToDo!.Id };
+        var deleteRequest = new DeleteToDoRequest { Id = createdToDo.Id };
 
         // Act
         var (response, result) = await AuthenticatedClientClient.DELETEAsync<DeleteToDoEndpoint, DeleteToDoRequest, ToDoResponse>(deleteRequest);

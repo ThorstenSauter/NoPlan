@@ -35,8 +35,9 @@ public static class WebApplicationBuilderExtensions
             { "service.version", Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "unknown" }
         };
 
-        services.ConfigureOpenTelemetryTracerProvider((_, builder) =>
-            builder.ConfigureResource(resourceBuilder => resourceBuilder.AddAttributes(resourceAttributes)));
+        services.ConfigureOpenTelemetryTracerProvider(
+            (_, builder) =>
+                builder.ConfigureResource(resourceBuilder => resourceBuilder.AddAttributes(resourceAttributes)));
 
         if (isDevelopment)
         {
@@ -53,21 +54,23 @@ public static class WebApplicationBuilderExtensions
             services.ConfigureOpenTelemetryMeterProvider(builder => builder.AddOtlpExporter());
         }
 
-        return services.ConfigureOpenTelemetryMeterProvider((_, meterProviderBuilder) =>
-        {
-            meterProviderBuilder.AddEventCountersInstrumentation(c =>
-                {
-                    c.AddEventSources(
-                        "Microsoft.AspNetCore.Hosting",
-                        "Microsoft.AspNetCore.Server.Kestrel",
-                        "System.Net.Http",
-                        "System.Net.Sockets",
-                        "System.Net.NameResolution",
-                        "System.Net.Security");
-                })
-                .AddProcessInstrumentation()
-                .AddRuntimeInstrumentation();
-        });
+        return services.ConfigureOpenTelemetryMeterProvider(
+            (_, meterProviderBuilder) =>
+            {
+                meterProviderBuilder.AddEventCountersInstrumentation(
+                        c =>
+                        {
+                            c.AddEventSources(
+                                "Microsoft.AspNetCore.Hosting",
+                                "Microsoft.AspNetCore.Server.Kestrel",
+                                "System.Net.Http",
+                                "System.Net.Sockets",
+                                "System.Net.NameResolution",
+                                "System.Net.Security");
+                        })
+                    .AddProcessInstrumentation()
+                    .AddRuntimeInstrumentation();
+            });
     }
 
     private static WebApplicationBuilder ConfigureLogging(this WebApplicationBuilder webApplicationBuilder, bool isDevelopment)

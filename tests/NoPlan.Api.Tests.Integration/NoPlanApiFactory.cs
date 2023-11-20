@@ -25,12 +25,13 @@ public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetim
     private IPublicClientApplication? _publicClientApplication;
 
     public NoPlanApiFactory() =>
-        AuthenticatedClient = new(async () =>
-        {
-            var client = CreateClient();
-            await AuthenticateClientAsUserAsync(client);
-            return client;
-        });
+        AuthenticatedClient = new(
+            async () =>
+            {
+                var client = CreateClient();
+                await AuthenticateClientAsUserAsync(client);
+                return client;
+            });
 
     public AsyncLazy<HttpClient> AuthenticatedClient { get; }
 
@@ -50,22 +51,26 @@ public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetim
         var connectionString = new SqlConnectionStringBuilder(_dbContainer.GetConnectionString()) { Encrypt = false, InitialCatalog = "noplan" }
             .ToString();
 
-        builder.ConfigureAppConfiguration(configBuilder =>
-        {
-            Environment.SetEnvironmentVariable("APPLICATIONINSIGHTS_CONNECTION_STRING", "InstrumentationKey=00000000-0000-0000-0000-000000000000;");
-            configBuilder.AddInMemoryCollection(new Dictionary<string, string?> { { "ConnectionStrings:Default", connectionString } });
-            configBuilder.AddUserSecrets<NoPlanApiFactory>();
-            configBuilder.AddEnvironmentVariables();
+        builder.ConfigureAppConfiguration(
+            configBuilder =>
+            {
+                Environment.SetEnvironmentVariable(
+                    "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                    "InstrumentationKey=00000000-0000-0000-0000-000000000000;");
+                configBuilder.AddInMemoryCollection(new Dictionary<string, string?> { { "ConnectionStrings:Default", connectionString } });
+                configBuilder.AddUserSecrets<NoPlanApiFactory>();
+                configBuilder.AddEnvironmentVariables();
 
-            var config = configBuilder.Build();
-            config.GetSection(nameof(UserAuthenticationSettings)).Bind(_userAuthenticationSettings);
-        });
+                var config = configBuilder.Build();
+                config.GetSection(nameof(UserAuthenticationSettings)).Bind(_userAuthenticationSettings);
+            });
 
-        builder.ConfigureServices(services =>
-        {
-            services.RemoveAll<DbContextOptions<PlannerContext>>();
-            services.AddDbContext<PlannerContext>(options => options.UseSqlServer(connectionString));
-        });
+        builder.ConfigureServices(
+            services =>
+            {
+                services.RemoveAll<DbContextOptions<PlannerContext>>();
+                services.AddDbContext<PlannerContext>(options => options.UseSqlServer(connectionString));
+            });
     }
 
     private async Task<AuthenticationResult> AuthenticateAsync()
@@ -88,7 +93,8 @@ public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetim
         }
 
         return await _publicClientApplication
-            .AcquireTokenByUsernamePassword(scopes,
+            .AcquireTokenByUsernamePassword(
+                scopes,
                 _userAuthenticationSettings.Username,
                 _userAuthenticationSettings.Password)
             .ExecuteAsync();
@@ -114,12 +120,13 @@ public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetim
                 TokenCacheConfiguration.KeyChainAccountName)
             .Build();
 
-        var publicClientApplication = PublicClientApplicationBuilder.CreateWithApplicationOptions(new()
-        {
-            AadAuthorityAudience = AadAuthorityAudience.AzureAdMyOrg,
-            ClientId = _userAuthenticationSettings.ClientId,
-            TenantId = _userAuthenticationSettings.TenantId
-        }).Build();
+        var publicClientApplication = PublicClientApplicationBuilder.CreateWithApplicationOptions(
+            new()
+            {
+                AadAuthorityAudience = AadAuthorityAudience.AzureAdMyOrg,
+                ClientId = _userAuthenticationSettings.ClientId,
+                TenantId = _userAuthenticationSettings.TenantId
+            }).Build();
 
         var cacheHelper = await MsalCacheHelper.CreateAsync(storageCreationProperties);
         cacheHelper.RegisterCache(publicClientApplication.UserTokenCache);
