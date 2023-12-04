@@ -1,7 +1,7 @@
 using Microsoft.Identity.Web;
+using NoPlan.Api;
 using NoPlan.Api.Features.ToDos;
 using NoPlan.Api.Validation;
-using NoPlan.Contracts;
 using NoPlan.Infrastructure.Data;
 using NoPlan.Infrastructure.HeathChecks;
 
@@ -19,7 +19,7 @@ try
             options =>
             {
                 options.SourceGeneratorDiscoveredTypes.AddRange(DiscoveredTypes.All);
-                options.SourceGeneratorDiscoveredTypes.AddRange(DiscoveredTypes.All);
+                options.SourceGeneratorDiscoveredTypes.AddRange(NoPlan.Contracts.DiscoveredTypes.All);
             })
         .AddScoped<IToDoService, ToDoService>()
         .AddAuthorization(options => options.AddUserPolicy())
