@@ -22,7 +22,6 @@
     <PackageVersion Include="Microsoft.Identity.Web" Version="2.16.0"/>
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0"/>
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0"/>
-    <PackageVersion Include="Newtonsoft.Json" Version="13.0.3"/>
     <PackageVersion Include="SecurityCodeScan.VS2019" Version="5.6.7"/>
     <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.14.0.81108"/>
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.507"/>
