@@ -17,7 +17,7 @@ public sealed class GetToDoEndpointTests(NoPlanApiFactory factory) : FakeRequest
         var (_, createdToDo) =
             await AuthenticatedClientClient.POSTAsync<CreateToDoEndpoint, CreateToDoRequest, ToDoResponse>(CreateRequestFaker.Generate());
 
-        var request = new GetToDoRequest { Id = createdToDo!.Id };
+        var request = new GetToDoRequest { Id = createdToDo.Id };
 
         // Act
         var (response, result) = await AuthenticatedClientClient.GETAsync<GetToDoEndpoint, GetToDoRequest, ToDoResponse>(request);

@@ -17,14 +17,14 @@ public sealed class UpdateToDoEndpointTests(NoPlanApiFactory factory) : FakeRequ
         var (_, createdToDo) =
             await AuthenticatedClientClient.POSTAsync<CreateToDoEndpoint, CreateToDoRequest, ToDoResponse>(CreateRequestFaker.Generate());
 
-        var updateRequest = UpdateRequestFaker.Generate() with { Id = createdToDo!.Id };
+        var updateRequest = UpdateRequestFaker.Generate() with { Id = createdToDo.Id };
 
         // Act
         var (response, result) = await AuthenticatedClientClient.PUTAsync<UpdateToDoEndpoint, UpdateToDoRequest, ToDoResponse>(updateRequest);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        result!.Id.Should().Be(createdToDo.Id);
+        result.Id.Should().Be(createdToDo.Id);
         await Verify(result);
     }
 
@@ -35,7 +35,7 @@ public sealed class UpdateToDoEndpointTests(NoPlanApiFactory factory) : FakeRequ
         var (_, createdToDo) =
             await AuthenticatedClientClient.POSTAsync<CreateToDoEndpoint, CreateToDoRequest, ToDoResponse>(CreateRequestFaker.Generate());
 
-        var updateRequest = UpdateRequestFaker.Generate() with { Id = createdToDo!.Id };
+        var updateRequest = UpdateRequestFaker.Generate() with { Id = createdToDo.Id };
         updateRequest.Tags.Clear();
         var updateTagRequests = createdToDo.Tags.Take(2).Select(t => new UpdateTagRequest { Id = t.Id, Name = t.Name }).ToList();
         updateTagRequests.Add(new() { Id = createdToDo.Tags.Last().Id, Name = "new tag" });
@@ -46,7 +46,7 @@ public sealed class UpdateToDoEndpointTests(NoPlanApiFactory factory) : FakeRequ
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        result!.Id.Should().Be(createdToDo.Id);
+        result.Id.Should().Be(createdToDo.Id);
         await Verify(result);
     }
 
@@ -59,7 +59,7 @@ public sealed class UpdateToDoEndpointTests(NoPlanApiFactory factory) : FakeRequ
 
         var request = new UpdateToDoRequest
         {
-            Id = createdToDo!.Id, Title = "a", Description = "  ", Tags = new() { new() { Name = string.Empty }, new() }
+            Id = createdToDo.Id, Title = "a", Description = "  ", Tags = new() { new() { Name = string.Empty }, new() }
         };
 
         // Act

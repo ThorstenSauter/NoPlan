@@ -1,4 +1,3 @@
-using FastEndpoints.Swagger;
 using Microsoft.Identity.Web;
 using NoPlan.Api;
 using NoPlan.Api.Features.ToDos;
@@ -16,23 +15,12 @@ try
 
     builder.AddInfrastructure();
     builder.Services
-        .AddFastEndpoints(options =>
-        {
-            options.SourceGeneratorDiscoveredTypes.AddRange(DiscoveredTypes.All);
-            options.SourceGeneratorDiscoveredTypes.AddRange(NoPlan.Contracts.DiscoveredTypes.All);
-        })
-        .SwaggerDocument(d =>
-        {
-            d.MaxEndpointVersion = 1;
-            d.ShortSchemaNames = true;
-
-            d.DocumentSettings = s =>
+        .AddFastEndpoints(
+            options =>
             {
-                s.DocumentName = "Release v1";
-                s.Title = "NoPlan API";
-                s.Version = "v1";
-            };
-        })
+                options.SourceGeneratorDiscoveredTypes.AddRange(DiscoveredTypes.All);
+                options.SourceGeneratorDiscoveredTypes.AddRange(NoPlan.Contracts.DiscoveredTypes.All);
+            })
         .AddScoped<IToDoService, ToDoService>()
         .AddAuthorization(options => options.AddUserPolicy())
         .AddMicrosoftIdentityWebApiAuthentication(configuration);
@@ -41,20 +29,15 @@ try
 
     await new MigrationRunner(app.Services).ApplyMigrationsAsync<PlannerContext>();
 
-    app.UseFastEndpoints(c =>
-    {
-        c.Endpoints.RoutePrefix = "api";
-        c.Errors.ResponseBuilder = ValidationErrors.ResponseBuilder;
-        c.Versioning.Prefix = "v";
-        c.Versioning.DefaultVersion = 1;
-        c.Versioning.PrependToRoute = true;
-    });
-
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseOpenApi();
-        app.UseSwaggerUi3(s => s.ConfigureDefaults());
-    }
+    app.UseFastEndpoints(
+        c =>
+        {
+            c.Endpoints.RoutePrefix = "api";
+            c.Errors.ResponseBuilder = ValidationErrors.ResponseBuilder;
+            c.Versioning.Prefix = "v";
+            c.Versioning.DefaultVersion = 1;
+            c.Versioning.PrependToRoute = true;
+        });
 
     app.MapHealthChecks("/health/ready", new() { ResponseWriter = JsonHealthCheckResponseWriter.WriteResponse });
     app.MapHealthChecks("/health/live", new() { Predicate = _ => false, ResponseWriter = JsonHealthCheckResponseWriter.WriteResponse });

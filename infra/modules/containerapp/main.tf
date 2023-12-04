@@ -76,6 +76,10 @@ resource "azurerm_container_app" "container_app" {
         name        = "ConnectionStrings__Default"
         secret_name = "connectionstrings-default"
       }
+      env {
+        name  = "OTEL_SERVICE_NAME"
+        value = var.container_app_name
+      }
     }
   }
   secret {
