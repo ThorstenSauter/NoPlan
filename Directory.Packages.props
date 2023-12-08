@@ -16,7 +16,7 @@
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0"/>
     <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0"/>
     <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.0"/>
-    <PackageVersion Include="Microsoft.Identity.Client.Extensions.Msal" Version="4.58.0"/>
+    <PackageVersion Include="Microsoft.Identity.Client.Extensions.Msal" Version="4.58.1"/>
     <PackageVersion Include="Microsoft.Identity.Web" Version="2.16.0"/>
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0"/>
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0"/>
@@ -24,7 +24,7 @@
     <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.15.0.81779"/>
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.507"/>
     <PackageVersion Include="Testcontainers.MsSql" Version="3.6.0"/>
-    <PackageVersion Include="Verify.Xunit" Version="22.7.1"/>
+    <PackageVersion Include="Verify.Xunit" Version="22.8.0"/>
     <PackageVersion Include="xunit" Version="2.6.2"/>
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.4"/>
   </ItemGroup>
