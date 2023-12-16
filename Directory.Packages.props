@@ -5,7 +5,7 @@
     <NuGetAuditLevel>low</NuGetAuditLevel>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="AspNetCore.HealthChecks.SqlServer" Version="7.0.0"/>
+    <PackageVersion Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.0"/>
     <PackageVersion Include="Azure.Monitor.OpenTelemetry.AspNetCore" Version="1.0.0"/>
     <PackageVersion Include="Bogus" Version="35.0.1"/>
     <PackageVersion Include="coverlet.collector" Version="6.0.0"/>
