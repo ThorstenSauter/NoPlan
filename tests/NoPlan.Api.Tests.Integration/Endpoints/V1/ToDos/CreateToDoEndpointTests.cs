@@ -7,7 +7,6 @@ using NoPlan.Contracts.Responses.V1.ToDos;
 
 namespace NoPlan.Api.Tests.Integration.Endpoints.V1.ToDos;
 
-[UsesVerify]
 public sealed class CreateToDoEndpointTests(NoPlanApiFactory factory) : FakeRequestTest(factory)
 {
     [Fact]
