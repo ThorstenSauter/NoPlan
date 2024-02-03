@@ -1,5 +1,6 @@
 ﻿namespace NoPlan.Api.Tests.Integration.TestBases;
 
+[Collection(nameof(EndpointCollection))]
 public class EndpointTestBase(NoPlanApiFactory factory) : IAsyncLifetime, IClassFixture<NoPlanApiFactory>
 {
     protected HttpClient AuthenticatedClientClient { get; private set; } = null!;

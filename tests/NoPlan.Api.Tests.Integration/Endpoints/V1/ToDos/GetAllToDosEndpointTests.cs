@@ -17,10 +17,11 @@ public sealed class GetAllToDosEndpointTests(NoPlanApiFactory factory) : FakeReq
             await AuthenticatedClientClient.POSTAsync<CreateToDoEndpoint, CreateToDoRequest, ToDoResponse>(createToDoRequest);
         }
 
-        var request = new GetAllToDosRequest();
+        var request = new EmptyRequest();
 
         // Act
-        var (response, result) = await AuthenticatedClientClient.GETAsync<GetAllToDosEndpoint, GetAllToDosRequest, ToDosResponse>(request);
+        var (response, result) =
+            await AuthenticatedClientClient.GETAsync<GetAllToDosEndpoint, EmptyRequest, ToDosResponse>(request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -31,10 +32,11 @@ public sealed class GetAllToDosEndpointTests(NoPlanApiFactory factory) : FakeReq
     public async Task HandleAsync_ShouldReturn401_WhenUserIsNotAuthenticated()
     {
         // Arrange
-        var request = new GetAllToDosRequest();
+        var request = new EmptyRequest();
 
         // Act
-        var (response, result) = await AnonymousClient.GETAsync<GetAllToDosEndpoint, GetAllToDosRequest, ToDosResponse>(request);
+        var (response, result) =
+            await AnonymousClient.GETAsync<GetAllToDosEndpoint, EmptyRequest, ToDosResponse>(request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
