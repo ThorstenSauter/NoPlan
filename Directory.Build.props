@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <NoWarn>NU1507;CS1591</NoWarn>
     <Authors>Thorsten Sauter</Authors>
-    <Copyright>(c) 2021-2023</Copyright>
+    <Copyright>(c) 2021-2024</Copyright>
     <RepositoryUrl>https://github.com/ThorstenSauter/NoPlan</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
