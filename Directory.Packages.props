@@ -12,9 +12,9 @@
     <PackageVersion Include="FastEndpoints" Version="5.22.0"/>
     <PackageVersion Include="FastEndpoints.Generator" Version="5.22.0"/>
     <PackageVersion Include="FluentAssertions" Version="6.12.0"/>
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.1"/>
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1"/>
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.1"/>
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.2"/>
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2"/>
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.2"/>
     <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.1"/>
     <PackageVersion Include="Microsoft.Identity.Client.Extensions.Msal" Version="4.59.0"/>
     <PackageVersion Include="Microsoft.Identity.Web" Version="2.17.0"/>

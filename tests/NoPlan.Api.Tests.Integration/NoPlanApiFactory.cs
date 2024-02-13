@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +17,7 @@ namespace NoPlan.Api.Tests.Integration;
 public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetime
 {
     private readonly MsSqlContainer _dbContainer = new MsSqlBuilder()
-        .WithPassword("ReallyComplicated01!")
+        .WithImage("mcr.microsoft.com/azure-sql-edge:latest")
         .Build();
 
     private readonly UserAuthenticationSettings _userAuthenticationSettings = new();
@@ -48,8 +47,7 @@ public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetim
     {
         builder.ConfigureLogging(logging => logging.ClearProviders());
 
-        var connectionString = new SqlConnectionStringBuilder(_dbContainer.GetConnectionString()) { Encrypt = false, InitialCatalog = "noplan" }
-            .ToString();
+        var connectionString = _dbContainer.GetConnectionString();
 
         builder.ConfigureAppConfiguration(
             configBuilder =>
@@ -57,7 +55,10 @@ public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetim
                 Environment.SetEnvironmentVariable(
                     "APPLICATIONINSIGHTS_CONNECTION_STRING",
                     "InstrumentationKey=00000000-0000-0000-0000-000000000000;");
-                configBuilder.AddInMemoryCollection(new Dictionary<string, string?> { { "ConnectionStrings:Default", connectionString } });
+
+                configBuilder.AddInMemoryCollection(
+                    new Dictionary<string, string?> { { "ConnectionStrings:Default", connectionString } });
+
                 configBuilder.AddUserSecrets<NoPlanApiFactory>();
                 configBuilder.AddEnvironmentVariables();
 
@@ -108,17 +109,19 @@ public class NoPlanApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetim
 
     private async Task<IPublicClientApplication> CreatePublicClientApplicationAsync()
     {
-        var storageCreationProperties = new StorageCreationPropertiesBuilder(TokenCacheConfiguration.CacheFileName, TokenCacheConfiguration.CacheDir)
-            .WithLinuxKeyring(
-                TokenCacheConfiguration.LinuxKeyRingSchema,
-                TokenCacheConfiguration.LinuxKeyRingCollection,
-                TokenCacheConfiguration.LinuxKeyRingLabel,
-                TokenCacheConfiguration.LinuxKeyRingAttr1,
-                TokenCacheConfiguration.LinuxKeyRingAttr2)
-            .WithMacKeyChain(
-                TokenCacheConfiguration.KeyChainServiceName,
-                TokenCacheConfiguration.KeyChainAccountName)
-            .Build();
+        var storageCreationProperties =
+            new StorageCreationPropertiesBuilder(TokenCacheConfiguration.CacheFileName,
+                    TokenCacheConfiguration.CacheDir)
+                .WithLinuxKeyring(
+                    TokenCacheConfiguration.LinuxKeyRingSchema,
+                    TokenCacheConfiguration.LinuxKeyRingCollection,
+                    TokenCacheConfiguration.LinuxKeyRingLabel,
+                    TokenCacheConfiguration.LinuxKeyRingAttr1,
+                    TokenCacheConfiguration.LinuxKeyRingAttr2)
+                .WithMacKeyChain(
+                    TokenCacheConfiguration.KeyChainServiceName,
+                    TokenCacheConfiguration.KeyChainAccountName)
+                .Build();
 
         var publicClientApplication = PublicClientApplicationBuilder.CreateWithApplicationOptions(
             new()
